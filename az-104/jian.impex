@@ -1,0 +1,29 @@
+$ctgVersion = Online
+$contentCatalog = wtchkContentCatalog
+$contentCatalogImg = wtchkContentCatalog
+$contentCV = catalogVersion(CatalogVersion.catalog(Catalog.id[default=$contentCatalog]), CatalogVersion.version[default=$ctgVersion])[default=$contentCatalog:$ctgVersion]
+$contentCatalogImg = wtchkContentCatalog
+$siteResource = jar:com.aswatson.constants.ElabsampledataConstants&/sampledata/wtc/images/01_wtchk/contentCatalogs/$contentCatalogImg
+$lang = en
+
+INSERT_UPDATE E2CMSParagraphComponent; $contentCV[unique = true]; uid[unique = true]     ; name                     ; &componentRef            ; content[lang = $lang]
+                                     ;                          ; JianParagraphComponent ; Jian Paragraph Component ; JianParagraphComponent_s ; <p>jian jian jian</p>
+
+INSERT_UPDATE E2BannerComponent; $contentCV[unique = true]; uid[unique = true]  ; media(code, $contentCV)[lang = $lang]; &componentRef
+                               ;                          ; JianBannerComponent ; JackMedia                            ; JianBannerComponent_s
+
+INSERT_UPDATE ContentSlotName; name[unique = true]; template(uid, $contentCV)[unique = true][default = 'GLTestPageTemplate']; validComponentTypes(code); compTypeGroup(code)
+                             ; jianbanner         ;                                                                         ; E2BannerComponent
+                             ; jianparagraph      ;                                                                         ; E2CMSParagraphComponent
+
+INSERT_UPDATE ContentSlot; $contentCV[unique = true]; uid[unique = true]; cmsComponents(&componentRef); active[default = true]
+                         ;                          ; JianBannerSlot    ; JianBannerComponent_s
+                         ;                          ; JianParagraphSlot ; JianParagraphComponent_s
+
+
+INSERT_UPDATE ContentPage; $contentCV[unique = true]; uid[unique = true]; name      ; masterTemplate(uid, $contentCV); label ; defaultPage[default = 'true']; approvalStatus(code)[default = 'approved']; homepage; title[lang = $lang]
+                         ;                          ; JianPage          ; Jian Page ; GLTestPageTemplate             ; /jian ;                              ;                                           ; false   ; Jian Page
+
+INSERT_UPDATE ContentSlotForPage; $contentCV[unique = true]; uid[unique = true]         ; position[unique = true]; page(uid, $contentCV)[unique = true][default = 'JianPage']; contentSlot(uid, $contentCV)[unique = true]
+                                ;                          ; JianBannerSlot-JianPage    ; jianbanner             ;                                                           ; JianBannerSlot
+                                ;                          ; JianParagraphSlot-JianPage ; jianparagraph          ;                                                           ; JianParagraphSlot
