@@ -196,17 +196,16 @@ FTP/S:
 
 ## Deployment Slot
 
-Deployment slots help you manage different app stages (in separate environments). For example, `development`, `test`, `stage`, and `production`.
+Deployment slots help you manage different app stages (in separate environments).  
+For example, `development`, `test`, `stage`, and `production`.
 
-**Each slot is a fully independent instance of your application**, and it enables you to perform tasks like `testing`, `staging`, and `deploying` updates without affecting the production environment. (Deployment slots are live apps that have their own hostnames)
+**Each slot is a fully independent instance of your application (Deployment slots are live apps that have their own `hostnames`)**, and it enables you to perform tasks like `testing`, `staging`, and `deploying` updates without affecting the production environment.  
 
-**App content and configuration elements can be swapped between two deployment slots, including the production slot.**
-
+**App content and configuration elements can be swapped between two deployment slots, including the production slot.**  
 When you create an Azure App Service, it comes with a default deployment slot called the `production` slot.  
 This is the live, publicly accessible instance of your application.  
 
 > **Think Of slots As A way to quickly clone your production environment for other use**
-
 
 ### App Service pricing tiers
 
@@ -322,9 +321,8 @@ Some domain registrars don't allow `CNAME` records for the root domain or for wi
 
 ## Backup & Restore
 
-### You Should Know
-
-1. To use the Backup and Restore feature, you need the Standard or Premium tier App Service plan
+What You Should Know
+1. To use the Backup and Restore feature, you need the `Standard` or `Premium tier` App Service plan
 2. You need an Azure storage account and container in the same subscription as the app 
 3. Azure App Service can back up these to the AZ storage account & container
    - App configuration settings
