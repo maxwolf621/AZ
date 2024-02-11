@@ -333,3 +333,32 @@ There are two ways to enable application monitoring for hosted applications:
 2. Manually instrumenting the application through code (Application Insights SDK)
 
 – The alternative approach is you need to install the Application Insights SDK. This means that you have to manage the updates to the latest version of the packages by yourself. The second method is recommended if you need to make custom API calls to track events/dependencies not captured by default with agent-based monitoring.
+
+## Azure Monitor Log Analytics Workspace for Storage Backup
+
+**Q :**
+There is a requirement that requires you to configure Azure Backup reports using `TDBackup1` to determine which backup items consume the most storage.  
+
+**ANS :**
+the correct answer is: `TDAnalytics1`, `TDAnalytics2`, and `TDAnalytics3`.
+
+--- 
+
+:memo: What is Azure Backup Report
+- Azure Backup Report provides a **reporting solution that uses Azure `Monitor logs` and Azure `workbooks`**.  
+- These resources help you get rich insights on your backups across your entire backup estate.   
+- **Backup Reports serve as a one-stop destination for tracking usage, auditing of backups and restores, and identifying key trends at different levels of granularity.**
+
+:memo: region & subscription
+- **When you create a Log Analytics workspace, it does not matter if the vault is located in a different region or subscription.**
+
+:memo: A common requirement for backup admins is to obtain insights on backups **based on data that spans a long period of time.**   
+
+:memo: Use cases for such a solution include :
+- `Allocating` and `Forecasting` of cloud STORAGE consumed.
+- `Auditing` of backups and restores.
+- `Identifying Key Trends` at different levels of granularity.
+
+:memo: Retention Of Log Analytics Data 
+- **By default, the data in a Log Analytics workspace is retained for 30 days.**   
+- To see data for a longer time horizon, change the retention period of the Log Analytics workspace.  

@@ -363,3 +363,105 @@ With a container access policy, you can grant or revoke permissions for specific
 https://learn.microsoft.com/en-us/azure/storage/common/storage-account-overview
 
 https://learn.microsoft.com/en-us/rest/api/storageservices/define-stored-access-policy
+
+
+## Persist data in container instance to Azure Storage 
+
+**:question: Q 3-:**
+![Alt text](image-69.png)
+You are tasked with deploying a new Azure Container Instance that will **run a custom-developed `.NET` application requiring persistent STORAGE for operation.**
+
+:mag: You need to create a Storage Service that will meet the requirements for Azure Container named `TDContainer`.  
+
+**:bell: ANS :**
+
+:o: Azure Files. (mount an azure file share)  
+
+:x: Azure Queue Storage is incorrect 
+- because this service is simply used for storing large numbers of messages to enable communication between components of a distributed application.
+
+:x: Azure Table Storage and Azure Blob Storage are both incorrect
+- because **Azure Container Services does not support direct integration of these services.**
+
+---
+
+:memo: Azure Container Instance
+- By default, Azure Container Instances are stateless.   
+If the container crashes or stops, all of its states are lost.   
+- To persist state beyond the lifetime of the container, you must mount a volume from an external store.  
+
+:memo: Azure File Share
+- Azure Files offers fully managed file shares hosted in Azure Storage that are accessible via the industry standard Server Message Block (SMB) protocol.
+
+
+:exclamation: <font color="red">Azure Container (Service) Instances can mount an Azure file share created with Azure Files.</font>
+- Using an Azure file share with Azure Container Instances provides file-sharing features similar to using an Azure file share with Azure virtual machines.
+
+:exclamation: Azure Disks or Files are commonly used to provide persistent volumes for 
+- Azure Container Instances 
+- Azure VMs.  
+
+## AzCopy make & Container & File Share
+
+**Q :**
+There is a requirement to **copy a virtual machine image** to a container named tdimage from your on-premises datacenter. 
+
+You need to provision an Azure Container instance to host the container image.
+1. Which `AzCopy` command should you run?
+2. Azure Blob storage is Microsoft’s object storage solution for the cloud. 
+
+:m: Take note that it is mentioned in the scenario that container images and instances are used.
+
+**:bell: ANS :**  
+
+:o: `azcopy make "https://[account-name].blob.core.windows.net/[top-level-resource-name]"`   
+
+:x: `Copy` is incorrect  
+- because it simply copies source data to a destination location.
+
+:x:`Sync` is incorrect  
+- because it only replicates the source location to the destination location.
+
+:x: `File` is incorrect  
+- because when you execute this command, it will create a file share.  
+
+:x: `Table` is incorrect  
+- because this is just a NoSQL data store that accepts authenticated calls from inside and outside the Azure cloud which allows you to store large amounts of **structured** data.
+
+:x: `Queue` is incorrect  
+- because this simply **provides cloud messaging between application components that allows you to decouple your applications so that they can scale independently.**
+
+---
+
+:memo: `AzCopy`  
+- `AzCopy` is a command-line utility that you can use to copy blobs or files to or from a storage account.
+
+:memo: `AzCopy make`
+- **The `AzCopy make` command is commonly used to create a container or a file share.**    
+
+:memo: Storage Container   
+- A container organizes a set of blobs, similar to a directory in a file system.     
+- **A storage account can include an unlimited number of containers, and a container can store an unlimited number of blobs.**     
+
+:memo: Blob Storage
+- Blob storage is optimized **for storing massive amounts** of unstructured data.
+- **Unstructured data** is data that doesn’t adhere to a particular data model or definition, such as text or binary data.   
+
+:memo: Blob storage is designed for:  
+- Serving 
+`images or documents directly to a browser`.
+- Storing 
+`files for distributed access`.
+- Storing data   
+for `backup and restore` disaster recovery, and archiving.
+- Storing data   
+for `analysis` by an on-premises or Azure-hosted service.  
+- Streaming Media 
+`video and audio`.
+- Writing   
+to `log` files.
+
+:memo: VHD Files for VMs
+- **VHD files can be used to create custom IMAGE that can be stored in an Azure Blob container**, which are used to provision VMs.   
+
+
