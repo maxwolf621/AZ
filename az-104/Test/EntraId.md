@@ -295,8 +295,9 @@ This type of connection requires a VPN device located on-premises that has an ex
 ## Network watcher & IP Flow Verify
 
 
-:o: IP flow verify.
+:a:
 
+:o: IP flow verify.
 `[檢查 Packet (connectivity) 在哪個 NSG的 Rule 被拒絕/接受]`
 IP flow verify checks if a packet is allowed or denied to or from a virtual machine. 
 - If the packet is denied by a security group, the name of the rule that denied the packet is returned. 
@@ -304,22 +305,19 @@ IP flow verify checks if a packet is allowed or denied to or from a virtual mach
 It is useful in confirming if a rule in a NSG is blocking ingress or egress traffic to or from a virtual machine.
 - IP flow verify helps administrators quickly diagnose connectivity issues from or to the Internet and from or to the on-premises environment.
 
-
 How it done
 1. `[Look at NSG for NIC & Subnet]`IP flow verify first looks at the rules for all Network Security Groups (NSGs) applied to the network interface, such as a subnet or virtual machine NIC. 
 2. `[Check Setting]`Traffic flow is then verified based on the configured settings to or from that network interface. 
 
-
-
 :x: Next hop is incorrect 
-- `[Traffic去向]`because this simply helps you determine if traffic is being directed to the intended destination, or whether the traffic is being sent nowhere. 
+- `[決定Traffic去向]`because this simply helps you determine if traffic is being directed to the intended destination, or whether the traffic is being sent nowhere. 
 - Take note that in this scenario, you need to determine if the network security group is blocking the ingress or egress traffic.
 
 :x: NSG Flow Logs is incorrect. 
-- `[LOG IP Traffic Flowing 去向]`It is only a feature of Azure Network Watcher that allows you to log information about IP traffic flowing through a network security group.
+- `[Log IP Traffic Flowing 去向]`It is only a feature of Azure Network Watcher that allows you to log information about IP traffic flowing through a network security group.
 
 :x: Traffic Analytics is incorrect 
-- `[視覺化 Traffic 並且 查詢]`because this just allows you to process your NSG Flow Log data that enables you to visualize, query, analyze, and understand your network traffic.
+- `[視覺化Traffic分析且讓你查詢]`because this just allows you to process your NSG Flow Log data that enables you to visualize, query, analyze, and understand your network traffic.
 
 ## Blob Storage Data to AKS cluster 
 
