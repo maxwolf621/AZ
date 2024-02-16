@@ -56,6 +56,8 @@ A VPN connection creates the link for the VPN gateway and local network gateway.
 
 ## File Sync
 
+![](./Test/file_sync.jpg)
+
 1. Prepare Windows Server to use with Azure File Sync
 You need to disable Internet Explorer Enhanced Security Configuration in your server.
 This is required only for initial server registration.
@@ -80,7 +82,146 @@ A server endpoint represents a specific location on a registered server, such as
 
 
 Backup disk of VMs with Difference O.S
-只要Region跟RSV一樣不管VMs是stopped/deallocated state, VM的DIsk都會被BackUP
+只要Region跟RSV一樣不管VMs是stopped/deallocated state, VM的DIsk都會被Back up
 
 SetUp backup policy
 ![alt text](./TEST/image-199.png)
+
+## Storage
+
+### Live migration 
+
+Live migration is supported only for storage accounts that use `LRS` or `GRS` replication.
+
+To request a live migration to `ZRS`, `GZRS`, or `RA-GZRS`, you need to migrate your storage account from `LRS` to `ZRS` in the primary region with no application downtime. 
+
+- Only General-purpose V2, FileStorage, and BlockBlobStorage support ZRS.
+
+![Alt text](./TEST/image-3.png)
+
+
+### VNet P2S
+
+- **It's established by starting it from the client's computer**
+- Is useful for telecommuters who want to connect to Azure VNets from a remote location, such as from home or a conference. 
+- P2S VPN is also a helpful solution to utilize instead of S2S VPN when you have only a few clients that need to connect to a VNet.
+
+Configuration Files
+- Client需要從VNet方下載
+- 每次網路拓樸有變更Client方都要重新下載跟Re-Install
+
+### VNet Restarting VPN Gateway
+
+restarting the VPN gateway is only done when you lose cross-premises VPN connectivity on one or more Site-to-Site VPN tunnels
+
+## VNet Gate Transit
+
+Gateway transit simplifies network architecture and enhances connectivity across VNets and on-premises networks in Azure
+
+A transit gateway is a network transit `hub` that facilitates the interconnection of virtual private clouds (VPCs) and on-premises networks
+
+In Azure, a transit gateway plays a crucial role in connecting virtual networks (VNets) and facilitating cross-premises communication.  
+1. VNet Peering  
+2. Gateway Transit (VNet to VNet or Cross-Prmises Connectivity)  
+3. Hub-And-Spoke Network  
+4. Route Control  
+5. Deployment Models  
+
+
+## Application Gateway
+
+![Alt text](./Test/image-6.png)   
+
+Azure Application Gateway (application tier) is a web traffic load balancer that enables you to **manage traffic to your WEB APPLICATION**. 
+
+For example, you can route traffic based on the incoming URL.  
+- if `/images` are in the incoming URL, you can route traffic to a specific set of servers (known as a pool) configured for images.  
+- If `/video` is in the URL, that traffic is routed to another pool that’s optimized for videos.  
+
+Web Application Firewall (WAF) within Azure Application Gateway
+It protects against the following web vulnerabilities:   
+- SQL injection attacks   
+- Cross-site scripting attacks  
+- Other common attacks, such as command injection, HTTP request smuggling, HTTP response splitting, and remote file inclusion  
+- HTTP protocol violations    
+- HTTP protocol anomalies, such as missing host user-agent and accept headers  
+- Bots, crawlers, and scanners  
+- Common application misconfigurations, such as Apache and IIS
+
+
+## VNet Peering & Transit Gateway Hub-Spoke
+
+<font color="red">To re-establish a peering connection, you will need to delete the disconnected peer and recreate it.</font>
+
+## LB sku
+
+![alt text](./TEST/image-189.png)
+In the image above, it states that only VMs within a single availability set or virtual machine scale set can be used as backend pool endpoints for load balancers that use `Basic` as its SKU.
+
+## Backed Pool
+
+Backend Pool  
+- The backend pool is a critical component of the load balancer.  
+The backend pool defines the group of resources that will serve traffic for a given load-balancing rule.  
+
+## Traffic Manager
+
+## VNet to VNet Connection & Communication
+
+Communication
+- Different Subscription
+- Different Tenant
+
+1. VNet Peering
+2. VPN Gateways
+not latency-sensitive
+two Vnet IP no overlap
+
+## Storage Account Type
+
+![Alt text](./Test/image-10.png)   
+
+
+## RSV & VM & BackUp Policy
+
+![Alt text](./Test/image-11.png)  
+
+<font color="red">You can only backup `data sources` or `VMs` that are in the same region as the Recovery Services vault.
+So You can back up virtual machines that `have different resource groups or operating systems as long as they are in the same region` as the vault.</font>
+
+## AZ Zone File  
+
+Using a zone file is a quick, reliable, and convenient way to transfer a DNS zone into or out of Azure DNS.
+
+**A DNS zone file is a `.txt` file that contains details of every Domain Name System (DNS) record in the zone.** 
+It follows a standard format, making it suitable for transferring DNS records between DNS systems. :arrow_down:
+![Alt text](./Test/image-12.png)
+
+## Vm for Public/Private IP Addr  
+
+:mag: Public IP Address of VM
+- allow Internet resources to communicate inbound to Azure resources.  
+- enable Azure resources to communicate to the Internet and public-facing Azure services.     
+- The address is dedicated to the resource until it’s unassigned by you. 
+- A resource without a public IP assigned can communicate outbound.
+- Azure dynamically assigns an available IP address that isn’t dedicated to the resource.
+
+:mag: Assignment Method of Public IP
+There are two types of public IP address assignment methods: static and dynamic.  
+
+Static addresses are assigned when a public IP address is created.  
+- Static addresses are not released until a public IP address resource is deleted.  
+- :red_circle: If the address is not associated to a resource, you can change the assignment method after the address is created.  
+- :red_circle: If the address is associated to a resource, you may not be able to change the assignment method.  
+
+Dynamic addresses are **assigned only after a public IP address is associated to an Azure resource, and the resource is started for the first time.**   
+- Dynamic addresses can change if they're assigned to a resource, such as a virtual machine, and the virtual machine is stopped (deallocated) and then started.
+
+:mag: When Address might be changed?
+The address remains the same if a virtual machine is rebooted or stopped (but not deallocated).  
+
+Dynamic addresses are released when a public IP address resource is dissociated from a resource it is associated with.  
+
+virtual machine is stopped (deallocated) and then started.
+Then it apply a ip with dynamically method.  
+
