@@ -1,7 +1,6 @@
 ## Manage Azure Identities and Governance
 
-## Azure Policy
-
+## Azure Policy Exclusion
 
 Policy evaluates resources in Azure by comparing the properties of resources to the business rules.   
 
@@ -24,24 +23,27 @@ You need to interpret the permissions that are allowed or denied by the policy s
 In the given policy, the resource group TD-RG is excluded in the effect of the policy. 
 
 This means that you are allowed to create 
-Virtual Networks in TD-RG. 
+Virtual Networks in `TD-RG.`  
 
-A policy exclusion allows you to assign a policy at a high level and then exclude scopes within it. 
+A policy exclusion allows you to assign a policy at a high level and then exclude scopes within it.   
 
 For example, in an environment with applications and a central network, you want to have a policy for all the application resource groups but not the network resource group.
 
-## :star2: Contributor role & Traffic Analytics
+## :star2: Role to manage Azure Network Watcher Traffic Analytics
 
 ![Alt text](image-84.png)
 
 <font color="red">The users in the group can visualize the traffic distribution by assigning a Contributor role to the group.</font>  
 
 :mag: Traffic Analytics 
-Traffic analytics is a powerful feature within Azure Network Watcher that provides visibility into user and application activity in your cloud networks.
+Traffic analytics is a powerful feature within Azure Network Watcher that provides visibility into `user` and `application activity` in your cloud networks.
 
 ![Alt text](image-85.png)
 
-To enable traffic analytics, your account must have any of the following Azure roles at the subscription scope: owner, contributor, or network contributor.
+To enable traffic analytics, your account must have any of the following Azure roles at the subscription scope: 
+- owner, 
+- contributor,
+- network contributor.
 
 Before you use traffic analytics, ensure your environment meets the following requirements:
 - `A Network Watcher enabled` Subscript.
@@ -49,22 +51,34 @@ Before you use traffic analytics, ensure your environment meets the following re
 - `An Azure Storage account` to store raw flow logs.
 - `An Azure Log Analytics workspace` with `read` and `write` access.
 
+https://learn.microsoft.com/en-us/azure/network-watcher/traffic-analytics-faq#what-are-the-prerequisites-to-use-traffic-analytics-
+
+https://learn.microsoft.com/en-us/azure/network-watcher/traffic-analytics
+
 ---
 
-:question: :
+:question: : 3-46
 
-You created a new Azure AD group for Network Administrators in your organization Azure Subscription.    
+You created a new Azure AD group for Network Administrators in your organization Azure Subscription.  
 
 You need to make sure that the users in the group can enable Traffic Analytics and visualize traffic distribution.  
 
+![alt text](image-256.png)
+
+Which Solution is Correct ?
+1. Assign a Reader role to the group.
+2. Assign a Security Operator role to the group.
+3. Assign a Contributor role to the group.
+
 :a: : 
 
-:o: Assign a Contributor role to the group.
+:x: Assign a Reader role to the group
+- the users in the group can visualize the traffic distribution by assigning a Reader role to the group.
 
 :x: a Security Operator can only create and manage security events. 
 - By assigning this role, the users in the group won’t be able to enable traffic analytics
 
-:x: the users within the group can visualize the traffic distribution by assigning a Reader role to the group.
+:o: Assign a Contributor role to the group.
 
 ## Azure RBAC
 
@@ -96,7 +110,15 @@ This role allows you to manage user access to the Azure resources.
 
 ## Moving Web-App to Resource Group 
 
-:question: 3-25 :
+https://docs.microsoft.com/en-us/azure/app-service/app-service-plan-manage
+
+https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/move-resource-group-and-subscription
+
+---
+
+:question: 3-25
+
+![alt text](image-250.png)
 
 TD-RG3 contains a web app named TD-App3 which is located in North Europe.
 
@@ -123,13 +145,81 @@ You can also assign multiple policies in one resource group.
 :mag: app cloning
 If you need to run your app in a different region, one alternative is app cloning. Cloning makes a copy of your app in a new or existing App Service plan in any region.
 
+## User Access Administrator role
+
+https://docs.microsoft.com/en-us/azure/role-based-access-control/rbac-and-directory-admin-roles
+
+https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#user-access-administrator
+
+---
+
+:question: 3-18
+
+Your company has an Azure subscription named ManilaSubscription that contains multiple virtual machines.
+
+The subscription has a user named ManilaUser01 which has the following roles:
+
+Backup Reader
+Storage Blob Data Contributor
+DevTest Labs User
+
+Which of the following actions should you do first?
+Assign the Security Admin role.
+Assign the Virtual Machine Contributor role.
+Assign the Security Reader role.
+Assign the User Access Administrator role.
+
+:a: : 
+
+![alt text](image-247.png)
+
+:o: Assign the User Access Administrator role.
+- The four fundamental Azure roles are Owner, Contributor, Reader, and User Access Administrator. 
+
+To assign a Reader role to all the users in the Azure subscription, you must grant the user a User Access Administrator role. 
+- This role allows you to manage user access to the Azure resources.
 
 
-![Alt text](image-95.png)
+:x: Assign the Security Reader role is incorrect 
+- because this role only allows the user to view permissions in the Security Center.
 
-## Managed Identity
+:x: Assign the Virtual Machine Contributor role is incorrect 
+- because this role just lets you manage virtual machines. 
+- **Take note that this role doesn’t allow you to access virtual machines directly nor assign a Reader role to all the users in the subscription.**
 
-:question: : 
+:x: Assign the Security Admin role is incorrect. 
+- This role has the same permissions as the Security Reader role. 
+- **The only difference is that it can update the security policy and dismiss alerts and recommendations.**
+
+## Managed Identity of the VM
+
+![Alt text](image-96.png)
+
+There are two types of managed identities:
+- System-assigned : 
+some Azure services allow you to enable a managed identity directly on a service instance.  
+- When you enable a system-assigned managed identity, an identity is created in Microsoft Entra ID that is tied to the lifecycle of that service instance.  
+So when the resource is deleted, Azure automatically deletes the identity for you.  
+By design, only that Azure resource can use this identity to request tokens from Microsoft Entra ID.
+- User-assigned:  
+you may also create a managed identity as a standalone Azure resource.   
+You can create a user-assigned managed identity and assign it to one or more instances of an Azure service.   
+In the case of user-assigned managed identities, the identity is managed separately from the resources that use it.  
+
+
+<font color="red">Take note that this identity is restricted to only one resource. 
+- You can grant permissions to the managed identity by using Azure RBAC.   
+- The managed identity is authenticated with Microsoft Entra ID, so you don’t have to store any credentials.   
+</font>
+
+https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/qs-configure-portal-windows-vm
+
+https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/overview
+
+---
+
+:question: 3-26
+
 You are managing an Azure subscription that contains a resource group named TD-RG1 which has a virtual machine named TD-VM1.
 
 `TD-VM1` has services that will deploy new resources on `TD-RG1`.
@@ -137,34 +227,52 @@ You are managing an Azure subscription that contains a resource group named TD-R
 You need to make sure that the services running on `TD-VM1` should be able to manage the resources in `TD-RG1` using its identity.
 
 Which of the following actions should you do first?
+- Configure the managed identity of TD-VM1.
+- Configure the access control of TD-VM1.
+- Configure the access control of TD-RG1.
+- Configure the security settings of TD-RG1.
 
 **ANS :**
-![Alt text](image-96.png)
 
-There are two types of managed identities:
-- System-assigned : some Azure services allow you to enable a managed identity directly on a service instance. When you enable a system-assigned managed identity, an identity is created in Microsoft Entra ID that is tied to the lifecycle of that service instance. So when the resource is deleted, Azure automatically deletes the identity for you. By design, only that Azure resource can use this identity to request tokens from Microsoft Entra ID.
-- User-assigned: you may also create a managed identity as a standalone Azure resource. You can create a user-assigned managed identity and assign it to one or more instances of an Azure service. In the case of user-assigned managed identities, the identity is managed separately from the resources that use it.
-
-In this scenario, you can use the system-assigned managed identity. Take note that this identity is restricted to only one resource. You can grant permissions to the managed identity by using Azure RBAC. The managed identity is authenticated with Microsoft Entra ID, so you don’t have to store any credentials.
+In this scenario, you can use the system-assigned managed identity. 
 
 Hence, the correct answer is: Configure the managed identity of TD-VM1.
 
 :x: Configure the security settings of TD-RG1 is incorrect because it only provides security recommendations and security alerts for your resource group. As per the scenario, you need to ensure that the services running on TD-VM1 are able to manage the resources in TD-RG1 using its identity. Therefore, you need to configure the managed identity settings of TD-VM1.
 
-The options that say: Configure the access control of TD-VM1 and Configure the access control of TD-RG1 are incorrect because these are only adding role assignments to an Azure resource. A role assignment is a process of attaching a role definition to a user, group, or service principal to provide access to a specific resource. Remember that access is granted by creating a role assignment, and access is revoked by removing a role assignment. You have to configure a managed identity instead.
+:x: Configure the access control of TD-VM1 and Configure the access control of TD-RG1 are incorrect because these are only adding role assignments to an Azure resource. A role assignment is a process of attaching a role definition to a user, group, or service principal to provide access to a specific resource. Remember that access is granted by creating a role assignment, and access is revoked by removing a role assignment. You have to configure a managed identity instead.
 
-## Account reset 
+## :star2::star2: Account reset Methods
 
+https://learn.microsoft.com/en-us/entra/identity/authentication/tutorial-enable-sspr
 
-注意 user account type
+https://learn.microsoft.com/en-us/entra/identity/authentication/concept-sspr-howitworks
+
+https://learn.microsoft.com/en-us/entra/identity/authentication/howto-sspr-deployment
+
+---
+
+:question: 3-27
+
+Your company has an Azure subscription with an Azure AD tenant named `tutorialsdojo.onmicrosoft.com` that contains the following users:
 ![Alt text](image-98.png)  
+
+You are instructed to enable self-service password reset for `tutorialsdojo.onmicrosoft.com`  
 ![Alt text](image-99.png)  
+
+You have configured the authentication methods for password reset as illustrated below.
 ![Alt text](image-100.png)  
 
-![Alt text](image-97.png)
-The Azure AD self-service password reset (SSPR) gives users the ability to change or reset their password with no administrator or help desk involvement. 
+- If TD-User3 has forgotten its password, a mobile phone app can be used to reset the password.  
+- TD-User1 can add security questions for password reset.    
+- The password can be reset immediately after TD-User2 answers the three security questions correctly.  
 
-If a user’s account is locked or they forget their password, they can follow prompts to unblock themselves. 
+:a: : 
+
+![Alt text](image-97.png)
+The Azure AD self-service password reset (SSPR) gives users the ability to change or reset their password with no administrator or help desk involvement.   
+
+If a user's account is locked or they forget their password, they can follow prompts to unblock themselves. 
 
 This ability reduces help desk calls and loss of productivity when a user can’t sign in to their device or an application.
 
@@ -173,20 +281,28 @@ Mobile app notification, Mobile app code, Mobile phone, Office phone, Email, and
 
 **You also need to use an account with Global Administrator privileges to allow users to unlock their account or reset passwords using Azure Active Directory self-service password reset since a user with a User Administrator role does not have permission to manage MFA.** 
 
-:x:
-TD-User1 can add security questions for password reset is incorrect 
+:x: TD-User1 can add security questions for password reset is incorrect 
 - because the role of TD-User1 is a **User Administrator**. 
-- Take note that the User Administrator role does not have permission to modify security questions. If TD-User1 needs to add security questions for a password reset, you should assign a Global Administrator role.
+- Take note that the `User Administrator role` does not have permission to modify security questions. 
+- If TD-User1 needs to add security questions for a password reset, you should assign a `Global Administrator role`.
 
-The password can be reset immediately after TD-User2 answers the three security questions correctly is incorrect 
+:x: The password can be reset immediately after TD-User2 answers the three security questions correctly is incorrect 
 - because the number of methods required for password reset is set to two. 
 - This means that you also need to use the second method (Mobile phone) to reset your password. :o: `3 + 1`
 
-If TD-User3 has forgotten its password, a mobile phone app can be used to reset the password is incorrect 
-- because TD-User3 is assigned to TD-Group2. Take note that the password reset is configured on TD-Group1. Therefore, TD-User3 won’t be able to reset its password.
+:x: If `TD-User3` has forgotten its password, a mobile phone app can be used to reset the password is incorrect 
+- because TD-User3 is assigned to TD-Group2. Take note that the password reset is configured on TD-Group1. 
+- Therefore, TD-User3 won’t be able to reset its password.
 
+## Management Group x Azure Policy
 
-## 
+https://docs.microsoft.com/en-us/azure/governance/management-groups/overview
+
+https://docs.microsoft.com/en-us/azure/governance/management-groups/manage#moving-management-groups-and-subscriptions
+
+https://docs.microsoft.com/en-us/azure/governance/policy/overview
+
+---
 
 :question: 3-28 : 
 
@@ -199,51 +315,31 @@ You have added the following Azure subscriptions to the management groups :
 You created the following Azure policies:
 ![Alt text](image-103.png)
 
-:a: 
-Based on the given scenario, there are two policies:
+:a: :
 
+Based on the given scenario, there are two policies:  
 1. Allowed resource types  
 this policy enables you to specify the resource types that your organization can deploy. Only resource types that support ‘tags’ and ‘location’ will be affected by this policy. To restrict all resources, you have to duplicate this policy and change the ‘mode’ to ‘All’.
 
 2. Not allowed resource types   
 this policy enables you to specify the resource types that your organization cannot deploy.
 
-When you assign a policy to the tenant root group, the policy would also be applied to the subscription and management group. 
-
-For example, if there is a Deny policy at the tenant root group, then the policy will be applied to the hierarchy of management groups and subscriptions. 
+**When you assign a policy to the tenant root group, the policy would also be applied to the subscription and management group.**  
+- For example, if there is a Deny policy at the tenant root group, then the policy will be applied to the hierarchy of management groups and subscriptions. 
 
 **Remember that a Deny policy always overrides an Allow policy.**
+ 
+:x: You can create a virtual machine in TD-Subscription2 is incorrect 
+- because the Tenant Root Group has a Deny policy that restricts it, as well as its related resource groups (e.g. TD-Management-Group11), from deploying virtual networks.**If you can’t create a virtual network, then you also can’t deploy a virtual machine.** 
+- To allow the creation of a virtual machine, you need to remove the assigned policy.
 
-The statement that says: 
+:x: You can create a virtual network in TD-Subscription1 is incorrect 
+- because deny overrides allow. Based on the given policies, you can’t create a virtual network since you have assigned a "Not allowed resource types" policy definition. 
+- To create a virtual network, you should remove/delete this policy.
 
-You can create a virtual machine in TD-Subscription2 is incorrect because the Tenant Root Group has a Deny policy that restricts it, as well as its related resource groups (e.g. TD-Management-Group11), from deploying virtual networks. If you can’t create a virtual network, then you also can’t deploy a virtual machine. To allow the creation of a virtual machine, you need to remove the assigned policy.
-
-You can create a virtual network in TD-Subscription1 is incorrect because deny overrides allow. Based on the given policies, you can’t create a virtual network since you have assigned a "Not allowed resource types" policy definition. To create a virtual network, you should remove/delete this policy.
-
-You can move TD-Subscription3 to TD-Management-Group20 is correct because you are allowed to move subscriptions between management groups. **Take note that a subscription can only have one parent management group.** Therefore, you can’t assign a subscription to multiple management groups.
-
-
-## RBAC for create APP
-
-:question: 3-32
-
-The Azure Subscription has a resource group named `Dev`.
-
-You need to assign a role in the Developers group to allow the users to create Azure Logic Apps in the resource group.
-
-Solution: In the Dev resource group, assign a User Access Administrator role to the Developers group.
-
-**ANS**
-
-:x: the User Access Administrator role 
-- are only related to the specific access of each user to access different Azure resources. 
-- **This role cannot create or manage any type of Azure resources**.
-
-:x: The Logic App Operator role only lets you `read`, `enable`, and `disable` logic apps. 
-- You can't Modify(edit, update, or create) logic apps.
-
-:o: Since the requirement in the scenario is to allow the users to create Azure Logic Apps in the resource group, you have to assign a Contributor role to the users of the Developers group. 
-![Alt text](image-106.png)
+:o: You can move TD-Subscription3 to TD-Management-Group20 is correct 
+- because you are allowed to move subscriptions between management groups. 
+- **Take note that a subscription can only have one parent management group. Therefore, you can’t assign a subscription to multiple management groups.**
 
 ## Custom Role 
 
@@ -319,93 +415,40 @@ How it done
 :x: Traffic Analytics is incorrect 
 - `[視覺化Traffic分析且讓你查詢]`because this just allows you to process your NSG Flow Log data that enables you to visualize, query, analyze, and understand your network traffic.
 
-## Blob Storage Data to AKS cluster 
+## RBAC role : Contributor & Owner
 
-Azure Kubernetes Service  
-Azure Container Registry    
-Azure Blob Storage  
+https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles
 
-You need to create a container image and deploy it to the cluster.   
-![Alt text](image-107.png)
+https://learn.microsoft.com/en-us/azure/role-based-access-control/overview
 
-To deploy an application on your AKS cluster, you’ll need to build a container image first.   
+:question: 3-42 : 
 
-Then create a deployment manifest file to run the image in your cluster.
-
-:a: 
-
-In this scenario, you need to identify what command should you use first, and if you take a look at the scenario again there is a statement you must create a container image. 
-
-:o: the correct answer is: az acr build.
-- The command `az acr build` allows you to queue a quick build, providing streaming logs for an Azure Container Registry. 
-- So after you push the image to the container registry, you should run `az acr build`.
-
-The option that says: az aks create is incorrect because there is already an existing AKS cluster in your Azure subscription.
-
-The option that says: az aks run is incorrect because in order to run a container image to your cluster, you need to build the image first and deploy it to the container.
-
-The option that says: az import-export create is incorrect because this is a command to create a new job or updates an existing job in the specified subscription.
-
----
-
-Azure Container Registry is a managed registry service based on the open-source Docker Registry 2.0. Create and maintain Azure container registries to store and manage your container images and related artifacts. Use Azure container registries with your existing container development and deployment pipelines, or use Azure Container Registry Tasks to build container images in Azure. Build on demand, or fully automate builds with triggers such as source code commits and base image updates.
-
-
-## AZ Role : Contributor
-
-You must ensure that only one user is able to deploy virtual machines and manage virtual networks.
+You must ensure that only one user is able to deploy virtual machines and manage virtual networks.  
 
 Which of the following options should you use to satisfy the principle of least privilege?
+- Virtual Machine Contributor
+- Owner
+- Contributor
+- Network Contributor
 
+:a: :
 
-According to the “principle of least privilege,” workers should only have access to resources necessary for carrying out their job duties. 
+:o:  the correct answer is: Contributor.
+> According to the `principle of least privilege`, workers should only have access to resources necessary for carrying out their job duties. 
 
-**In this scenario, the roles that you can use to deploy VMs and manage VNets are through Owner and Contributor roles, but the requirement is to assign a role with the least privilege.**
+- In this scenario, the roles that you can use to deploy VMs and manage VNets are through Owner and Contributor roles, but the requirement is to assign a role with the least privilege.
 
-The Owner grants full access to manage all resources, including the ability to assign roles in Azure RBAC. 
-
+Difference btw Owner and Contributor 
+- The Owner grants full access to manage all resources, including the ability to assign roles in Azure RBAC. 
 **While the Contributor role grants full access to manage all resources but does not allow you to assign roles in Azure RBAC, manage assignments in Azure Blueprints, or share image galleries.**
 
-Hence, the correct answer is: Contributor.
+:x: Virtual Machine Contributor is incorrect 
+- because this role does not grant you management access to the virtual network.
 
-Virtual Machine Contributor is incorrect because this role does not grant you management access to the virtual network.
-
-Network Contributor is incorrect 
+:x: Network Contributor is incorrect 
 - because **you can only use this role to manage the network but deploy virtual machines.**
 
-## Delte Backup
 
-The VMs are continuously backed up and stored in the Recovery Services vault named td-backup-labs.
-
-You have been asked to delete td-backup-labs vault but it contains protected items.
-
-![Alt text](image-108.png)
-
-To delete a Recovery Services vault, you need to stop the continuous backup first. Because if you try to delete the vault without stopping the backup, you would receive an error notification.
-
-You can’t delete a Recovery Services vault with any of the following dependencies:
-
-– You can’t delete a vault that contains protected data sources (for example, IaaS VMs, SQL databases, Azure file shares).
-
-– You can’t delete a vault that contains backup data. Once backup data is deleted, it will go into the soft deleted state.
-
-– You can’t delete a vault that contains backup data in the soft deleted state.
-
-– You can’t delete a vault that has registered storage accounts.
-
-If you try to delete the vault without removing the dependencies, you’ll encounter one of the following error messages:
-
-– Vault cannot be deleted as there are existing resources within the vault.
-
-– Recovery Services vault cannot be deleted as there are backup items in soft deleted state in the vault. The soft deleted items are permanently deleted after 14 days of delete operation.
-
-Hence, the correct answer is: Stop the backup of each item.
-
-The option that says: Modify the lock type of RSV is incorrect because there’s no lock type configured in scenario. Even if you modify the lock type, you still won’t be able to delete the vault.
-
-The option that says: Delete the backup data is incorrect because you need to stop the backup first before you’re able to delete a backup data.
-
-The option that says: Modify the backup policy is incorrect because you won’t still be able to delete the RSV even if you modify the backup policy. To delete a vault, stop the backup items.
 
 ## Condition Access
 

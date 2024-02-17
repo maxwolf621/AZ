@@ -1,30 +1,123 @@
-## Monitor and Maintain Azure Resources
+# Monitor and Maintain Azure Resources
 
-### Alert Rule x action group
+## AZ Net Watcher NSG Flow logs & IP Flow Verify
 
-**Q :**
-You created an alert rule and configured an action group with the notification type Email Azure Resource Manager Role, which sends an email to the Monitoring Reader role.
+https://docs.microsoft.com/en-us/azure/network-watcher/network-watcher-monitoring-overview
 
-The Monitoring Reader role is assigned to the user, service principal and group.
+https://docs.microsoft.com/en-us/azure/network-watcher/network-watcher-ip-flow-verify-overview
 
-**ANS :**
 
-An action group is a collection of notification preferences set by the Azure subscription's owner. 
+NSG Flow Logs:
+- allow you to log network traffic passing through your `Network Security Groups` (NSGs).
+These logs capture information about inbound and outbound traffic, including details like source and destination IP addresses, ports, and protocol.
 
-**Since an action group is a global service, it is not bound to a specific Azure region and can handle any client requests. **
+Key points:
+- Source IP address for communication is logged.
+- Rule counter information is recorded.
+- Useful for diagnosing traffic filtering issues at the level of:
+  - Virtual machines.
+  - Virtual machine scale sets.
+  - Application gateways.
+
+Storage:
+- NSG flow log data is written to an Azure Storage account.
+
+IP Flow Verify:
+- helps you diagnose connectivity issues related to virtual machine connectivity.
+- It checks whether a packet is allowed or denied to or from an Azure virtual machine based on the configured security and admin rules.
+
+![alt text](image-251.png)
+
+**IP flow verify first looks at the rules for all Network Security Groups (NSGs) applied to the network interface**, such as a subnet or virtual machine NIC.   
+Traffic flow is then verified based on the configured settings to or from that network interface.   
+
+<font color="red">It is useful in confirming if a rule in a Network Security Group is blocking ingress or egress traffic to or from a virtual machine.</font>  
+
+---
+
+:question: 3-40
+
+Adatum Corporation hosts its applications in their Singapore datacenter. 
+
+The Singapore datacenter consists of the following servers:  
+![alt text](image-252.png)  
+
+Your network contains an Active Directory forest named adatum.com. 
+
+All servers and client computers are joined to Active Directory.
+
+A private connection is used for traffic in between offices. Each office has a network device that can be used for VPN connections.
+
+`Adatum` uses two web applications named `AdatumApp1` and `AdatumApp2`.
+
+:m: Planned Changes
+Adatum Corporation plans to implement the following modifications for their migration to Azure:
+1. Establish a private connection to Azure from the headquarters in Singapore.
+2. Move the virtual machines located in the Singapore datacenter to Azure.
+3. Move AdatumApp1 and AdatumApp2 to two Azure App Service named AdatumWeb1 and AdatumWeb2.
+4. Ensure that the on-premises active directory is synchronized with Azure Active Directory.
+
+
+Technical Requirements
+1. Minimize administrative effort and cost whenever possible.
+2. Ensure that the information technology department receives an email whenever the CPU utilization `vm3.adatum.com` reaches 75%.
+3. Ensure that you create an Azure custom role named AdatumAdministrator that is based on the built-in Contributor role.  
+4. Enable Multi-Factor Authentication (MFA) for the information technology department only.  
+5. The servers in the Montreal office must be able to establish a connection over port `443` to `vm3.adatum.com`.  
+6. Ensure that the London office can send encrypted traffic to Azure over the public internet.  
+7. Ensure that `AdatumWeb2` can automatically increase the number of instances based on CPU utilization.  
+8. According to the sales department, `vm3.adatum.com` does not have connectivity to the Montreal office.  
+
+You need to determine if a NSG is causing the issue.  
+
+What Azure Network Watcher feature should you use?  
+- NSG Flow Logs
+- Traffic Analytics
+- Next hop
+- IP flow verify
+
+:o: IP flow verify
+
+:x: NSG Flow Logs is incorrect. 
+- It is only a feature of Azure Network Watcher that allows you to log information about IP traffic flowing through a network security group.
+
+## Alert Rule x action group
+
+An action group is a collection of notification preferences set by the Azure subscription's owner.
+
+**an action group is a global service, it is not bound to a specific Azure region and can handle any client requests.**
 - For example, if one region of the action group service is unavailable, traffic is routed and processed by other regions.
 - A catastrophe recovery solution is provided by an action group as a global service.
 
-When you use the Email Azure Resource Manager role type of notification, you can send email to members of a subscription's role. 
-Emails are only sent to Azure AD user members who are members of the role.   
-Azure AD groups and service principals are not emailed.   
-Also, a notification email will only be sent to the primary email address.  
+When you use the Email Azure Resource Manager role type of notification, you can send email to members of a subscription's role.  
+- Emails are only sent to Azure AD user members who are members of the role.   
+- Azure AD groups and service principals are not emailed.   
+- Also, a notification email will only be sent to the primary email address.  
 
-Hence, the correct answer is: TDU3.
+https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/action-groups#email-azure-resource-manager-role
 
-All of the other options are incorrect because only TDU3 will able to receive the email notification since emails are only sent to Azure AD user members who are members of the role.
+https://learn.microsoft.com/en-us/azure/azure-monitor/alerts/action-groups
 
-### backup policy in Recovery Services Vault Resource setup
+---
+
+:question: 3-45 
+
+Your organization Azure subscription contains the following identities:  
+![alt text](image-254.png)  
+
+You created an alert rule and configured an action group with the `notification type Email Azure Resource Manager Role`, which sends an email to the `Monitoring Reader role`.
+
+The Monitoring Reader role is assigned to the user, service principal and group. 
+
+:a: : 
+
+:o: the correct answer is: TDU3.
+![alt text](image-255.png)
+
+All of the other options are incorrect 
+- because only TDU3 will able to receive the email notification since emails are only sent to Azure AD user members who are members of the role.  
+
+## backup policy in Recovery Services Vault Resource setup
 
 To create a backup policy, you need to create a Recovery Services vault first. 
 
@@ -37,54 +130,15 @@ Since January 15 is not configured as a yearly backup point, this backup is cons
 - The created backup on January 15 will be retained for 36 months.
 - The created backup on December 15 will be retained for 5 Years.
 
-## Azure Network Watcher
-
-3-24. QUESTION  
-
-A web application is hosted on TD-VM1(within TDVNet1) and the data is retrieved and processed by TD-VM2 (within TDVNet2).  
-
-Several users reported that the web application has a sluggish performance.  
-
-You are instructed to track the average round-trip time (RTT) of the packets from TD-VM1 to TD-VM2.
-
-![Alt text](image-94.png)
-
-**In this scenario, you can use Connection Monitor to track the average round-trip time (RTT) of the packets from TD-VM1 to TD-VM2.** 
-
-In Azure Network Watcher, Connection Monitor provides unified end-to-end connection monitoring. 
-
-**The Connection Monitor feature also supports hybrid and Azure cloud deployments.**
-
-Benefits of using the Connection Monitor:
-
-– Unified, intuitive experience for Azure and hybrid monitoring needs
-
-– Cross-region, cross-workspace connectivity monitoring
-
-– Higher probing frequencies and better visibility into network performance
-
-– Faster alerting for your hybrid deployments
-
-– Support for connectivity checks that are based on HTTP, TCP, and ICMP
-
-– Metrics and Log Analytics support for both Azure and non-Azure test setups
-
-Hence, the correct answer is Connection Monitor.
-
-IP flow verify is incorrect because this feature only looks at the rules for all Network Security Groups (NSGs) applied to the network interface. It is stated in the scenario that you must track the packets from TD-VM1 to TD-VM2. IP flow verify is not capable of providing the average round-trip time of the packets from the source to the destination.
-
-Connection Troubleshoot is incorrect because it simply checks connectivity between source and destination. Take note that you need to track the average round-trip time of the packets from VM1 to VM2. Therefore, you need to use Connection Monitor to analyze the end-to-end connection and not the Connection Troubleshoot operation.
-
-NSG flow logs is incorrect because it only allows you to log information about IP traffic flowing (ingress and egress) through an NSG. Take note that you can’t use NSG flow logs to track the average RTT of the packets from TD-VM1 to TD-VM2. You need to use Connection Monitor to provide unified end-to-end connection monitoring.
-
-
-## Change the Recovery Services vault of a virtual machine
+## Change the RSV of a VM
 
 You can use Recovery Services vaults to hold backup data for various Azure services such as `IaaS VMs (Linux or Windows)` and `Azure SQL databases`. 
 
 Recovery Services vaults support `System Center DPM`
 
 To change the Recovery Services vault of a virtual machine, you need to stop the backup first **since Azure VMs may only be assigned a single Recovery Services Vault (RSV) at a time. After the backup stops**, you can now assign a new vault to your VM. 
+
+![alt text](image-257.png)
 
 Reference :
 https://learn.microsoft.com/en-us/azure/backup/backup-azure-arm-vms-prepare
@@ -93,8 +147,10 @@ https://learn.microsoft.com/en-us/azure/backup/backup-azure-recovery-services-va
 
 ---
 
-**Q 3-49:**
-You have been assigned to manage two Azure VMs and Recovery Services vaults.    
+:question: 3-49
+
+You have been assigned to manage two Azure VMs and Recovery Services vaults.  
+
 Both VMs currently store back up to a single vault.     
 
 You must configure the other VM to backup in a different vault.  
@@ -108,35 +164,37 @@ Stop the backup of one VM.
 :x: Change the VM target vault is incorrect
 - because you also need to stop the backup of one VM to change the RSV.
 
-:warning: Stop the backup of both VM is incorrect 
+:x: Stop the backup of both VM is incorrect 
 - because you don't need to stop the backup of both VMs to change the vault of one VM.
 
 
-## RSV for resources
+## :O RSV for resources
 
-Tips 
-- location or region of the resource matching with RSV .
+ 
+---
 
-**Q 3-50:**
+:question: 3-50
 Your company Azure Subscription contains the following resources:  
+
 ![Alt text](image-109.png)  
-You have created a file share named FS1 and a blob container named BC1.  
 
-Which of the following resources can be backed up in the Recovery Services vaults?  
-– Backups can be performed using `RSV1` ?  
-– Backups can be performed using `RSV2` ?  
+You have created a file share named `FS1` and a blob container named `BC1`.  
 
-**ANS :**
-![Alt text](image-110.png)
-In this scenario, you need to identify which resources can be backed up by RSV1 and RSV2. 
+Which of the following resources can be backed up in the RSVs?  
+- Backups can be performed using `RSV1` ?  
+- Backups can be performed using `RSV2` ?  
+
+:a: :
+
+In this scenario, you need to identify which resources can be backed up by RSV1 and RSV2.
 
 **The first thing that you need to take a look at is the location or region of the resource.**   
-Since you can only backup using RSV if the resource and vault are in the same location.
+- Since you can only backup using RSV if the resource and vault are in the same location.
 
-You can only use Recovery Services vaults to hold backup data for various Azure services such as IaaS VMs (Linux or Windows) and SQL Server in Azure VMs. 
+You can only use Recovery Services vaults to hold backup data for various Azure services such as `IaaS VMs (Linux or Windows)` and `SQL Server` in Azure VMs. 
+![Alt text](image-110.png)
 
 After knowing which resources can be backed up using RSV, the remaining resources would be VM and File Share.
-
 
 ## Azure Backup & How to Restore VM
 
@@ -278,7 +336,6 @@ Azure Monitor Network Insights provides a **comprehensive view of health and met
 
 **It also provides access to network monitoring capabilities like Connection Monitor, flow logging for network security groups (NSGs), and Traffic Analytics.** And it provides other network diagnostic features. 
 
-
 Key features of Network Insight:
 - Single console for network monitoring
 - No agent configuration required
@@ -334,27 +391,20 @@ There are two ways to enable application monitoring for hosted applications:
 
 – The alternative approach is you need to install the Application Insights SDK. This means that you have to manage the updates to the latest version of the packages by yourself. The second method is recommended if you need to make custom API calls to track events/dependencies not captured by default with agent-based monitoring.
 
-## Azure Monitor Log Analytics Workspace for Storage Backup
-
-**Q :**
-There is a requirement that requires you to configure Azure Backup reports using `TDBackup1` to determine which backup items consume the most storage.  
-
-**ANS :**
-the correct answer is: `TDAnalytics1`, `TDAnalytics2`, and `TDAnalytics3`.
-
---- 
+## :star2: AZ Monitor Log Analytics Workspace for Storage Backup
 
 :memo: What is Azure Backup Report
 - Azure Backup Report provides a **reporting solution that uses Azure `Monitor logs` and Azure `workbooks`**.  
 - These resources help you get rich insights on your backups across your entire backup estate.   
-- **Backup Reports serve as a one-stop destination for tracking usage, auditing of backups and restores, and identifying key trends at different levels of granularity.**
 
-:memo: region & subscription
-- **When you create a Log Analytics workspace, it does not matter if the vault is located in a different region or subscription.**
+:memo: Region & Subscription for Azure Monitor Log Analytics workspace
+- <font color="red"> When you create a Log Analytics workspace, it does not matter if the vault is located in a different region or subscription. </font>
 
 :memo: A common requirement for backup admins is to obtain insights on backups **based on data that spans a long period of time.**   
 
 :memo: Use cases for such a solution include :
+
+Backup Reports serve as a one-stop destination for tracking usage for 
 - `Allocating` and `Forecasting` of cloud STORAGE consumed.
 - `Auditing` of backups and restores.
 - `Identifying Key Trends` at different levels of granularity.
@@ -362,3 +412,14 @@ the correct answer is: `TDAnalytics1`, `TDAnalytics2`, and `TDAnalytics3`.
 :memo: Retention Of Log Analytics Data 
 - **By default, the data in a Log Analytics workspace is retained for 30 days.**   
 - To see data for a longer time horizon, change the retention period of the Log Analytics workspace.  
+
+---
+
+:question: 3-11
+There is a requirement that requires you to configure Azure Backup reports using `TDBackup1` to determine which backup items consume the most storage.  
+
+![alt text](image-238.png)
+
+:a: : 
+
+:o: the correct answer is: `TDAnalytics1`, `TDAnalytics2`, and `TDAnalytics3`.

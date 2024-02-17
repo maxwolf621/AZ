@@ -1,26 +1,41 @@
 ## Access Tiers & Replication Strategies
 
-Two concept to know 
-1. Access Tiers
-2. Replication Strategies
+:mag: Access Tiers
+Hot (讀)
+- Optimized for storing data that is accessed frequently.  
 
-Access Tiers
-Hot
-- Optimized for storing data that is accessed frequently.
+Cool (不太讀)
+- Optimized for storing data that is infrequently accessed and stored for **at least `30` days**.  
 
-Cool 
-- Optimized for storing data that is infrequently accessed and stored for at least `30` days.
+Archive (陳年)
+- Optimized for storing data that is rarely accessed and stored for **at least `30*6` days** with flexible latency requirements on the order of hours.  
 
-Archive
-- Optimized for storing data that is rarely accessed and stored for at least `30*6` days with flexible latency requirements on the order of hours.
+:mag: Storage Account Type for Copies Of Data
+![Alt text](image-73.png)  
+- Only 3 for LRS and GRS and 6 for GRS and GZRS.
 
-Storage Account Type for Copies Of Data
-![Alt text](image-73.png)
+https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview
+
+https://docs.microsoft.com/en-us/azure/storage/common/storage-redundancy
+
+https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blob-storage-tiers
 
 ---
 
-**Q 3-:**
+:question: 3-7 :
+
+You created an Azure storage account named tutorialsdojostorage using the following parameters:
+
 ![Alt text](image-72.png)
+
+1. How many copies of your data will be maintained by the Azure storage account at the minimum? 
+2. The files that you will host in tutorialsdojostorage are frequently accessed files. What setting should you modify?
+
+:a: : 
+
+:o: :arrow_down:
+1. you will have a total of 6 copies maintained because its replication setting is Geo-redundant storage (GRS)
+2. if you store frequently accessed files, you must modify the access tier to the hot tier from the cool tier.
 
 :x: `Account Kind` is incorrect 
 - because it simply offers several types of storage accounts, such as StorageV2, Storage, and BlobStorage. 
@@ -36,6 +51,124 @@ Storage Account Type for Copies Of Data
   1. `Standard` :arrow_right: optimized for high capacity/throughput, 
   2. `Premium`  :arrow_right: `optimized for high transaction rates and single-digit consistent storage latency`.
 
+## Backup Policy for yearly, monthly backup point
+
+To create a backup policy, you need to create a Recovery Services vault first. 
+
+Take note that the services supported by Azure Backup are virtual machine, file share, SQL server, and SAP HANA. 
+
+Azure Backup Policy has two components: 
+- Schedule (when to take a backup) and Retention (how long to retain backup). 
+
+You can define the policy based on the type of data that’s being backed up, RTO/RPO requirements, operational or regulatory compliance needs, and workload type.
+
+https://docs.microsoft.com/en-us/azure/backup/guidance-best-practices
+
+https://docs.microsoft.com/en-us/azure/backup/backup-azure-manage-vms
+
+---
+
+:question: 3-17
+
+![alt text](image-246.png)
+
+- The created backup on January 15 will be retained for ?
+- The created backup on December 15 will be retained for?
+
+:a: :
+
+![alt text](image-245.png)
+Based on the given policy, the retention period for monthly backup is 36 months. Since January 15 is not configured as a yearly backup point, this backup is considered a monthly backup.
+
+## Delete A Recover Service Vault
+
+https://learn.microsoft.com/en-us/azure/backup/backup-azure-delete-vault?tabs=portal#delete-protected-items-in-the-cloud
+
+https://learn.microsoft.com/en-us/azure/backup/backup-azure-vms-first-look-arm
+
+---
+
+:question: 3-43
+You are currently managing multiple Azure virtual machines that are used for lab experiments.
+
+The VMs are continuously backed up and stored in the Recovery Services vault named td-backup-labs.
+
+You have been asked to delete `td-backup-labs` vault but it contains protected items.
+
+:a: : 
+
+![Alt text](image-108.png)
+
+:o: the correct answer is: Stop the backup of each item.
+
+:memo: To delete a Recovery Services vault, you need to stop the continuous backup first. 
+- Because if you try to delete the vault without stopping the backup, you would receive an error notification.
+
+:red_circle: You can't delete a RSV with any of the following dependencies:
+- a vault that contains protected data sources  
+  - for example, IaaS VMs, SQL databases, Azure file shares.
+- a vault that contains backup data. 
+  - Once backup data is deleted, it will go into the soft deleted state.
+- a vault that contains backup data in the soft deleted state.
+- a vault that has registered storage accounts.
+
+:warning: If you try to delete the vault without removing the dependencies, you’ll encounter one of the following error messages:
+> Vault cannot be deleted as there are existing resources within the vault.
+
+RSV cannot be deleted as there are backup items in soft deleted state in the vault. 
+- The soft deleted items are permanently deleted after 14 days of delete operation.
+
+:x: Modify the lock type of RSV is incorrect 
+- because there's no lock type configured in scenario. 
+- Even if you modify the lock type, you still won’t be able to delete the vault.
+
+:x: **Delete the backup data is incorrect** 
+- because you need to stop the backup first before you’re able to delete a backup data.
+
+:x: Modify the backup policy is incorrect 
+- because you won’t still be able to delete the RSV even if you modify the backup policy. 
+
+## :star2::star2: AKS Networking Configuration
+
+:question: 3-44
+
+Your company is planning to launch an internal web app using an AKS cluster.  
+
+The app should be accessible via the pod's IP address.  
+
+Which of the following network settings should you configure to meet this requirement?
+
+:a: : 
+
+AKS is free; you only pay for the agent nodes within your clusters, not for the masters.
+
+![alt text](image-253.png)
+
+A Kubernetes cluster provides two options to configure your network:
+
+- By default, AKS clusters use `kubenet`, and a virtual network and subnet are created for you.  
+With `kubenet`, nodes get an IP address from a virtual network subnet.
+
+- With Azure Container Networking Interface (CNI), every pod gets an IP address from the subnet and can be accessed directly.
+
+Since you will connect to the app using the pod's IP address, you need to select Azure CNI upon creation of your cluster.
+
+Hence, the correct answer is: Azure CNI.
+
+:x: kubenet is incorrect 
+- because as stated in the scenario, you need to connect via the pods ip address. 
+- With this option, network address translation is then configured on the nodes, and pods receive an IP address behind the node IP.
+
+:x: Azure NSG is incorrect 
+- because you don’t need to allow or deny inbound and outbound network traffic.
+
+:x: Azure Private Link is incorrect 
+- because this just provides private access to Azure-hosted services. 
+- It will not allow you to configure the cluster network type to assign IP addresses to pods.
+
+https://learn.microsoft.com/en-us/azure/aks/configure-azure-cni
+
+https://learn.microsoft.com/en-us/azure/aks/concepts-network
 
 ## Replication Strategies & Regions
 
@@ -365,25 +498,7 @@ https://learn.microsoft.com/en-us/azure/storage/common/storage-account-overview
 https://learn.microsoft.com/en-us/rest/api/storageservices/define-stored-access-policy
 
 
-## Persist data in container instance to Azure Storage 
-
-**:question: Q 3-:**
-![Alt text](image-69.png)
-You are tasked with deploying a new Azure Container Instance that will **run a custom-developed `.NET` application requiring persistent STORAGE for operation.**
-
-:mag: You need to create a Storage Service that will meet the requirements for Azure Container named `TDContainer`.  
-
-**:bell: ANS :**
-
-:o: Azure Files. (mount an azure file share)  
-
-:x: Azure Queue Storage is incorrect 
-- because this service is simply used for storing large numbers of messages to enable communication between components of a distributed application.
-
-:x: Azure Table Storage and Azure Blob Storage are both incorrect
-- because **Azure Container Services does not support direct integration of these services.**
-
----
+## Persist data in az container instance to Azure Storage 
 
 :memo: Azure Container Instance
 - By default, Azure Container Instances are stateless.   
@@ -401,20 +516,86 @@ If the container crashes or stops, all of its states are lost.
 - Azure Container Instances 
 - Azure VMs.  
 
-## AzCopy make & Container & File Share
+https://docs.microsoft.com/en-us/azure/container-instances/container-instances-overview
 
-**Q :**
-There is a requirement to **copy a virtual machine image** to a container named tdimage from your on-premises datacenter. 
+https://docs.microsoft.com/en-us/azure/container-instances/container-instances-volume-azure-files
+
+---
+
+**:question: Q 3-2:**
+Your company has an Azure Subscription that contains an Azure Container named TDContainer.
+
+You are tasked with deploying a new Azure Container Instance that will **run a custom-developed `.NET` application requiring persistent STORAGE for operation.**
+
+:mag: You need to create a Storage Service that will meet the requirements for Azure Container named `TDContainer`.  
+
+**:bell: ANS :**
+
+![Alt text](image-69.png)
+
+:o: Azure Files. (mount an azure file share)  
+
+:x: Azure Queue Storage is incorrect 
+- because this service is simply used for storing large numbers of messages to enable communication between components of a distributed application.
+
+:x: Azure Table Storage and Azure Blob Storage are both incorrect
+- because **Azure Container Services does not support direct integration of these services.**
+
+## :star::star: AZ image x AzCopy `make` x UNC for blob 
+
+**:question: 3-3**
+
+https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview
+
+https://docs.microsoft.com/en-us/azure/storage/common/storage-ref-azcopy-make
+
+---
+
+![alt text](image-232.png)
+
+Blob storage is designed for:
+- Serving images or documents directly to a browser.
+- Storing files for distributed access.
+- Streaming video and audio.
+- Writing to log files.
+- Storing data for backup and restore disaster recovery, and archiving.
+- Storing data for analysis by an on-premises or Azure-hosted service.
+
+A container organizes a set of blobs, similar to a directory in a file system. 
+- A storage account can include an unlimited number of containers, and a container can store an unlimited number of blobs. 
+
+:mag: VHD File x AZ Images
+<font color="red">VHD files can be used to create custom images that can be stored in an Azure Blob container</font>, which are used to provision virtual machines.
+
+:mag: AzCopy With Data for Az Container Instance 
+AzCopy is a command-line utility that you can use to copy blobs or files to or from a storage account. 
+> The `azcopy make` command is commonly used to create a container or a file share.
+
+---
+
+Your company has an Azure subscription that contains an Azure Storage account named tutorialsdojoaccount.
+
+There is a requirement to **copy a virtual machine image** to a container named `tdimage` from your on-premises datacenter. 
 
 You need to provision an Azure Container instance to host the container image.
-1. Which `AzCopy` command should you run?
-2. Azure Blob storage is Microsoft’s object storage solution for the cloud. 
 
-:m: Take note that it is mentioned in the scenario that container images and instances are used.
+1. Which `AzCopy` command should you run?
+2. UNC PATH
+```bash 
+azcopy make "https://[account-name].blob.core.windows.net/[top-level-resource-name]"
+```   
 
 **:bell: ANS :**  
 
-:o: `azcopy make "https://[account-name].blob.core.windows.net/[top-level-resource-name]"`   
+:o: 
+
+:m: Take note that it is mentioned in the scenario that container images and instances are used.
+
+```bash
+AzCopy = Make
+
+https://tutorialsdojoaccount.____.core.windows.net/tdimage = Blob
+```
 
 :x: `Copy` is incorrect  
 - because it simply copies source data to a destination location.
@@ -429,7 +610,7 @@ You need to provision an Azure Container instance to host the container image.
 - because this is just a NoSQL data store that accepts authenticated calls from inside and outside the Azure cloud which allows you to store large amounts of **structured** data.
 
 :x: `Queue` is incorrect  
-- because this simply **provides cloud messaging between application components that allows you to decouple your applications so that they can scale independently.**
+- Because this simply **provides cloud messaging between application components that allows you to decouple your applications so that they can scale independently.**
 
 ---
 
@@ -465,3 +646,36 @@ to `log` files.
 - **VHD files can be used to create custom IMAGE that can be stored in an Azure Blob container**, which are used to provision VMs.   
 
 
+## UNC path for File Share
+
+https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction
+
+https://docs.microsoft.com/en-us/azure/storage/files/storage-how-to-use-files-windows
+
+:question: 3-1
+
+Your company has an existing subscription in Azure.
+
+You provisioned an Azure Storage account named `TutorialsDojoAccount` and then created a file share named `TDShare`.
+
+You need to create a script that will allow you to connect to your file share.
+
+What is the UNC path of the file share?  
+```bash 
+\\TutorialsDojoAccount.TDShare\file.core.windows.net
+\\TutorialsDojoAccount.file.core.windows.net\TDShare
+\\TDShare.file.core.windows.net\TutorialsDojoAccount
+\\file.core.windows.net.TutorialsDojoAccount\TDShare
+```
+
+:a: :
+
+In order to use an Azure file share outside of the Azure region it is hosted in, such as on-premises or in a different Azure region, the OS must support `SMB 3.0.` 
+
+You can use Azure file shares on a Windows installation that is running either in an Azure VM or on-premises.
+
+```bash 
+\\<storageAccountName>.file.core.windows.net\<File Share Name>
+```
+
+:o: Hence, the correct answer is: `\\TutorialsDojoAccount.file.core.windows.net\TDShare`

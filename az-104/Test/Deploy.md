@@ -63,6 +63,51 @@ https://learn.microsoft.com/en-us/azure/aks/tutorial-kubernetes-scale?tabs=azure
 
 https://learn.microsoft.com/en-us/azure/aks/intro-kubernetes
 
+## Create Image and Deploy to the Cluster 
+
+:question: 3-41 :
+
+Your organization Azure subscription has the following resources:
+- Azure Kubernetes Service  
+- Azure Container Registry    
+- Azure Blob Storage  
+
+You need to create a container image and deploy it to the cluster.     
+![Alt text](image-107.png)
+
+:a: : 
+
+To deploy an application on your AKS cluster, you’ll need to build a container image first.   
+- Then create a deployment manifest file to run the image in your cluster.
+
+In this scenario, you need to identify what command should you use first, and if you take a look at the scenario again there is a statement you must create a container image. 
+
+:o: the correct answer is: az acr build.
+- The command `az acr build` allows you to queue a quick build, providing streaming logs for an Azure Container Registry. 
+
+So after you push the image to the container registry, you should run `az acr build`.
+
+:x: `az aks create` is incorrect 
+- because there is already an existing AKS cluster in your Azure subscription.
+
+:x: `az aks run` is incorrect 
+- because in order to run a container image to your cluster, you need to build the image first and deploy it to the container.
+
+:x: `az import-export create` is incorrect 
+- because this is a command to create a new job or updates an existing job in the specified subscription.  
+
+---
+
+Azure Container Registry 
+- is a managed registry service based on the open-source Docker Registry 2.0. 
+
+Create and maintain Azure container registries to store and manage your container images and related artifacts. 
+
+Use Azure container registries with your existing container development and deployment pipelines, or use Azure Container Registry Tasks to build container images in Azure. 
+
+Build on demand, or fully automate builds with triggers such as source code commits and base image updates.
+
+
 ## Export ARM JSON form Resource
 
 :question: **Q :**
@@ -105,16 +150,7 @@ This means that if you need to redeploy all your resources, you can just create 
 
 **An App Service plan can only be associated with a web app located in the same region.**
 
-**Q :**
-Your company has multiple App Service plans shown in the table below :  
-![Alt text](image-88.png)
-
-You are instructed to create the following Web Apps.  
-![Alt text](image-89.png)
-
-You need to determine which appropriate App Service plan can be used on a particular web app.
-
-**ANS :**
+:question: 3-20
 
 :warning: **An App Service plan defines a set of computing resources** for a web app to run. 
 
@@ -128,14 +164,44 @@ You need to determine which appropriate App Service plan can be used on a partic
 - The `Java 17` runtime stack can run on both `Linux` and `Windows` O.S.   
 - While the `ASP .NET 4.8` runtime stack can only run on `Windows` O.S.  
 
+https://docs.microsoft.com/en-us/azure/app-service/overview-hosting-plans
+
+https://docs.microsoft.com/en-us/azure/app-service/app-service-plan-manage
+
+https://docs.microsoft.com/en-us/azure/app-service/environment/intro
+
+---
+
+Your company has multiple App Service plans shown in the table below :  
+![Alt text](image-88.png)
+
+You are instructed to create the following Web Apps.  
+![Alt text](image-89.png)
+
+You need to determine which appropriate App Service plan can be used on a particular web app.
+
+- TD-App1 ?
+- TD-App2 ?
+
+:a: :
+
+![alt text](image-249.png)
+
+– TD-ASP1 and TD-ASP2
+– TD-ASP2
+
 ## Automation x Custom Script Extension x ARM script
 
-**Q :**
+:question: 3-19
+
 You plan to automate the deployment of Windows Servers using a virtual machine scale set.
 
 You need to make sure that the web components are installed in the virtual machines.
 
 **ANS :**
+
+![alt text](image-248.png)
+
 :warning: The Custom Script Extension downloads and executes scripts on Azure virtual machines. 
 - This extension is useful for 
     1. post-deployment configuration, 
@@ -148,9 +214,47 @@ You need to make sure that the web components are installed in the virtual machi
 - Configure the `extensionProfile` section of the ARM template.
 
 
-### AKS cluster x Grant Permission to User With OAuth2.0 authorization x Namespace
+:x: Create an automation account is incorrect 
+- because an automation account wouldn’t help you automatically install web components. 
 
-**Q :** 
+:x: Create a policy is incorrect 
+- because this option only evaluates resources in Azure. 
+- Take note that you don’t need to create a policy to install web components.
+
+:x: **Create a new scale set is incorrect** 
+- because this wouldn’t install the required web components. 
+- **Instead of creating a new scale set, you should use a custom script extension to install the web components in the VMs.**
+
+https://docs.microsoft.com/en-us/azure/virtual-machine-scale-sets/virtual-machine-scale-sets-deploy-app
+
+https://docs.microsoft.com/en-us/azure/virtual-machine-scale-sets/tutorial-install-apps-template#what-is-the-azure-custom-script-extension
+
+https://docs.microsoft.com/en-us/azure/virtual-machine-scale-sets/virtual-machine-scale-sets-deploy-app#already-provisioned
+
+
+## AKS cluster x Grant Permission to User With OAuth2.0 authorization x Namespace
+
+![Alt text](image-92.png)
+
+OAuth2.0
+- The OAuth 2.0 authorization code grant can be used in apps that are installed on a device to gain access to protected resources.  
+
+Sign In
+- As shown in the image above, the Azure AD client application will use `kubectl` to sign in users with OAuth 2.0 device authorization grant flow. 
+
+How to 
+1. Azure AD will provide an `access_token`, `id_token`, and a `refresh_token` 
+2. then the user will request to `kubectl` using an `access_token` from `kubeconfig`. 
+3. After validation, the API will perform an authorization decision based on the Kubernetes `Role/RoleBinding`.
+4. Once authorized, the API server returns a response to `kubectl`.
+
+https://docs.microsoft.com/en-us/azure/aks/concepts-identity
+
+https://docs.microsoft.com/en-us/azure/aks/azure-ad-integration-cli
+
+---
+
+:question: 3-22
 Your company has an Azure Subscription that contains an Azure Kubernetes Service (AKS) cluster and an Azure AD tenant named `tutorialsdojo.com`.  
 
 You received a report that the system administrator is unable to grant access to Azure AD users who need to use the cluster.   
@@ -175,22 +279,3 @@ To grant the users in `tutorialsdojo.com` access to the cluster, you should crea
 - because a cluster is just a set of nodes that run containerized applications.  
 - Creating a new cluster is not necessary.  
 You need to create an authorization endpoint to grant the users access to the domain name.
-
----
-
-:exclamation:
-
-![Alt text](image-92.png)
-
-OAuth2.0
-- The OAuth 2.0 authorization code grant can be used in apps that are installed on a device to gain access to protected resources.  
-
-Sign In
-- As shown in the image above, the Azure AD client application will use `kubectl` to sign in users with OAuth 2.0 device authorization grant flow. 
-
-How to 
-1. Azure AD will provide an `access_token`, `id_token`, and a `refresh_token` 
-2. then the user will request to `kubectl` using an `access_token` from `kubeconfig`. 
-3. After validation, the API will perform an authorization decision based on the Kubernetes `Role/RoleBinding`.
-4. Once authorized, the API server returns a response to `kubectl`.
-

@@ -1,21 +1,83 @@
 # VNet
 
 
+## VNet Peering 
 
-:question: **Q 3-29:** 
-Your company has 12 peered virtual networks in your Azure subscription.
+You have the following virtual networks in your Azure subscription.
+![alt text](image-233.png)
 
-You plan to deploy a network security group for each virtual network.
+Which of the following virtual networks can you establish a virtual network peering from TDVnet1?
 
-There is a compliance requirement that port 80 should be automatically blocked between virtual networks whenever a new network security group is created. 
-- The solution must minimize administrative effort.
+:a: :
 
-:bell: **ANS :**
+![alt text](image-234.png)
+
+## Resizing VNet and Sync
+
+:question: 3-13
+
+Your company has an Azure subscription named TDSubscription1 that contains the following resources:
+
+You recently added a new address space `10.30.0.0/16` to `TDVnet1`.  
+
+:a: : 
+
+:o: Sync the peering between TDVnet1 and TDVnet2.
+:mag: VNet resizing
+- You can resize the address space of Azure virtual networks that are peered without incurring any downtime on the currently peered address space. 
+- This feature is useful when you need to resize the virtual network's address space after scaling your workloads. 
+- **After resizing the address space, all that is required is for peers to be `synced` with the new address space changes.**
+- Resizing works for both IPv4 and IPv6 address spaces.
+
+:link: https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview  
+:link: https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-manage-peering  
+
+ 
+
+Addresses can be resized in the following ways:
+1. Modifying the address range prefix of an existing address range (For example, changing 10.1.0.0/16 to 10.1.0.0/18).
+2. Adding address ranges to a virtual network.
+3. Deleting address ranges from a virtual network.
+4. Resizing of address space is supported cross-tenant.
+
+:x: Delete TDVnet2 is incorrect 
+- because you can add an address space to your virtual network without deleting it.
+
+The following statements are incorrect because you do not need to delete and re-create the peering when you add an address space to an existing virtual network peering. 
+
+> All you have to do is sync the peering after you have added an address space.
+
+- Delete the peering between TDVnet1 and TDVnet2
+- Re-create the peering between TDVnet1 and TDVnet2
+
+
+
+## Automate NSG rule
+
+https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview
+
+https://docs.microsoft.com/en-us/azure/virtual-network/network-security-groups-overview
+
+---
+
+:question: **3-29:** 
+
+Your company has 12 peered virtual networks in your Azure subscription.  
+
+You plan to deploy a NSG for each virtual network.    
+
+There is a compliance requirement that port `80` should be automatically blocked between virtual networks whenever a new network security group is created. 
+
+The solution must minimize administrative effort.
+
+Solutions
+- You create a security rule that denies incoming port 80 traffic.
+- You configure the network security group (NSG) flow log to automatically block port 80.
+:a: : 
 
 It is stated in the scenario that **blocking port 80 should be done automatically whenever a new network security group is created.** 
 
 By creating a rule manually, it becomes quite cumbersome to configure as you need to create a security rule for every network security group you create. 
-
 
 It’s best practice to always automate your security processes to avoid administrative overhead. :arrow_down:
 - **You should use a custom policy definition in order to automate the requirement.**  
@@ -30,13 +92,15 @@ It’s best practice to always automate your security processes to avoid adminis
   - Cost management
   - Organization-specific rules (like naming or locations)
 
-
 :x: Configure the network security group (NSG) flow log to automatically block port 80.
 - <font color="red"> NSG flow logs are only used to monitor traffic that is allowed or denied by a network security group.</font>
 
+
+NSG flow logs are only used to monitor traffic that is allowed or denied by a network security group.  
 ![Alt text](image-105.png)
 - **Network security group (NSG) flow logs are a feature of Azure Network Watcher** that allows you to log the source and destination IP address, port, protocol, and whether traffic was allowed or denied by an NSG. 
 - Flow data is sent to Azure Storage accounts from where you can access it as well as export it to any visualization tool, SIEM, or IDS of your choice.
+
 
 
 
@@ -135,8 +199,6 @@ Capture information about the IP traffic going to and from a network security gr
 
 Diagnose connectivity issues to an Azure virtual machine: `IP flow verify`
 
-
-
 ---
 
 https://docs.microsoft.com/en-us/azure/network-watcher/network-watcher-monitoring-overview
@@ -166,9 +228,11 @@ Therefore, you have to use the NSG flow logs to capture information about the IP
 
 Conversely, to diagnose connectivity issues to or from an Azure virtual machine, you need to use IP flow verify.
 
-Next hop is incorrect because this simply helps you determine if traffic is being directed to the intended destination, or whether the traffic is being sent nowhere.
+:x: `[Traffic會被傳送到哪]` Next hop is incorrect 
+- because this simply helps you determine if traffic is being `directed` to `the intended destination`, or whether the traffic is being sent nowhere.
 
-Traffic analytics is incorrect because this just allows you to process your NSG Flow Log data that enables you to visualize, query, analyze, and understand your network traffic.
+:x: `[蒐集NSG Flow Log Data並讓你可以分析]`Traffic analytics is incorrect 
+- because this just allows you to process your NSG Flow Log data that enables you to visualize, query, analyze, and understand your network traffic.
 
 ## SKU of load balancer for Health Probe
 
@@ -262,7 +326,7 @@ The packet capture output (.cap) file can be saved in a storage account and/or o
 
 ## Create DNS Zone & Record
 
-Q 4-29
+:question: 4-29
 Your organization has a domain named `tutorialsdojo.com`.
 
 You want to host your records in Microsoft Azure.
@@ -295,26 +359,107 @@ https://docs.microsoft.com/en-us/azure/dns/dns-overview
 
 https://docs.microsoft.com/en-us/azure/dns/dns-getstarted-portal
 
+## Azure Network Watcher Connection Monitor
 
-## Azure Network Watcher
+In Azure Network Watcher, Connection Monitor provides unified end-to-end connection monitoring. 
+
+**The Connection Monitor feature also supports hybrid and Azure cloud deployments.**
+
+Use Connection Monitor
+1. Install Monitoring Agents:  
+Enable Network Watcher on your subscription.
+2. Create a Connection Monitor:  
+Specify the Virtual Network (VNet) where you want to deploy your applications.
+3. Analyze Monitoring Data and Set Alerts:  
+Connection Monitor supports connectivity checks based on `HTTP`, `TCP`, and `ICMP`.
+
+Benefits of using the Connection Monitor:
+- Unified, intuitive experience for Azure and hybrid monitoring needs
+- `[跨域]` `Cross-region`, `cross-workspace` connectivity monitoring
+- Higher probing frequencies and better visibility into network performance
+- Faster alerting for your hybrid deployments
+- Support for connectivity checks **that are based on `HTTP`, `TCP`, and `ICMP`**
+- Metrics and Log Analytics support for both Azure and non-Azure test setups
+
+https://docs.microsoft.com/en-us/azure/network-watcher/connection-monitor-overview
+
+https://docs.microsoft.com/en-us/azure/azure-monitor/faq
+
+---
+
+:question: 3-24 
+
+Your company has two Azure virtual networks named `TDVNet1` and `TDVNet2` in Central US region. 
+
+A virtual machine named `TD-VM1` is running in `TDVNet1` while the other virtual network has a virtual machine named `TD-VM2`.  
+
+A web application is hosted on TD-VM1 and the data is retrieved and processed by TD-VM2.  
+
+Several users reported that the web application has a sluggish performance.  
+
+You are instructed to track the average round-trip time (RTT) of the packets from TD-VM1 to TD-VM2.
+
+Which of the following options can satisfy the given requirement?
+- Connection Troubleshoot
+- IP flow verify
+- Connection Monitor
+- NSG flow logs
+
+:a: :
+![Alt text](image-94.png)
+
+**In this scenario, you can use Connection Monitor to track the average round-trip time (RTT) of the packets from TD-VM1 to TD-VM2.** 
+
+Hence, the correct answer is Connection Monitor.
+
+:x: IP flow verify is incorrect 
+- because this feature only looks at the rules for all Network Security Groups (NSGs) applied to the network interface. 
+- It is stated in the scenario that you must track the packets from TD-VM1 to TD-VM2. IP flow verify is not capable of providing the average round-trip time of the packets from the source to the destination.
+
+:x: Connection Troubleshoot is incorrect 
+- because it simply checks connectivity between source and destination. 
+- Take note that you need to track the average round-trip time of the packets from VM1 to VM2. Therefore, you need to use Connection Monitor to analyze the end-to-end connection and not the Connection Troubleshoot operation.
+
+:x: NSG flow logs is incorrect 
+- **because it only allows you to log information about IP traffic flowing (ingress and egress) through an NSG.** 
+- Take note that you can’t use NSG flow logs to track the average RTT of the packets from TD-VM1 to TD-VM2.  
+
+## Azure Network Watcher Connection Troubleshoot & IP flow verify
+
+:mag: Connection troubleshoot 
+- helps reduce the amount of time to diagnose and troubleshoot network connectivity issues. 
+- The results returned can provide insights about the root **cause of the connectivity problem and whether it's due to a platform or user configuration issue.**
+
+Connection troubleshoot reduces the Mean Time To Resolution (MTTR) by providing a comprehensive method of performing all connection major checks to detect issues pertaining to NSGs, user-defined routes, and blocked ports.  
+
+:mag: IP flow verify (Rule & Traffic)
+- IP flow verify is a feature in Azure Network Watcher
+- checks if a packet is allowed or denied to or from a virtual machine. 
+If the packet is denied by a security group, the name of the rule that denied the packet is returned.
+
+**IP flow verify looks at the rules for all Network Security Groups (NSGs) applied to the network interface**, such as a subnet or virtual machine NIC. 
+- Traffic flow is then verified based on the configured settings to or from that network interface. 
+
+<font color="red">IP flow verify is useful in confirming if a RULE in a NSG is blocking ingress or egress Traffic `TO/FROM` a virtual machine.</font>
+
+:mag: IP flow verify vs NSG flow logs
+In summary, NSG flow logs provide detailed traffic information, while IP flow verify quickly checks if a packet is allowed or denied based on rules
+
+---
+
+:question: 
 
 ![Alt text](image-143.png)
 
-TD1 is unable to connect to TD4 via port 443. You need to troubleshoot why the communication between the two virtual machines is failing.  
+TD1 is unable to connect to TD4 via port 443.   
 
-Connection troubleshoot helps reduce the amount of time to diagnose and troubleshoot network connectivity issues. The results returned can provide insights about the root cause of the connectivity problem and whether it’s due to a platform or user configuration issue.
+You need to troubleshoot why the communication between the two virtual machines is failing.      
 
-Connection troubleshoot reduces the Mean Time To Resolution (MTTR) by providing a comprehensive method of performing all connection major checks to detect issues pertaining to network security groups, user-defined routes, and blocked ports.
-
-IP flow verify checks if a packet is allowed or denied to or from a virtual machine. If the packet is denied by a security group, the name of the rule that denied the packet is returned.
-
-IP flow verify looks at the rules for all Network Security Groups (NSGs) applied to the network interface, such as a subnet or virtual machine NIC. Traffic flow is then verified based on the configured settings to or from that network interface. IP flow verify is useful in confirming if a rule in a Network Security Group is blocking ingress or egress traffic to or from a virtual machine.
+:a: :
 
 Therefore, the correct answers are:
-
-– Connection troubleshoot
-
-– IP flow verify
+- Connection troubleshoot
+- IP flow verify
 
 Effective security rules is incorrect because this simply allows you to see all inbound and outbound security rules that apply to a virtual machine’s network interface. This is also used for security compliance and auditing.
 
@@ -482,18 +627,31 @@ Export the security rules to Target VNet Region :
 - You can use an `Azure Resource Manager (ARM)` Template to export the existing configuration and security rules of an NSG.   
 - **You can then stage the resource in another region by exporting the NSG to a template, modifying the parameters to match the destination region, and then deploying the template to the new region.**  
 
-## P2S VPN gateway type
+## :star: P2P & Route-based VPN Type
 
-**Q :**
-Your company has a virtual network named `TDVnet1` and a policy-based virtual network gateway named TD1 in your Azure subscription.
+https://docs.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-howto-point-to-site-resource-manager-portal
 
-You have users that need to access TDVnet1 from a remote location.
+https://docs.microsoft.com/en-us/azure/vpn-gateway/point-to-site-about
 
-What should you do?
+---
 
-**ANS :**
+:question: 3-6 :
 
-:o: If you create a policy-based VPN type as your gateway, you need to delete it and deploy a route-based VPN gateway instead. Hence, the correct answers are:
+Your company has a virtual network named `TDVnet1` and a policy-based virtual network gateway named `TD1` in your Azure subscription.  
+
+You have users that need to access `TDVnet1` from a remote location.
+
+Which two actions should you do so your users can establish a point-to-site connection to `TDVnet1`?
+
+:a: :  
+
+When you configure a point-to-site VPN connection, you must use a route-based VPN type for your gateway. 
+
+Policy-based VPN type for point-to-site VPN connection is not supported by Azure.  
+
+**If you create a policy-based VPN type as your gateway, you need to delete it and deploy a route-based VPN gateway instead.**      
+
+:o: Hence, the correct answers are
 - Delete TD1
 - Deploy a route-based VPN gateway
 
@@ -516,42 +674,50 @@ What should you do?
 
 ## Linked VNet to Private DNS zone with auto registration enabled
 
-**Q :**
+:question: 3-8
+
+
+Your company has an Azure subscription named TD-Subscription1 with the following resources:
+
+![alt text](image-237.png)
+
 You need to use a DNS service that will resolve domains for your two virtual networks.   
 
-You created an Azure PRIVATE ZONE named `tutorialsdojo.com`.     
-You link `TDVnet2` to `tutorialsdojo.com` with `auto registration` enabled.  
+You created an Azure PRIVATE ZONE named `tutorialsdojo.com`.  
+
+You link `TDVnet2` to `tutorialsdojo.com` with `auto registration` enabled.   
 
 The parameters of your private zone are as follows:  
 ![Alt text](image-74.png)
 
+Which one is correct
+- `td2.tutorialsdojo.com` is resolvable by TD3.		
+- `td2.tutorialsdojo.com` is resolvable by TD4.		
+- When you create a virtual machine in `TDVnet1`, it will automatically register the A record of the VM to `tutorialsdojo.com` zone.
+
 **ANS :**
-:o: Take note that in this scenario, `TDVnet2` is linked to the `tutorialsdojo.com` zone with `auto registration` enabled. 
+
+:o: `td2.tutorialsdojo.com` is resolvable by `TD4`.  
+- Take note that in this scenario, `TDVnet2` is linked to the `tutorialsdojo.com` zone with `auto registration` enabled. 
 - This means that the DNS RECORDS of the VMs deployed in `TDVnet2` are automatically created in the `tutorialsdojo.com` zone
 - Hence, this statement is correct:   
-`td2.tutorialsdojo.com` is resolvable by `TD4`.  
 
 :x: `td2.tutorialsdojo.com` is resolvable by `TD3` is incorrect 
 - because TD3 is located in TDVnet1. Since TDVnet1 is not linked to the `tutorialsdojo.com` zone, TD3 will not have the capability to resolve it. You can link a virtual network to a private zone by heading over to virtual network links in your private zone.
 
 :x: When you create a virtual machine in VNet : `TDVnet1`, it will automatically register the A record of the VM to `tutorialsdojo.com` zone is incorrect. 
 - There are two conditions for the automatic registration of your VMs A records. 
-1. First, you need to link the `tutorialsdojo.com` zone to `TDVnet1` and 
-2. second, you must enable `auto registration`. 
+  1. First, you need to link the `tutorialsdojo.com` zone to `TDVnet1` and 
+  2. second, you must enable `auto registration`. 
 - Since `TDVnet1` is not linked to `tutorialsdojo.com` zone, you will not be able to automatically register the `A records` of your VMs.
 
----
 
-
-#### Link VNet to DNS Zone & auto registration enable
+:memo: Link VNet to DNS Zone
 To resolve the records of a private DNS zone from your VNet, you must link the virtual network with the zone.  
+- **Linked VNets have full access and can resolve all DNS records published in the private zone.**  
+- Additionally, you can also enable auto `registration` on a virtual network link.  
 
-**Linked VNets have full access and can resolve all DNS records published in the private zone.**  
-
-Additionally, you can also enable auto `registration` on a virtual network link.  
-
-#### What auto-registration enable benefits 
-
+:mag: Benefit of auto registration enabled
 The Azure DNS private zones auto registration feature takes the pain out of DNS record management for virtual machines deployed in a virtual network.
 
 - <font color="red">In addition to **forward look records (A records), reverse lookup records (PTR records) are also automatically created** for the virtual machines.</font>   
@@ -560,64 +726,100 @@ The Azure DNS private zones auto registration feature takes the pain out of DNS 
 
 - When you **delete a virtual machine, the DNS records for the virtual machine are automatically deleted** from the private DNS zone.  
 
-## Application Security Group (ASG,NSG) & NIC
+## ASG x NSG x NIC assignment 
 
-**Q :**
+{%youtube https://youtu.be/w8H5fWBHddA?feature=shared %}
+
+ASGs enable you to configure network security as a natural extension of an application's structure, allowing you to group VMs and define network security policies based on those VM groups.  
+- You can reuse your security policy at scale without manual maintenance of explicit IP addresses
+
+> You can only attach an `ASG` to the network interface of a virtual machine.
+
+:mag: ASG vs NSG
+NSG 網路安全群組。
+- NSG 包含了一些安全規則，可以允許或拒絕對某些 Azure 資源的入站或出站網路流量。
+- 每個安全規則都可以指定來源和目的地、埠和協定。NSG 可以關聯到子網或網路介面卡 (NIC)。
+
+ASG 應用程式安全群組。
+- ASG 是一種邏輯分組的功能，可以將虛擬機器 (VM) 分組，並根據這些分組定義網路安全策略。
+- ASG 可以讓您根據**應用程式的結構來配置網路安全**，而不需要手動維護明確的 IP 位址。
+- **ASG 只能作為 NSG 規則的來源或目的地，不能單獨使用。**
+
+簡單來說，NSG 是用來定義網路安全規則的，而 ASG 是用來分組 VM 並簡化 NSG 規則的。使用 ASG 可以減少需要的安全規則的數量，並提高網路安全的可維護性和可讀性。
+
+---
+
+:question: 3-9
+
+You have an Azure subscription named TDSubscription1 that contains the following resources:
 ![Alt text](image-76.png)
 
-VM : `TD1` is associated with `TDSubnet1` which is connected to `TDVnet1`.  
-For data security, the `TDNSG1` NSG is associated with `TD1`.
+`TD1` is associated with `TDSubnet1` which is connected to `TDVnet1`.  
+
+For data security, the `TDNSG1` NSG is associated with `TD1`.  
 
 `TDASG1` must be integrated directly to `TD1`.   
 
-**ANS :**
+What should you do?
+1. Remove `TDNSG1` from TD1 and attach `TDASG1` to TD1.  
+2. Attach `TDASG1` to the network interface of TD1.    
+3. Attach a new network interface to TD1 and attach it to `TDASG1`.  
+4. Attach `ASG1` to `TDSubnet1`.  
+
+:a: : 
+
 :arrow_down: Configure ASG in a VM resource
 ![Alt text](image-75.png)  
 
 :warning: Take note of the following ASG constraints:
-- You can **specify one application security group as the source and destination in a security rule.**  
-- You cannot specify multiple application security groups in the source or destination.  
-- **All network interfaces assigned to an ASG have to exist in the same virtual network** that the first network interface assigned to the ASG is in.   
+- You can **specify one ASG as the source and destination in a security rule.**  
+- You cannot specify multiple ASGs in the source or destination.  
+- **All network interfaces assigned to an ASG have to exist in the same VNet** that the first network interface assigned to the ASG is in.   
 - If you specify an ASG as the source and destination in a security rule, the network interfaces in both application security groups must exist in the same virtual network.  
 
-:x: `Attach `ASG1` to `TDSubnet1`` is incorrect 
-- because you can not attach an application security group to a subnet.  
-- You can only attach an application security group to the network interface of a virtual machine.
+:x: Attach `ASG1` to `TDSubnet1` is incorrect 
+- because yo1u can not attach an application security group to a subnet.  
+- You can only attach an `ASG` to the network interface of a virtual machine.
 
----
 
-{%youtube https://youtu.be/w8H5fWBHddA?feature=shared%}
-
-ASGs enable you to configure network security as a natural extension of an application's structure, allowing you to group VMs and define network security policies based on those VM groups.  
-
-- You can reuse your security policy at scale without manual maintenance of explicit IP addresses.  
-
-## Assign Security Rules for subnets
+## :star::star: Assign Security Rules for subnets
 
 **A Network Security Groups Resource can be attached to multiple subnets and/or network interfaces.**
 
 NSGs can be attached to multiple subnets and/or network interfaces. 
 
 Unless you have a specific reason to, it is recommended that you associate a NSG to a subnet or a network interface, but not both.
+
 ![Alt text](image-79.png)
+
+https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview
+
+https://learn.microsoft.com/en-us/azure/virtual-network/network-security-group-how-it-works
 
 ---
 
+:question: 3-10
+
 You have an Azure virtual network named `TDVnet1` that contains the following subnets shown below:  
+
 ![Alt text](image-77.png)
 
 Requirement :   
 1. Virtual machines in `TDSub2` and `TDSub3` must have `HTTPS` traffic from the Internet.  
-2. Remote Desktop connections from the public Internet must only access `TD1`.
-3. All traffic between `TD1` and `TD2` must be allowed.
-4. Restrict all other external network traffic from accessing TDVnet1.
+2. Remote Desktop connections from the public Internet must only access `TD1`.  
+3. All traffic between `TD1` and `TD2` must be allowed. 
+4. Restrict all other external network traffic from accessing TDVnet1.  
 
 What is the minimum number of network security groups that you should provision to satisfy the requirements above?
 
-**ANS**
+:a: : 
+
 ![Alt text](image-80.png)
 In the image above, the requirements of the scenario are fully satisfied.   
-You only need to create one network security group with multiple rules and associate it with `TDSub1`, `TDSub2`, and `TDSub3`.  
+
+> You only need to create one network security group with multiple rules and associate it with `TDSub1`, `TDSub2`, and `TDSub3`.  
+
+:o: Hence, the answer is: 1
 
 :red_circle: Virtual machines in `TDSub2` and `TDSub3` must have HTTPS traffic from the Internet.  
 - You can whitelist the address spaces of `TDSub2` and `TDSub3` in the destination IP addresses/CIDR ranges of an inbound security rule.   
@@ -630,15 +832,12 @@ You only need to create one network security group with multiple rules and assoc
 - See priority 110 in the image above.
 
 :red_circle: All traffic between TD1 and TD2 must be allowed.
-- When you create a network security group, the default rules of a network security group always allow traffic coming from WITHIN the virtual network. 
+- When you create a network security group, the default rules of a network security group always allow traffic coming from WITHIN THE VNet. 
 - No action is needed from your side.
 
 :red_circle: Restrict all other external network traffic from accessing `TDVnet1`.
 - The default rules of a network security group explicitly deny all incoming traffic. 
 - No action is needed from your side.
-
-Hence, the answer is: 1
-
 
 ## Resize VNet IP address space in a peering status & Sync the peering
 
@@ -661,18 +860,45 @@ This feature is useful when you need to resize the virtual network's address spa
 
 https://learn.microsoft.com/en-us/azure/virtual-network/virtual-network-peering-overview#resize-the-address-space-of-azure-virtual-networks-that-are-peered
 
-## Host Scaling for Bastion Service Resource with SKU Standard 
+## :o Upgrad Azure Bastion SKU x host scaling
 
-**Q :**
+![alt text](image-239.png)
+
+Two instances are created when you configure Azure Bastion using the Basic SKU. 
+
+
+**you can only use host scaling if your bastion server has an SKU of `Standard`**  
+Using the Standard SKU, you can specify the number of instances. 
+- This is called host scaling.
+
+Each instance can support 20 concurrent RDP connections and 40 concurrent SSH connections for medium workloads. 
+
+The number of connections per instance depends on your actions when connected to the client VM. 
+- For example, if you are doing something data-intensive, it creates a more significant load for the instance to process. Once the concurrent sessions are exceeded, an additional scale unit (instance) is required.
+
+https://docs.microsoft.com/en-us/azure/bastion/bastion-overview
+
+https://learn.microsoft.com/en-us/azure/bastion/configuration-settings
+
+---
+
+:question: 3-14
+
 You recently deployed an Azure bastion named `TD1` with an SKU of `Basic` and a subnet size of `/26`.
 
 There is a requirement that more than 90 users will concurrently use TD1. 
 
 What is the first thing you need to do? 
 
+- Deploy a new bastion server with an SKU of `Standard`
+- Increase the server size of TD1.
+- Increase the instance count of TD1.
+- Upgrade the SKU of TD1
+
 **ANS :**
 
-:o: To accommodate additional concurrent client connections.
+:o: 
+To accommodate additional concurrent client connections.
 - First, you need to upgrade the SKU of `TD1` from `Basic` to `Standard`(after upgrading to Standard, you can not revert back to Basic SKU).   
 After that, you can increase the instance count of TD1 to whatever number of servers are required to accommodate the `90` users.
 
@@ -683,74 +909,133 @@ After that, you can increase the instance count of TD1 to whatever number of ser
 - **because there is no option to increase the server size of a bastion server**. 
 - If you need more computing power, you can increase the instance count of the bastion server and you need to use an SKU of Standard before being able to use host scaling.
 
---- 
+## :star2::star2:NSG x AZ Network Watcher 
 
-> **Remember that you can only use host scaling if your bastion server has an SKU of `Standard`**
+:question: 3-15
 
-For a Bastion Service Resource, `Setting | Configuration`
-![Alt text](image-86.png)
-- Two instances are created when you configure Azure Bastion using the Basic SKU.  
-- Using the Standard SKU, you can specify the number of instances. This is called host scaling.  
+Your company has an Azure subscription that contains the following resources:
+![alt text](image-240.png)
 
-**Each instance can support `20` concurrent RDP connections and `40` concurrent SSH connections for medium workloads.**
+TD2 allows ICMP in its inbound Windows firewall.  
 
-When do you need to scale up instance :question:
-The number of connections per instance depends on your actions when connected to the client VM.   
-- For example, if you are doing something data-intensive, it creates a more significant load for the instance to process. 
-Once the concurrent sessions are exceeded, an additional scale unit (instance) is required.  
+You create a network security group named `TDNSG1` and add the following inbound security rules:  
+![alt text](image-241.png)
 
-### NSG x AZ Network Watcher 
+You execute an Azure Network Watcher Connection Troubleshoot operation for port 443.  
+![alt text](image-242.png)
+
+You also invoked another Network Watcher Connection Troubleshoot operation for ICMP protocol.
+![alt text](image-243.png)
+
+Which questions are correct?
+- TD1 and TD2 are in the same virtual network.		
+- TDNSG1 is associated with the network interface of TD2.		
+- Traffic to TD1 is restricted by TDNSG1.
+
+
+:a: :
 
 ![Alt text](image-87.png)
+Azure Network Watcher provides tools to monitor, diagnose, view metrics, and enable or disable logs for resources in an Azure virtual network. 
+
+Network Watcher is designed to monitor and repair the network health of IaaS (Infrastructure-as-a-Service) products which includes Virtual Machines, Virtual Networks, Application Gateways, Load balancers, etc.
+
 Connection Troubleshoot enables one-time connectivity and latency check between a VM and another network resource.
 
-The destination of the inbound security rules of TDNSG1 all points to 10.0.2.0/24 (where TD2 is connected to), which indicates that the purpose of `TDNSG1` is to filter network traffic for `TD2`. 
+- The destination of the inbound security rules of `TDNSG1` all points to `10.0.2.0/24` (where `TD2` is connected to), which indicates that the purpose of `TDNSG1` is to filter network traffic for `TD2`.   
 
-Remember that if `TDNSG1` is attached to TD1, the inbound security rules will be passed on to the default security rules of `TDNSG1` because it will not match the two inbound security rules since the destination is `10.0.2.0/24`.
+Remember that if `TDNSG1` is attached to `TD1`, the inbound security rules will be passed on to the default security rules of `TDNSG1` 
+- because it will not match the two inbound security rules since the destination is `10.0.2.0/24`.
 
-When you create a network security group, the default rules of a network security group always allow traffic coming from within the virtual network. Since TD1 can ping TD2 without an additional inbound security rule, this means that the virtual machines are located in the same virtual network. Also, the priority 310 deny rule only denies TCP protocols and not ICMP protocols.
+When you create a NSG, the default rules of a NSG always allow traffic coming from within the VNet. 
+
+**Since TD1 can ping TD2 without an additional inbound security rule, this means that the virtual machines are located in the same virtual network.**  
+Also, the priority `310` deny rule only denies TCP protocols and not ICMP protocols.
 
 Hence, the following statements are correct:
-- TDNSG1 is associated with the network interface of TD2
-- TD1 and TD2 are in the same virtual network.
+:o: TDNSG1 is associated with the network interface of TD2  
+:o: TD1 and TD2 are in the same virtual network.
 
-## Create Child Domain in DNS zone using AZ Portal
+:x: Traffic to `TD1` is restricted by `TDNSG1` is incorrect. 
+- Rules are processed in priority order, with lower numbers processed before higher numbers, because lower numbers have higher priority. 
+- Since priority 300 inbound security rule allows all TCP traffic from 10.0.1.0/24 to 10.0.2.0/24, the processing stops. As a result, any rules that exist with lower priorities (priority 310) are not processed. 
+- **This means that TDNSG1 does not limit traffic to TD1. One of the reasons port 443 was unreachable from TD1 to TD2 is that TD1 is not configured to listen to port 443.**
 
-You can use the Azure portal to delegate a DNS subdomain.   
+https://docs.microsoft.com/en-us/azure/network-watcher/network-watcher-monitoring-overview
 
-For example, if you own the `tutorialsdojo.com` domain, you can delegate a subdomain called portal to another, separate zone that you can administer separately from the `tutorialsdojo.com` zone (DNS zone).
+https://docs.microsoft.com/en-us/azure/network-watcher/network-watcher-connectivity-portal
 
+## NS Record for Child Domain in Father DNS zone using AZ Portal 
+
+https://docs.microsoft.com/en-us/azure/dns/dns-overview
+
+https://docs.microsoft.com/en-us/azure/dns/delegate-subdomain
+
+---
+
+:question: 3-16
+You have an Azure subscription that contains an Azure DNS zone named `tutorialsdojo.com`.
+
+There is a requirement to delegate a subdomain named portal.tutorialsdojo.com to another Azure DNS zone.
+
+What solution would satisfy the requirement?
+- Navigate to tutorialsdojo.com and add a PTR record named portal.
+- Navigate to tutorialsdojo.com and add an NS record named portal.
+- Navigate to tutorialsdojo.com and add a CNAME record named portal.
+- Navigate to tutorialsdojo.com and add a TXT record named portal.
+
+:a: : 
+
+:o: Navigate to tutorialsdojo.com and add an NS record named portal  
+
+You can use the Azure portal to delegate a DNS subdomain.     
 To delegate an Azure DNS subdomain, 
 1. you must first delegate your Public Domain to Azure DNS.   
 2. Once your Public Domain is delegated to your Azure DNS zone, you can delegate your subdomain.    
 
+For example, if you own the `tutorialsdojo.com` domain, you can delegate a subdomain called `portal` to another, separate zone that you can administer separately from the `tutorialsdojo.com` zone (DNS zone).
+
 You can delegate a subdomain by doing the following :
 1. `[CREATION]` Create a new Azure DNS zone named `portal.tutorialsdojo.com`.  
+![alt text](image-244.png)
 Copy down the four nameservers as you will need them for step 2.
-2. `[LINK]` Navigate to the `tutorialsdojo.com` DNS zone and add an NS record named portal.  
-Under records, enter the four nameservers from `portal.tutorialsdojo.com` and click ok.
-3. `[VERIFICATION]` To verify your work, open a PowerShell window and type `nslookup portal.tutorialsdojo.com`
+2. `[LINK]` Navigate to the `tutorialsdojo.com` DNS zone and add an NS record named `portal`.  
+Under records, enter the four nameservers from `portal.tutorialsdojo.com` and click `ok`.
+3. `[VERIFICATION]` To verify your work, open a `PowerShell` window and type `nslookup portal.tutorialsdojo.com`
 
 :x: `PTR`, `CNAME`, and `TXT` records are not used to delegate an Azure DNS subdomain
 
-### App Service & VNet Integration
+## :star2::star2: Web App Service connects VM x VNet Integration
 
-**:question: Q :**
+https://docs.microsoft.com/en-us/azure/app-service/web-sites-integrate-with-vnet
+
+https://azure.microsoft.com/en-in/services/app-service/
+
+---
+
+**:question: 3-23 :**
+
 Your company has a virtual network that contains a MySQL database hosted on a virtual machine.
 
 You created a web app named `tutorialsdojo-webapp` using the Azure App service.
 
 You need to make sure that `tutorialsdojo-webapp` can fetch the data from the MySQL database.  
 
-**:bell: Ans :**
+What should you implement?
+- Create an Azure Application Gateway.
+- Peer the virtual network to another virtual network.
+- Enable VNet Integration and connect the web app to the virtual network.
+- Create an internal load balancer.
+
+:a: :
 The only requirement is to ensure that `tutorialsdojo-webapp` can access the data from the MySQL database hosted on a virtual machine. :arrow_down:
 
 ![Alt text](image-93.png)  
 
-:memo: With Azure Virtual Network, you can place many of your Azure resources in a non-internet-routable network. 
+:memo: Through Azure Virtual Network, you can place many of your Azure resources in a non-internet-routable network. 
 
 :memo: The VNet Integration feature 
-- enables your apps to access resources in or through a VNet.
+- Enables your apps to access resources in or through a VNet.
 - VNet Integration doesn't enable your apps to be accessed privately. 
 
 :memo: Azure App Service has two variations on the VNet Integration feature:
@@ -766,25 +1051,17 @@ The only requirement is to ensure that `tutorialsdojo-webapp` can access the dat
 - An Azure Application Gateway is just **a web traffic load balancer that enables you to manage traffic to your web applications.** 
 
 
-## S2S VM & File Share SMB protocol connection
+## S2S. VM connects File Share with SMB protocol
 
-:x: Create an Azure virtual network peering is incorrect 
-- this only enables you to seamlessly connect two or more Virtual Networks in Azure.
+https://docs.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-about-vpngateways
 
-:x: Create an `Azure AD Connect sync` is incorrect because 
-- this service is simply the main component of Azure AD Connect. 
-This service synchronizes information held in the on-premises Active Directory to Azure AD.  
-- For example, if you provision or deprovision groups and users on-premises, these changes propagate to Azure AD. 
-- **You can not use this to synchronize `FileServer1` to `TD1` since the file server is not an Active Directory.**
-
-:x: Create an Azure Application Gateway is incorrect 
-- because this service is **just a web traffic load balancer** that enables you to manage traffic to your web applications.
+https://docs.microsoft.com/en-us/azure/vpn-gateway/tutorial-site-to-site-portal
 
 ---
 
 ![Alt text](image-81.png)
 
-An Azure `Virtual Network Gateway` or `VPN Gateway` is a specific type of virtual network gateway that is used to send encrypted traffic between an Azure virtual network and an on-premises location over the public Internet.  
+An Azure `Virtual Network Gateway` or `VPN Gateway` is a specific type of virtual network gateway that is used to send encrypted traffic between an Azure virtual network and an on-premises location **over the public Internet**.  
 - :warning: **Each VNet can have only one VPN gateway.**  
 However, you can create multiple connections to the same VPN gateway.   
 - :warning: When you create multiple connections to the same VPN gateway, **all VPN tunnels share the available gateway bandwidth.**
@@ -805,21 +1082,109 @@ Azure VPN Gateway
 - You can also use VPN Gateway to send encrypted traffic between Azure virtual networks over the Microsoft network. 
 - It is used for secure communication over the internet and provides confidentiality, integrity, and authentication for IP packets.
 
-## Peering different VNets x VNet IP address x VNet Subnet
+https://docs.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-about-vpngateways
+
+https://docs.microsoft.com/en-us/azure/vpn-gateway/tutorial-site-to-site-portal
+
+---
+
+:question: 3-12
+
+Your company has an Azure subscription that contains a virtual machine named `TD1` and a virtual network named `TDVnet1`.
+
+You have an on-premises Server Message Block (SMB) file server named `FileServer1`.
+
+There is a requirement to connect `TD1` to `FileServer1`.
+
+:a: :
+
+:o: Create an Azure Virtual Network Gateway.
+- A site-to-site VPN gateway connection is used to connect your on-premises network to an Azure virtual network over an IPsec/IKE (IKEv1 or IKEv2) VPN tunnel.
+
+:x: Create an Azure virtual network peering is incorrect 
+- this only enables you to seamlessly connect two or more Virtual Networks in Azure.
+
+:x: Create an `Azure AD Connect sync` is incorrect because 
+- this service is simply the main component of Azure AD Connect. 
+This service synchronizes information held in the on-premises Active Directory to Azure AD.  
+- For example, if you provision or deprovision groups and users on-premises, these changes propagate to Azure AD. 
+- **You can not use this to synchronize `FileServer1` to `TD1` since the file server is not an Active Directory.**
+
+:x: Create an Azure Application Gateway is incorrect 
+- because this service is **just a web traffic load balancer** that enables you to manage traffic to your web applications.
+
+## :star: VNets peering x IP address x Region
 
 ![Alt text](image-70.png)
 
-:warning: **The virtual networks you peer with must have non-overlapping IP address spaces.**  
-- e.g. VNetA peer with VNetB then both should have different IP address space (:x: `10.1.1.1/10` peering `10.1.1.1/20`) 
-
 The virtual networks appear as one for connectivity purposes. 
 Via the Microsoft backbone infrastructure. 
-- Make connection just like traffic between virtual machines in the same network, `[Azure VNet存在意義]`**traffic is routed through Microsoft’s private network only**.  
+- Make connection just like traffic between virtual machines in the same network, **traffic is routed through Microsoft’s private network only**.  
 
-Azure supports the following types of peering:
+:warning: **The VNets you peer with must have non-overlapping IP address spaces.**  
+- e.g. When `VNetA` peers with `VNetB`, both should have different IP address space (:x: `10.1.1.1/10` peering `10.1.1.1/20`) 
+
+
+Azure supports the following types of peering : (依據Region)
 - Virtual network peering: 
   - Connect virtual networks within the same Azure region.   
 - Global virtual network peering: 
   - Connecting virtual networks across Azure regions.  
 
-You can always change the address space of a virtual network, but you need to make sure that the subnets within it must be contained to the new address space of your virtual network.
+You need to plan ahead when you create your virtual network address spaces in the event that you will need to peer your virtual networks.
+
+<font color="red"> You can always change the address space of a virtual network, but you need to make sure that the subnets within it must be contained to the new address space of your virtual network.</font>
+
+https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview
+
+https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-peering-overview
+
+---
+:question: 3-4
+
+You have the following virtual networks in your Azure subscription.  
+![alt text](image-235.png)
+
+Which of the following virtual networks can you establish a virtual network peering from `TDVnet1`?
+
+:a: :
+
+:o: TDVnet3 and TDVnet4 only. 
+:x: The following options are incorrect   
+because the address space 10.1.0.0/17 of TDVnet2 overlaps with the address space 10.1.0.0/16 of TDVnet1. 
+- TDVnet2 only
+- TDVnet2, TDVnet3 and TDVnet4
+- TDVnet2 and TDVnet3 only
+
+## :| NSG region to a subnet or NIC with same region
+
+:warning: Region Restriction With NIC & Subnet
+You can only associate a network security group to a subnet or network interface within the same region as the network security group. 
+- So if your network security is in the Azure security groups, it can’t be moved from one region to another. 
+
+:mag: Export the NSG and change the region you want
+However, you can use an Azure Resource Manager template to export the existing configuration and security rules of an NSG. 
+- You can then stage the resource in another region by exporting the NSG to a template, modifying the parameters to match the destination region, and then deploying the template to the new region.
+
+https://docs.microsoft.com/en-us/azure/virtual-network/network-security-groups-overview
+
+https://docs.microsoft.com/en-us/azure/virtual-network/move-across-regions-nsg-portal
+
+---
+
+:question: 3-5
+
+Your company has an Azure subscription named TDSubcription1. 
+
+It contains the following resources:
+
+![alt text](image-236.png)
+
+Which subnet/s can you associate `TDNSG1` with?
+
+:a: : 
+
+:o: You can associate it to the subnet of TDVnet3 only.
+:x: You can associate it to the subnets of TDVnet1 and TDVnet2 only
+:x: You can associate it to the subnet of TDVnet1 only
+:x: You can associate it to the subnet of TDVnet2 only
