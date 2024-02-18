@@ -198,23 +198,29 @@ After knowing which resources can be backed up using RSV, the remaining resource
 
 ## Azure Backup & How to Restore VM
 
-Azure Backup takes a snapshot of the existing VM before replacing the disk, and stores it in the staging location you specify.  
-The existing disks connected to the VM are replaced with the selected restore point.
+Azure Backup 
+- **takes a snapshot of the existing VM before replacing the disk, and stores it in the staging location you specify.**    
+- The existing disks connected to the VM are replaced with the selected restore point.
+![Alt text](image-112.png)  
 
-The snapshot is copied to the vault (RSV保存庫), and retained in accordance with the retention policy.   
-After the replace disk operation, the original disk is retained in the resource group.  
-You can choose to manually delete the original disks if they aren’t needed.  
+:mag: snapshot
+**The snapshot is copied to the vault, and retained in accordance with the retention policy.**   
+- After the replace disk operation, the original disk is retained in the resource group.  
+- You can choose to manually delete the original disks if they aren’t needed.  
 
 Azure Backup provides several ways to restore a VM:  
-![Alt text](image-112.png)  
 - Create a new VM
 Quickly creates and gets a basic VM up and running from a restore point.  
 - Restore disk 
 Restores a VM disk, which can then be used to create a new VM.  
-- Replace existing disk
+- Replace existing disk (on the existing VM)
 Restore a disk, and use it to replace a disk on the existing VM.
-- Cross-Region (secondary region)
+- Cross-Region (Secondary Region)
 Restore Azure VMs in the secondary region, which is an Azure paired region.
+
+https://docs.microsoft.com/en-us/azure/backup/backup-azure-arm-restore-vms
+
+https://docs.microsoft.com/en-us/azure/backup/backup-azure-vms-first-look-arm
 
 ---
 
@@ -227,16 +233,38 @@ You created a backup of the TD-BGC and implemented the following changes:
 - Resize the virtual machine.
 - Copy the log reports to the data disk.
 
-You received an email that the admin restore the TD-BGC using the `replace existing` configuration.    
+You received an email that the admin restore the `TD-BGC` using the `replace existing` configuration.  
+
 Which options should you perform to bring back the changes in TD-BGC?  
+- Create and attach a new disk.
+- Change the local admin password.
+- Resize the virtual machine.
+- Copy the log reports to the data disk.
 
-**ANS :**
-**Since you restore the VM using the backup data, the new disk won't have a copy of the log reports.**   
+:a: 
 
-To bring back the changes in the TD-BGC virtual machine, you will need to copy the log reports to the disk.  
-Hence, the correct answer is: Copy the log reports to the data disk.
+:o: Copy the log reports to the data disk.
+**Since you restore the VM using the backup data, the new disk won't have a copy of the log reports.**  
+- To bring back the changes in the `TD-BGC` virtual machine, you will need to copy the log reports to the disk.  
 
-## A Recovery Services Configuration  
+:x: Change the local admin password is incorrect 
+- because the new password will not be overridden with the old password using the restore VM option. Therefore, you can use the updated password to connect via RDP to the machine.
+
+:x: Create and attach a new disk is incorrect 
+- because the new disk does not contain the log reports. Instead of creating a new disk, you should attach the existing data disk that contains the log reports.
+
+:x: Resize the virtual machine is incorrect 
+- because the only changes that will retain after rolling back are the VM size and the account password.
+
+## :star2::star2: A Recovery Services Configuration  
+
+https://docs.microsoft.com/en-us/azure/site-recovery/tutorial-prepare-azure-for-hyperv
+
+https://docs.microsoft.com/en-nz/azure/site-recovery/hyper-v-azure-tutorial
+
+https://docs.microsoft.com/en-us/windows-server/virtualization/hyper-v/hyper-v-technology-overview
+
+:question: 4-12
 
 Your company created several Azure virtual machines and a file share in the subscription `TD-Boracay`.   
 
@@ -244,26 +272,35 @@ Condition
 The VMs are all part of the same virtual network.  
 
 Requirement : 
-You have been assigned to manage the on-premises Hyper-V server replication to Azure.
+You have been assigned to manage the `on-premises Hyper-V` server replication to Azure.
 
-To support the planned deployment, you will need to create additional resources in TD-Boracay.
+To support the planned deployment, you will need to create additional resources in `TD-Boracay`.
 
-**ANS :**
-To set up disaster recovery of on-premises Hyper-V VMs to Azure, you should complete the following steps:
+Which of the following options should you create?
+- VNet Service Endpoint
+- Azure Storage Account
+- Hyper-V site
+- Azure ExpressRoute
+- Azure Recovery Services Vault
+- Replication Policy
 
-**1.** Select your replication source and target 
+:a: : 
+
+To set up disaster recovery of `on-premises Hyper-V` VMs to Azure, you should complete the following steps:
+
+:one: Select your replication source and target 
 - To prepare the infrastructure, you will need to create a Recovery Services vault Resource. 
 
 After you created the vault, you can now accomplish the protection goal, as shown in the image below :arrow_down:.
 ![Alt text](image-122.png)
 
-**2.** Set up the source replication environment, including on-premises Site Recovery components and the target replication environment 
+:two: Set up the source replication environment, including on-premises Site Recovery components and the target replication environment 
 - to set up the source environment, you need to create a Hyper-V site and add to that site the Hyper-V hosts containing the VMs that you want to replicate. 
 - The target environment will be the subscription and the resource group in which the Azure VMs will be created after failover.
 
-**3.** Create a replication policy
+:three: Create a replication policy
 
-**4.** Enable replication for a VM
+:four: Enable replication for a VM
 
 ---
 
@@ -279,11 +316,25 @@ A replication policy defines the settings for the retention history of recovery 
 
 ## The Linux Diagnostic Extension For METRIC & LOG
 
-**Q 4-18**
+https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/diagnostics-linux
+
+https://docs.microsoft.com/en-us/azure/azure-monitor/platform/diagnostics-extension-overview
+
+Azure Diagnostics extension is an agent in Azure Monitor that collects monitoring data from the guest operating system of Azure compute resources including virtual machines. It collects guest metrics into Azure Monitor Metrics and sends guest logs and metrics to Azure storage for archiving.  
+
+Azure Performance Diagnostics VM Extension helps collect performance diagnostic data from Windows VMs. 
+The extension performs analysis and provides a report of findings and recommendations to identify and resolve performance issues on the virtual machine.  
+
+---
+
+**:question: 4-18**
+
 You deployed an Ubuntu server using an Azure virtual machine.  
+
 You need to monitor the system performance metrics and log events.  
 
-**ANS :**
+:a: : 
+
 The Linux Diagnostic Extension will help you monitor the health of a Linux VM running on Microsoft Azure. 
 
 With this extension, you can now monitor the system performance metrics and log events of the virtual machine.
@@ -307,23 +358,19 @@ Hence, the correct answer is: Linux Diagnostic Extension.
 :x: Connection monitor is incorrect 
 - because this is simply used for end-to-end connection monitoring.
 
----
 
-https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/diagnostics-linux
-
-https://docs.microsoft.com/en-us/azure/azure-monitor/platform/diagnostics-extension-overview
-
-Azure Diagnostics extension is an agent in Azure Monitor that collects monitoring data from the guest operating system of Azure compute resources including virtual machines. It collects guest metrics into Azure Monitor Metrics and sends guest logs and metrics to Azure storage for archiving.
-
-Azure Performance Diagnostics VM Extension helps collect performance diagnostic data from Windows VMs. The extension performs analysis and provides a report of findings and recommendations to identify and resolve performance issues on the virtual machine.
-
-
-## Azure Monitor with VNet
+## Azure Monitor Networks 
 
 **Q 4-19**
 You have an Azure subscription that contains hundreds of network resources.
 
-You need to recommend a solution that will allow you to monitor resources in one centralized console for network monitoring.
+You need to recommend a solution that will allow you to monitor resources in **one centralized console** for network monitoring.
+
+What solution should you recommend?
+- Azure Advisor
+- Azure Monitor Network Insights
+- Azure Traffic Manager
+- Azure Virtual Network
 
 **ANS :**
 the correct answer is: Azure Monitor Network Insights.
@@ -423,3 +470,97 @@ There is a requirement that requires you to configure Azure Backup reports using
 :a: : 
 
 :o: the correct answer is: `TDAnalytics1`, `TDAnalytics2`, and `TDAnalytics3`.
+
+## :star: RSV backup pre-checks
+
+:question: 4-24
+
+Your company has a web app hosted in Azure Virtual Machine.
+
+You plan to create a backup of TD-VM1 but the backup pre-checks displayed a warning state.
+
+What could be the reason?
+
+:a: :
+
+![alt text](image-263.png)
+
+Backup Pre-Checks, as the name implies, check the configuration of your VMs for issues that may affect backups and aggregate this information so that you can view it directly from the Recovery Services Vault dashboard. It also provides recommendations for corrective measures to ensure successful file-consistent or application-consistent backups, wherever applicable.
+
+Backup Pre-Checks are performed as part of your Azure VMs’ scheduled backup operations and result in one of the following states:
+
+Passed: This state indicates that your VMs configuration is conducive for successful backups and no corrective action needs to be taken.
+Warning: This state indicates one or more issues in VM’s configuration that might lead to backup failures and provides recommended steps to ensure successful backups. Not having the latest VM Agent installed, for example, can cause backups to fail intermittently and falls in this class of issues.
+Critical: This state indicates one or more critical issues in the VM’s configuration that will lead to backup failures and provides required steps to ensure successful backups. A network issue caused due to an update to the NSG rules of a VM, for example, will fail backups as it prevents the VM from communicating with the Azure Backup service and falls in this class of issues.
+As stated above, the reason why backup pre-checks displayed a warning state is because of the VM agent. The Azure VM Agent for Windows is automatically upgraded on images deployed from the Azure Marketplace. As new VMs are deployed to Azure, they receive the latest VM agent at VM provision time.
+
+If you have installed the agent manually or are deploying custom VM images you will need to manually update to include the new VM agent at image creation time. To check for the Azure VM Agent in your machine, open Task Manager and look for a process name WindowsAzureGuestAgent.exe.
+
+Hence, the correct answer is: The latest VM Agent is not installed in TD-VM1.
+
+The option that says: The Recovery Services vault lock type is read-only is incorrect because you can’t create a backup if the configured lock type is read-only. If you attempted to backup a virtual machine with a resource lock, the operation won’t be performed, and notify you to remove the lock first.
+
+The option that says: The TD-VM1 data disk is unattached is incorrect because you don’t need to attach a data disk to the virtual machine when creating a backup. To enable VM backup, you need to have a VM agent and Recovery Services vault.
+
+The option that says: The status of TD-VM1 is deallocated is incorrect because you can still create a backup even if the status of your virtual machine is stopped (deallocated).
+
+References:
+
+https://docs.microsoft.com/en-us/azure/backup/backup-azure-arm-vms-prepare
+
+https://azure.microsoft.com/en-us/blog/azure-vm-backup-pre-checks
+
+https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/backup/backup-azure-manage-windows-server.md
+
+## 
+
+:question: 4-28
+
+Your organization has two web applications running in different environments:
+
+![alt text](image-264.png)
+
+You have been tasked to monitor the performance of the applications using Azure Application Insights.
+
+The operation should have minimal changes to the code.
+
+What should you do?
+- TDWebApp1 
+- TDWebApp2
+
+:a: :
+
+The main requirement in the scenario is to use Azure Application Insights to track the performance of the applications. 
+
+But the condition is to implement it with minimal changes in the code. 
+
+That is why the first approach satisfies the requirement since you only need to install the agent in the machine.
+
+![alt text](image-265.png)
+
+There are two ways to enable application monitoring for hosted applications:
+
+Agent-based application monitoring (Application Insights Agent)
+- This method is the easiest to enable, you only need to install the Application Insights Agent, and code changes or advanced configurations are not required.
+
+Manually instrumenting the application through code (Application Insights SDK)
+- The alternative approach is you need to install the Application Insights SDK. 
+- This means that you have to manage the updates to the latest version of the packages by yourself. The second method is recommended if you need to make custom API calls to track events/dependencies not captured by default with agent-based monitoring.
+
+
+:x: Install the Application Insights SDK is incorrect 
+- because, in order to implement this method, you will need to do some changes in the application code. Take note that the requirement is to implement monitoring with minor changes in the code.
+
+:x: Install the Windows Azure VM Agent is incorrect 
+- because this won’t help you track the performance of the application. 
+- The VM agent is commonly used when you need to create a backup of the virtual machine. 
+
+:x: Install the Azure Monitor Agent is incorrect 
+- because it is already indicated in the scenario that you need to use Azure Application Insights to track the performance of the application. 
+- Also, the Azure Application Insights is a feature of Azure Monitor.
+
+https://docs.microsoft.com/en-us/azure/azure-monitor/app/app-insights-overview
+
+https://docs.microsoft.com/en-us/azure/azure-monitor/app/azure-web-apps
+
+https://docs.microsoft.com/en-us/azure/azure-monitor/app/status-monitor-v2-overview

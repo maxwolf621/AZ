@@ -1,16 +1,82 @@
 # VNet
 
+## :star: VNets peering x IP address x Region
 
-## VNet Peering 
+![Alt text](image-70.png)
 
-You have the following virtual networks in your Azure subscription.
-![alt text](image-233.png)
+The virtual networks appear as one for connectivity purposes.   
+Via the Microsoft backbone infrastructure.  
+- Make connection just like traffic between virtual machines in the same network, **traffic is routed through Microsoft’s private network only**.  
 
-Which of the following virtual networks can you establish a virtual network peering from TDVnet1?
+:warning: **The VNets you peer with must have non-overlapping IP address spaces.**  
+- e.g. When `VNetA` peers with `VNetB`, both should have different IP address space (:x: `10.1.1.1/10` peering `10.1.1.1/20`) 
+
+
+Azure supports the following types of peering : (依據Region)
+- Virtual network peering: 
+  - Connect virtual networks within the same Azure region.   
+- Global virtual network peering: 
+  - Connecting virtual networks across Azure regions.  
+
+You need to plan ahead when you create your virtual network address spaces in the event that you will need to peer your virtual networks.
+
+<font color="red"> You can always change the address space of a virtual network, but you need to make sure that the subnets within it must be contained to the new address space of your virtual network.</font>
+
+Both of Address Space of the peering network should not be overlapped 
+
+https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview
+
+https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-peering-overview
+
+---
+:question: 3-4
+
+You have the following virtual networks in your Azure subscription.  
+![alt text](image-235.png)
+
+Which of the following virtual networks can you establish a virtual network peering from `TDVnet1`?
 
 :a: :
 
-![alt text](image-234.png)
+:o: TDVnet3 and TDVnet4 only. 
+:x: The following options are incorrect   
+because the address space 10.1.0.0/17 of TDVnet2 overlaps with the address space 10.1.0.0/16 of TDVnet1. 
+- TDVnet2 only
+- TDVnet2, TDVnet3 and TDVnet4
+- TDVnet2 and TDVnet3 only
+
+## NSG region and subnet or NIC should be in a same region
+
+:warning: Region Restriction With NIC & Subnet
+You can only associate a network security group to a subnet or network interface within the same region as the network security group. 
+- So if your network security is in the Azure security groups, it can’t be moved from one region to another. 
+
+:mag: Export the NSG and change the region you want
+However, you can use an Azure Resource Manager template to export the existing configuration and security rules of an NSG. 
+- You can then stage the resource in another region by exporting the NSG to a template, modifying the parameters to match the destination region, and then deploying the template to the new region.
+
+https://docs.microsoft.com/en-us/azure/virtual-network/network-security-groups-overview
+
+https://docs.microsoft.com/en-us/azure/virtual-network/move-across-regions-nsg-portal
+
+---
+
+:question: 3-5
+
+Your company has an Azure subscription named TDSubcription1. 
+
+It contains the following resources:
+
+![alt text](image-236.png)
+
+Which subnet/s can you associate `TDNSG1` with?
+
+:a: : 
+
+:o: You can associate it to the subnet of TDVnet3 only.
+:x: You can associate it to the subnets of TDVnet1 and TDVnet2 only
+:x: You can associate it to the subnet of TDVnet1 only
+:x: You can associate it to the subnet of TDVnet2 only
 
 ## Resizing VNet and Sync
 
@@ -50,8 +116,6 @@ The following statements are incorrect because you do not need to delete and re-
 - Delete the peering between TDVnet1 and TDVnet2
 - Re-create the peering between TDVnet1 and TDVnet2
 
-
-
 ## Automate NSG rule
 
 https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview
@@ -70,9 +134,11 @@ There is a compliance requirement that port `80` should be automatically blocked
 
 The solution must minimize administrative effort.
 
-Solutions
+Which Solution is correct ? 
 - You create a security rule that denies incoming port 80 traffic.
 - You configure the network security group (NSG) flow log to automatically block port 80.
+
+
 :a: : 
 
 It is stated in the scenario that **blocking port 80 should be done automatically whenever a new network security group is created.** 
@@ -83,7 +149,6 @@ It’s best practice to always automate your security processes to avoid adminis
 - **You should use a custom policy definition in order to automate the requirement.**  
 ![Alt text](image-104.png)
  
-
 :memo: Custom Policy Def
 - Azure Policy has a list of built-in policy definitions, but if you need something more specific, you can create your own by creating a custom policy definition that will allow your organization to meet its compliance requirements.
 - A custom policy definition allows customers to define their own rules for using Azure. 
@@ -95,13 +160,59 @@ It’s best practice to always automate your security processes to avoid adminis
 :x: Configure the network security group (NSG) flow log to automatically block port 80.
 - <font color="red"> NSG flow logs are only used to monitor traffic that is allowed or denied by a network security group.</font>
 
-
 NSG flow logs are only used to monitor traffic that is allowed or denied by a network security group.  
 ![Alt text](image-105.png)
 - **Network security group (NSG) flow logs are a feature of Azure Network Watcher** that allows you to log the source and destination IP address, port, protocol, and whether traffic was allowed or denied by an NSG. 
 - Flow data is sent to Azure Storage accounts from where you can access it as well as export it to any visualization tool, SIEM, or IDS of your choice.
 
+## Connection of on-premises and Azure VNet
 
+:question: 3-9 
+
+Adatum Corporation is an insurance company that has a total of `5,000` employees with its headquarters located in Singapore and three satellite offices in Tokyo, Seattle, and London.
+
+Your network contains an Active Directory forest named adatum.com. All servers and client computers are joined to Active Directory.
+
+A private connection is used for traffic in between offices.  
+
+Each office has a network device that can be used for VPN connections.  
+
+Adatum uses two web applications named AdatumApp1 and AdatumApp2.
+
+You create an Azure virtual network named `TDVnet1`.
+
+You need to fulfill the connectivity requirement for the London office (on-premises).
+
+What should you do on the Azure portal?   
+What should you do in the London office?  
+
+:a: 
+
+A Site-to-Site VPN gateway connection is used to send encrypted traffic between an Azure virtual network and an on-premises location over the public Internet. This type of connection requires a VPN device located on-premises that has an externally facing public IP address assigned to it.
+
+Take note that in this scenario, you must ensure that the London office can send encrypted traffic to Azure over the public Internet, and deploying a site-to-site VPN gateway connection satisfies the requirement.  
+- Therefore, you have to Deploy a virtual network gateway and a local network gateway on the Azure portal.  
+- Conversely, you must Configure a VPN device for site-to-site VPN connection in the London office.
+
+:x: Deploy a virtual network peering is incorrect 
+- because you only use this if you need to seamlessly connect two or more Virtual Networks in Azure. In this scenario, you need to connect the on-premises network in London to Azure.
+
+The statement that says: Deploy an ExpressRoute circuit only is incorrect. ExpressRoute lets you extend your on-premises networks into the Microsoft cloud over a private connection with the help of a connectivity provider. Remember that the requirement states that the traffic to Azure must go through the Internet gateway and not via a private connection.
+
+The statement that says: Deploy an ExpressRoute circuit only and a local network gateway is incorrect because you do not need to deploy a local network gateway when you create an ExpressRoute connection. Also, you need to deploy a site-to-site VPN connection instead of an ExpressRoute circuit.
+
+The statement that says: Configure a VPN device for point-to-site VPN connection is incorrect because you need to connect the London office to Azure and you can only achieve that by using a site-to-site VPN connection. A point-to-site VPN connection is typically used for remote work wherein you need a computer to have a secure connection to your Azure virtual network.
+
+The statement that says: Configure a local network gateway is incorrect because a local network gateway is deployed in Azure only and not on your on-premises data center.
+
+The statement that says: Configure an ExpressRoute circuit is incorrect because an ExpressRoute circuit can only be deployed in Azure. You can not deploy an ExpressRoute circuit in your data center on your own. If you need to create an ExpressRoute connection, on the on-premises side, you need to contact your Internet service provider to assist you with connecting your on-premises network to Azure privately.
+
+
+References: 
+
+https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview
+
+https://docs.microsoft.com/en-us/azure/vpn-gateway/tutorial-site-to-site-portal
 
 
 ## Associate a public IP address to a SKU of Standard Public Load Balancer
@@ -110,21 +221,20 @@ NSG flow logs are only used to monitor traffic that is allowed or denied by a ne
 
 :link: https://docs.microsoft.com/en-us/azure/virtual-network/ip-services/configure-public-ip-load-balancer
 
-A public IP associated with a load balancer serves as an Internet-facing frontend IP configuration.   
+A public IP associated with a load balancer serves as an `Internet-facing` frontend IP configuration.   
 - The frontend is used to access resources in the backend pool. (Internet -> Resource)
-- The frontend IP can be used for members of the backend pool to egress to the Internet. (Resource -> Internet)
+- The frontend IP can be used for members of the backend pool to egress to the Internet. 
 
 Remember that 
-1. The SKU of a load balancer and the SKU of a public IP address SKU must match
-2. You can only create a standard public IP address with an assignment of static
+1. **The `SKU` of a load balancer and the `SKU` of a public IP address SKU must match**
+2. **You can only create a standard public IP address with an assignment of `static`**
 
 :question: **Q 4-3:**
 ![Alt text](image-113.png)
 
 You need to associate a public IP address to a public Azure load balancer with an SKU of standard.
 
-
-**ANS :**
+:a: : 
 
 :o: TD3.  
 
@@ -135,10 +245,38 @@ You need to associate a public IP address to a public Azure load balancer with a
 :x: TD3 and TD4 is incorrect 
 - **because you can only create a standard public IP address with an assignment of static**.
 
-## Network Interface usage
+## :star: Network Interface usage
 
-:m: Learning : 
-**A virtual machine, virtual network and network interface must be in the same region or location.**
+:mag: Network Interface 
+A network interface enables an Azure Virtual Machine to communicate with internet, Azure, and on-premises resources. 
+- When creating a virtual machine using the Azure portal, the portal creates one network interface with default settings for you.
+
+:mag: What you may do with interface setup
+- **You may instead choose to create network interfaces with custom settings and add one or more network interfaces to a virtual machine when you create it.** 
+- **You may also want to change default network interface settings for an existing network interface.**
+
+
+![Alt text](image-120.png)
+:warning: :triangular_flag_on_post:	Remember these conditions and restrictions when it comes to network interfaces:  
+1. A VM can have multiple network interfaces attached BUT a network interface can only be attached to a single VM.  
+2. The network interface must be located in the same region and subscription as the VM that it will be attached to.
+3. **When you delete a virtual machine, the network interface attached to it will not be deleted.**
+4. In order to detach a network interface from a VM, you must shut down the virtual machine first.
+5. **By default, the first network interface attached to a VM is the primary network interface.**  
+All other network interfaces in the VM are secondary network interfaces.
+
+:star2: **Take note that resources inside a resource group can be of different regions.**
+- A resource group is only a logical grouping of resources so it does not matter if a resource group is located in a different region.
+
+Think you to be aware 
+
+:warning: (VM與NIC) Each NIC attached to a VM must exist in the same location and subscription as the VM. 
+
+:warning: (subscription與NIC) Each NIC must be connected to a VNet that exists in the same Azure location and subscription as the NIC.
+
+:warning: You can’t change the virtual network.
+
+> **A virtual machine, virtual network and network interface must be in the same region or location.**
 
 **Q 4-9**
 Tutorials Dojo has a subscription named `TDSub1` that contains the following resources:
@@ -152,52 +290,29 @@ What should you do to connect `TDVM1` to `TDNET1`?
 
 :o: Solution : Redeploy TDVM1 to the Japan West region and create and attach a network interface in the Japan West Region.
 
----
-
-A network interface enables an Azure Virtual Machine to communicate with internet, Azure, and on-premises resources. 
-
-When creating a virtual machine using the Azure portal, the portal creates one network interface with default settings for you.
-
-:star2: what you may do with interface setup 
-- **You may instead choose to create network interfaces with custom settings and add one or more network interfaces to a virtual machine when you create it.** 
-- **You may also want to change default network interface settings for an existing network interface.**
-
-![Alt text](image-120.png)
-
-:warning: :triangular_flag_on_post:	Remember these conditions and restrictions when it comes to network interfaces:  
-1. A VM can have multiple network interfaces attached BUT a network interface can only be attached to a single VM.  
-2. The network interface must be located in the same region and subscription as the VM that it will be attached to.
-3. **When you delete a virtual machine, the network interface attached to it will not be deleted.**
-4. In order to detach a network interface from a VM, you must shut down the virtual machine first.
-5. **By default, the first network interface attached to a VM is the primary network interface.**  
-All other network interfaces in the VM are secondary network interfaces.
-
-:star2: **Take note that resources inside a resource group can be of different regions.**
-- A resource group is only a logical grouping of resources so it does not matter if a resource group is located in a different region.
-
-:warning: (VM與NIC) Each NIC attached to a VM must exist in the same location and subscription as the VM. 
-:warning: (Subscript與NIC) Each NIC must be connected to a VNet that exists in the same Azure location and subscription as the NIC. 
-:warning: You can’t change the virtual network.
-
 ## (Azure Network Watcher) Capture IP Traffic and Diagnose connectivity Issue
 
+**:question: 4-15**
 
-**Q 4-15**
 You have an Azure subscription that contains a subscription named `TDSub1`.
 
 There is a requirement to assess your network infrastructure using Azure Network Watcher. 
 
 You plan to do the following activities:
-1. Capture information about the IP traffic going to and from a network security group.
+1. Capture information about the **IP** traffic going to and from a network security group.
 2. Diagnose connectivity issues to or from an Azure virtual machine
 
-Which feature should you use for each activity?
+Which feature should you use for each activity ? 
+- Capture information about the IP traffic going to and from a network security group: 
+- Diagnose connectivity issues to an Azure virtual machine: 
 
-**ANS**
+:a: :  
 
-Capture information about the IP traffic going to and from a network security group: `NSG flow logs`
+Capture information about the IP traffic going to and from a network security group:  
+`NSG flow logs`
 
-Diagnose connectivity issues to an Azure virtual machine: `IP flow verify`
+Diagnose connectivity issues to an Azure virtual machine:  
+`IP flow verify`
 
 ---
 
@@ -208,24 +323,31 @@ https://docs.microsoft.com/en-us/azure/network-watcher/network-watcher-ip-flow-v
 https://docs.microsoft.com/en-us/azure/network-watcher/network-watcher-nsg-flow-logging-overview
 
  
-`Azure Network Watcher Resource | Network diagnostic tools`  
+`Azure Network Watcher Resource | Network diagnostic tools`
+
 `Azure Network Watcher Resource | Logs`  
 ![Alt text](image-125.png)  
 
-Network security group (NSG) flow logs is a feature of Azure Network Watcher that allows you to log information about IP traffic flowing through an NSG. 
+:memo: Network security group (NSG) flow logs 
+is a feature of Azure Network Watcher that allows you to **log information about IP traffic flowing through an NSG**. 
 
-Flow data is sent to Azure Storage accounts from where you can access it as well as export it to any visualization tool, SIEM, or IDS of your choice.
+- Flow data is sent to Azure Storage accounts from where you can access it as well as export it to any visualization tool, SIEM, or IDS of your choice.
+- Flow logs are the source of truth for all network activity in your cloud environment. 
 
-Flow logs are the source of truth for all network activity in your cloud environment. 
+Whether you're an upcoming startup trying to optimize resources or a large enterprise trying to detect intrusion, Flow logs are your best bet. 
+- You can use it for optimizing network flows, monitoring throughput, verifying compliance, detecting intrusions, and more.
 
-Whether you’re an upcoming startup trying to optimize resources or a large enterprise trying to detect intrusion, Flow logs are your best bet. You can use it for optimizing network flows, monitoring throughput, verifying compliance, detecting intrusions, and more.
+:memo: IP flow verify 
+Checks if a packet is allowed or denied to or from a virtual machine.  
+- If the packet is denied by a security group, **the name of the rule** that denied the packet is returned.  
 
-IP flow verify checks if a packet is allowed or denied to or from a virtual machine. If the packet is denied by a security group, the name of the rule that denied the packet is returned.
+IP flow verify looks at the rules for all Network Security Groups (NSGs) applied to the network interface, such as a subnet or virtual machine NIC.  
 
-IP flow verify looks at the rules for all Network Security Groups (NSGs) applied to the network interface, such as a subnet or virtual machine NIC. Traffic flow is then verified based on the configured settings to or from that network interface. IP flow verify is useful in confirming if a rule in a Network Security Group is blocking ingress or egress traffic to or from a virtual machine.
+Traffic flow is then verified based on the configured settings to or from that network interface. 
+
+IP flow verify is useful in confirming if a rule in a Network Security Group is blocking ingress or egress traffic to or from a virtual machine.
 
 Therefore, you have to use the NSG flow logs to capture information about the IP traffic going to and from a network security group.
-
 Conversely, to diagnose connectivity issues to or from an Azure virtual machine, you need to use IP flow verify.
 
 :x: `[Traffic會被傳送到哪]` Next hop is incorrect 
@@ -236,7 +358,13 @@ Conversely, to diagnose connectivity issues to or from an Azure virtual machine,
 
 ## SKU of load balancer for Health Probe
 
-**Q 4-21**
+https://docs.microsoft.com/en-us/azure/load-balancer/load-balancer-overview
+
+https://docs.microsoft.com/en-us/azure/load-balancer/skus
+
+---
+
+**:question: 4-21**
 ![Alt text](image-131.png)
 
 You provisioned two groups of virtual machines containing 5 virtual machines each where the traffic must be load balanced to ensure the traffic are evenly distributed.
@@ -304,17 +432,31 @@ Remember that Basic Load Balancer will be retired on September 30, 2025, so if y
 
 ## Packet Capture
 
-Q-22
+https://learn.microsoft.com/en-us/azure/network-watcher/network-watcher-packet-capture-overview
+
+https://learn.microsoft.com/en-us/azure/network-watcher/frequently-asked-questions
+
+---
+
+:question: 4-22
+
+Your company Azure subscription contains the following resources:
+
 ![Alt text](image-132.png)
 
 You plan to record all sessions to track traffic to and from your virtual machines for a period of 3600 seconds.
 
+
+:a: :
+
 :x: Solution: Create a connection monitor in Azure Network Watcher.
-> The solution provided is to set up a Connection Monitor in Azure Network Watcher. Connection Monitor’s primary use case is to track connectivity between your on-premises setups and the Azure VMs/virtual machine scale sets that host your cloud application. You cannot use this feature to capture packets to and from your virtual machines in a virtual network because it is not supported
+- The solution provided is to set up a Connection Monitor in Azure Network Watcher. 
+- Connection Monitor’s primary use case is to track connectivity between your on-premises setups and the Azure VMs/virtual machine scale sets that host your cloud application. 
+- You cannot use this feature to capture packets to and from your virtual machines in a virtual network because it is not supported
 
 :x: Solution: Use IP flow verify in Azure Network Watcher.
-> The provided solution is to use IP flow verify in Azure Network Watcher. 
-> The main use case of IP flow verify is to determine whether a packet to or from a virtual machine is allowed or denied based on 5-tuple information and not to capture packets from your virtual machines for a period of 3600 seconds or 1 hour.
+- The provided solution is to use IP flow verify in Azure Network Watcher. 
+- The main use case of IP flow verify is to determine whether a packet to or from a virtual machine is allowed or denied based on 5-tuple information and not to capture packets from your virtual machines for a period of 3600 seconds or 1 hour.
 
 :o: Solution: Configure a packet capture in Azure Network Watcher.
 
@@ -324,17 +466,25 @@ With Packet Capture, you can create packet capture sessions to track traffic to 
 The packet capture output (.cap) file can be saved in a storage account and/or on the target virtual machine. You can also filter the protocol, IP addresses, and ports when adding a packet capture. Keep in mind that the maximum duration of capturing sessions is 5 hours.
 
 
-## Create DNS Zone & Record
+## :warning: Create DNS Zone & Record
 
 :question: 4-29
 Your organization has a domain named `tutorialsdojo.com`.
 
-You want to host your records in Microsoft Azure.
+You want to host your records in Microsoft Azure.  
+Which three actions should you perform?  
+- Copy the Azure DNS A records
+- Create an Azure private DNS zone
+- Create an Azure public DNS zone
+- Update the Azure A records to your domain registrar
+- Update the Azure NS records to your domain registrar
+- Copy the Azure DNS NS records
 
-Which three actions should you perform?
+:a: : 
 
+You can use Azure DNS to host your DNS domain and manage your DNS records. 
 
-You can use Azure DNS to host your DNS domain and manage your DNS records. By hosting your domains in Azure, you can manage your DNS records by using the same credentials, APIs, tools, and billing as your other Azure services.
+By hosting your domains in Azure, you can manage your DNS records by using the same credentials, APIs, tools, and billing as your other Azure services.
 
 Since you own tutorialsdojo.com from a domain name registrar you can then create a zone with the name tutorialsdojo.com in Azure DNS. Since you’re the owner of the domain, your registrar allows you to configure the Nameserver (NS) records to your domain allowing internet users around the world are then directed to your domain in your Azure DNS zone whenever they try to resolve tutorialsdojo.com.
 
@@ -471,6 +621,8 @@ VPN troubleshoot is incorrect because this only provides the capability to troub
 
 ## dynamic/static public IP address x routine maintenance
 
+:question: 4-46
+
 You have an Azure subscription containing an Azure virtual machine named `Siargao` with an assigned dynamic public IP address.
 
 During routine maintenance, `Siargao` was deallocated and then started again.
@@ -482,10 +634,12 @@ The external service whitelists the IP addresses allowed to access it.
 You suspect the public IP address has changed during the maintenance.
 
 What should you do?
-
+- Attach multiple dynamic public IP addresses to Siargao.
+- Provision an Azure NAT gateway to provide outbound internet connectivity.
+- Enable an Azure VPN gateway for Siargao.
+- Modify Siargao to use a static public IP address.
 
 ![Alt text](image-148.png)
-
 
 Public IP addresses allow Internet resources to communicate inbound to Azure resources. Public IP addresses enable Azure resources to communicate with the Internet and public-facing Azure services. The address is dedicated to the resource until it’s unassigned by you. A resource without a public IP assigned can communicate outbound.
 
@@ -561,61 +715,6 @@ This includes :arrow_down:
 
 :link: https://learn.microsoft.com/en-us/azure/site-recovery/azure-to-azure-quickstart
 
-## Access x Enable Azure Container Apps ingress x Ingress Type
-
-:memo: What is AZ Container Apps Service
-- Azure Container Apps allows you to deploy containerized apps without managing complex infrastructure. 
-- You have the freedom to write code in your preferred language or framework, and create microservices that are fully supported by the Distributed Application Runtime (Dapr). 
-- The scaling of your application can be automatically adjusted based on either HTTP traffic or events, utilizing Kubernetes Event-Driven Autoscaling (KEDA).
-
-`Container App Resource | Settings | Ingress`
-![Alt text](image-151.png)
-
-:memo: Azure Container Apps ingress
-- With Azure Container Apps ingress, you can make your container application accessible to the public internet, VNET, or other container apps within your environment. 
-- **This eliminates the need to create an Azure Load Balancer, public IP address, or any other Azure resources to handle incoming HTTPS requests.** 
-- Each container app can have unique ingress configurations. 
-For instance, one container app can be publicly accessible while another can only be reached within the Container Apps environment.
-
- 
-:link: https://learn.microsoft.com/en-us/azure/container-apps/ingress?tabs=bash
-
-:link: https://azure.microsoft.com/en-us/products/container-apps/
-
----
-
-:question: **Q :**
-A company deployed a Grafana image in Azure Container Apps with the following configurations:
-```bash 
-Resource Group: tdrg-grafana
-Region: Canada Central
-Zone Redundancy: Disabled
-Virtual Network: Default
-IP Restrictions: Allow
-```
-
-The container’s public IP address was provided to development teams in the `East US region` to allow users access to the dashboard. 
-
-However, you received a report that users can’t access the application.  
-
-What should you do?
-
-:bell: **ANS :**
-
-:o: Configure ingress to generate a new endpoint.
-- The problem with the given scenario is that users are accessing the public IP address even though the ingress setting is not enabled during the creation of the container app. 
-- When you configure the ingress and target port and then save it, the app will generate a new endpoint depending on the ingress traffic that you’ve selected. 
-- Now when you try to access the application URL, you will be redirected to the target port of the container image.
-
-:x: Move the container app to the `East US Region` is incorrect 
-- because you can't move a container app to a different Region.
-
-:x:  Disable IP Restrictions is incorrect 
-- because this won’t still help users access the Grafana app. Instead of denying traffic from source IPs, you only need to enable ingress and target port.
-
-:x: Add a custom domain and certificate is incorrect 
-- because even though you added a custom domain name, you still won’t be able to access the application since additional configurations must be done to allow VNET-scope ingress.  
-Therefore, the quickest way and least amount of configurations would be to enable ingress and get the application URL.
 
 ## NSG assignment with VNet (REGION)
 
@@ -1113,78 +1212,208 @@ This service synchronizes information held in the on-premises Active Directory t
 :x: Create an Azure Application Gateway is incorrect 
 - because this service is **just a web traffic load balancer** that enables you to manage traffic to your web applications.
 
-## :star: VNets peering x IP address x Region
+## ExpressRoute x S2S x VPN gateway SKU
 
-![Alt text](image-70.png)
+:question: 4-36
 
-The virtual networks appear as one for connectivity purposes. 
-Via the Microsoft backbone infrastructure. 
-- Make connection just like traffic between virtual machines in the same network, **traffic is routed through Microsoft’s private network only**.  
+Your company is currently hosting a mission-critical application in an Azure virtual machine that resides in a virtual network named TDVnet1. You plan to use Azure ExpressRoute to allow the web applications to connect to the on-premises network.
 
-:warning: **The VNets you peer with must have non-overlapping IP address spaces.**  
-- e.g. When `VNetA` peers with `VNetB`, both should have different IP address space (:x: `10.1.1.1/10` peering `10.1.1.1/20`) 
+Due to compliance requirements, you need to ensure that in the event your ExpressRoute fails, the connectivity between TDVnet1 and your on-premises network will remain available.
 
+The solution must utilize a site-to-site VPN between TDVnet1 and the on-premises network. The solution should also be cost-effective.
 
-Azure supports the following types of peering : (依據Region)
-- Virtual network peering: 
-  - Connect virtual networks within the same Azure region.   
-- Global virtual network peering: 
-  - Connecting virtual networks across Azure regions.  
+Which three actions should you implement? Each correct answer presents part of the solution.
 
-You need to plan ahead when you create your virtual network address spaces in the event that you will need to peer your virtual networks.
-
-<font color="red"> You can always change the address space of a virtual network, but you need to make sure that the subnets within it must be contained to the new address space of your virtual network.</font>
-
-https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview
-
-https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-peering-overview
-
----
-:question: 3-4
-
-You have the following virtual networks in your Azure subscription.  
-![alt text](image-235.png)
-
-Which of the following virtual networks can you establish a virtual network peering from `TDVnet1`?
-
-:a: :
-
-:o: TDVnet3 and TDVnet4 only. 
-:x: The following options are incorrect   
-because the address space 10.1.0.0/17 of TDVnet2 overlaps with the address space 10.1.0.0/16 of TDVnet1. 
-- TDVnet2 only
-- TDVnet2, TDVnet3 and TDVnet4
-- TDVnet2 and TDVnet3 only
-
-## :| NSG region to a subnet or NIC with same region
-
-:warning: Region Restriction With NIC & Subnet
-You can only associate a network security group to a subnet or network interface within the same region as the network security group. 
-- So if your network security is in the Azure security groups, it can’t be moved from one region to another. 
-
-:mag: Export the NSG and change the region you want
-However, you can use an Azure Resource Manager template to export the existing configuration and security rules of an NSG. 
-- You can then stage the resource in another region by exporting the NSG to a template, modifying the parameters to match the destination region, and then deploying the template to the new region.
-
-https://docs.microsoft.com/en-us/azure/virtual-network/network-security-groups-overview
-
-https://docs.microsoft.com/en-us/azure/virtual-network/move-across-regions-nsg-portal
-
----
-
-:question: 3-5
-
-Your company has an Azure subscription named TDSubcription1. 
-
-It contains the following resources:
-
-![alt text](image-236.png)
-
-Which subnet/s can you associate `TDNSG1` with?
+- Configure a VPN gateway with Basic as its SKU.
+- Configure a local network gateway.
+- Configure a VPN gateway with VpnGw1 as its SKU.
+- Configure a gateway subnet.
+- Configure a connection.
 
 :a: : 
 
-:o: You can associate it to the subnet of TDVnet3 only.
-:x: You can associate it to the subnets of TDVnet1 and TDVnet2 only
-:x: You can associate it to the subnet of TDVnet1 only
-:x: You can associate it to the subnet of TDVnet2 only
+![alt text](image-269.png)
+
+
+A site-to-site VPN gateway connection is used to connect your on-premises network to an Azure virtual network over an IPsec/IKE (IKEv1 or IKEv2) VPN tunnel. 
+
+This type of connection requires a VPN device located on-premises that has an externally facing public IP address assigned to it.
+
+Configuring Site-to-Site VPN and ExpressRoute coexisting connections has several advantages:
+
+- You can configure a Site-to-Site VPN as a secure failover path for ExpressRoute.  
+- Alternatively, you can use Site-to-Site VPNs to connect to sites that are not connected through ExpressRoute.  
+
+To create a site-to-site connection, you need to do the following:
+
+- Provision a virtual network
+- Provision a VPN gateway
+- Provision a local network gateway
+- Provision a VPN connection
+- Verify the connection
+- Connect to a virtual machine
+
+Take note that since you have already deployed an ExpressRoute, you do not need to create a virtual network and gateway subnet as these are prerequisites in creating an ExpressRoute.
+
+Hence, the correct answers are:
+
+- Configure a VPN gateway with a VpnGw1 SKU.
+- Configure a local network gateway.
+- Configure a connection.
+
+:x: Configure a gateway subnet is incorrect. 
+- **As you already have an ExpressRoute connecting to your on-premises network, this means that a gateway subnet is already provisioned**.
+
+:x: Configure a VPN gateway with Basic as its SKU is incorrect. 
+- Although one of the requirements is to minimize costs, the coexisting connection for ExpressRoute and site-to-site VPN connection does not support a `Basic` SKU. 
+- The bare minimum for a coexisting connection is VpnGw1.
+
+ 
+
+References:
+
+https://docs.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-howto-site-to-site-resource-manager-portal
+
+https://docs.microsoft.com/en-us/azure/expressroute/expressroute-howto-coexist-resource-manager
+
+https://docs.microsoft.com/en-us/azure/vpn-gateway/vpn-gateway-about-vpngateways#gwsku
+
+
+## RDB for Subnet in Same VNet
+
+https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview
+
+https://docs.microsoft.com/en-us/azure/virtual-network/network-security-groups-overview
+
+---
+
+:question: 4-37
+
+You have an Azure subscription that has a virtual network named TDVNet1 that contains 2 subnets: TDSubnet1 and TDSubnet2.
+
+You have two virtual machines shown in the following table:
+
+![alt text](image-270.png)
+
+TD1 and TD2 both use a public IP address and you allow inbound Remote Desktop connections from the Windows Server 2019.
+
+Your subscription has two network security groups (NSGs) named TDSG1 and TDSG2.
+
+TDSG1 is associated with TDSubnet1 and only uses the default rules.
+
+TDSG2 is associated with the network interface of TD2. It uses the default rules and the following custom incoming rule:
+```
+Priority: 100
+Name: RDP
+Port: 3389
+Protocol: TCP
+Source: Any
+Destination: Any
+Action: Allow
+```
+
+For each of the following items, choose Yes if the statement is true or choose No if the statement is false.   
+- You can connect to TD1 using Remote Desktop from the internet.		
+- You can connect to TD2 using Remote Desktop from the internet.		
+- You can connect to TD2 from TD1 using Remote Desktop via Azure
+
+:a: : 
+
+![alt text](image-271.png)
+In the image above, there is an inbound rule named RDP that allows Remote Desktop access (3389) from the Internet. 
+
+Since TDSG2 is associated with the network interface of TD2, it will allow RDP access from the Internet. 
+
+From a security standpoint, RDP access should not be exposed to the Internet and the best practice is to use whitelisting of specific IP addresses to ensure that only traffic coming in from your workstation can connect to the server.
+
+**Take note that you do not need to configure additional inbound rules when you want to connect to TD2 from TD1.** 
+- This is because the default rules of a network security group always allow traffic that is coming from within the virtual network where both virtual machines reside in as well as all connected on-premises address spaces and connected Azure VNets (local networks).
+
+Therefore, the following statements are correct:
+- You can connect to TD2 using Remote Desktop from the internet. 
+- You can connect to TD2 from TD1 using Remote Desktop via Azure Bastion.
+
+## :star2: inbound NAT rule.
+
+:question: 4-38
+
+You have an Azure subscription named TD-Subscription1 that contains a load balancer that distributes traffic between 10 virtual machines using port 443.
+
+There is a requirement wherein all traffic from Remote Desktop Protocol (RDP) connections must be forwarded to VM1 only.
+
+What should you do to satisfy the requirement?
+- Create a new load balancer for VM1.
+- Create a load balancing rule.
+- Create a health probe.
+- Create an inbound NAT rule.
+
+:a: :
+
+![alt text](image-272.png)
+
+You need to create an inbound NAT rule to forward traffic from a specific port of the front-end IP address to a specific port of a back-end VM. 
+The traffic is then sent to a specific virtual machine.
+
+Take note that you can only have one virtual machine as the target virtual machine. 
+- A network security group (NSG) must be associated to VM1 with inbound rules explicitly allowing traffic from port `3389` and `your IP address`.
+
+Hence, the correct answer is: Create an inbound NAT rule.
+
+:x: Create a new load balancer for VM1 is incorrect because you do not need to create a new load balancer as you can simply use port forwarding or inbound NAT rule to forward RDP traffic to VM1.
+
+:x: Create a load balancing rule is incorrect because this component only defines how incoming traffic is distributed to all the instances within the backend pool. Furthermore, it is mentioned in the scenario that you should direct RDP traffic to VM1 only.
+
+:x: Create a health probe is incorrect because it is just used to determine the health status of the instances in the backend pool. This health probe will determine if an instance is healthy and can receive traffic.
+
+
+https://docs.microsoft.com/en-us/azure/load-balancer/load-balancer-overview
+
+https://docs.microsoft.com/en-us/azure/load-balancer/tutorial-load-balancer-port-forwarding-portal
+
+
+## VM and Subnet IP flow verify & Connection troubleshoot
+
+:question: 4-43
+
+You have an Azure subscription with the following resources:
+
+![alt text](image-273.png)
+
+TD1 is unable to connect to TD4 via port 443. You need to troubleshoot why the communication between the two virtual machines is failing.
+
+Which two features should you use?
+
+- VPN troubleshoot
+- IP flow verify
+- Connection troubleshoot
+- Log Analytics
+- Azure Diagnostics
+- Effective security rules
+
+:a: :
+
+Connection troubleshoot helps reduce the amount of time to diagnose and troubleshoot network connectivity issues. 
+
+The results returned can provide insights about the root cause of the connectivity problem and whether it’s due to a platform or user configuration issue.
+
+Connection troubleshoot reduces the Mean Time To Resolution (MTTR) by providing a comprehensive method of performing all connection major checks to detect issues pertaining to network security groups, user-defined routes, and blocked ports.
+
+Therefore, the correct answers are:
+- Connection troubleshoot
+- IP flow verify
+
+:x: Effective security rules is incorrect because this simply allows you to see all inbound and outbound security rules that apply to a virtual machine’s network interface. This is also used for security compliance and auditing.
+
+:x: Azure Diagnostics is incorrect because it is an agent in Azure Monitor that collects monitoring data from the guest operating system of Azure compute resources, including virtual machines.
+
+:x: Log Analytics is incorrect because this is just a tool to edit and run log queries from data collected by Azure Monitor logs and interactively analyze their results.
+
+:x: VPN troubleshoot is incorrect because this only provides the capability to troubleshoot virtual network gateways and their connections. This is primarily used for diagnosing the traffic between your on-premises resources and Azure virtual networks.
+
+References:
+
+https://docs.microsoft.com/en-us/azure/network-watcher/network-watcher-ip-flow-verify-overview
+
+https://learn.microsoft.com/en-us/azure/network-watcher/network-watcher-connectivity-overview
+
+ 

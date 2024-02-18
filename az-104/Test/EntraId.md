@@ -450,7 +450,7 @@ Difference btw Owner and Contributor
 
 
 
-## Condition Access
+## :star2: Condition Access
 
 https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/overview
 
@@ -460,44 +460,51 @@ https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/conce
 
 --- 
 
-:question: **Question 4-1:**
-Your organization has an Azure AD subscription that is associated with the directory TD-Siargao.  
+:question: 4-1:
+Your organization has an Azure AD subscription that is associated with the directory `TD-Siargao`.  
 
 The policy must require the DevOps group to use multi-factor authentication and a hybrid Azure AD joined device when connecting to Azure AD from untrusted locations.
 
+Solutions
+- Create a conditional access policy and enforce session control.
+- Create a conditional access policy and enforce grant control.
+- Go to the security option in Azure AD and configure MFA.
+
 :a: : 
 
-![Alt text](image-111.png)
-![Alt text](image-137.png)
+![Alt text](image-111.png)  
+![Alt text](image-137.png)  
 **With conditional access, you can implement automated access-control decisions for accessing your cloud apps based on conditions.** 
 
 Conditional access policies are enforced after the first-factor authentication has been completed.   
-It's not intended to be a first-line defense against denial-of-service (DoS) attacks, but it uses signals from these events to determine access.
+- It's not intended to be a first-line defense against denial-of-service (DoS) attacks, but it uses signals from these events to determine access.
 
 There are two types of access controls in a conditional access policy:  
-1. Grant (RESOURCE) - enforces `grant` or `block` access to resources.
-2. Session (CLOUD APPLICATION) - enable limited experiences within specific cloud applications
+1. Grant (RESOURCE)
+enforces `grant` or `block` access to resources.
+2. Session (CLOUD APPLICATION)
+enable limited experiences within specific cloud applications
 
 In this scenario, the requirement is to enforce a policy to the members of the `DevOps` group to use `MFA` and a `hybrid Azure AD joined device` when connecting to Azure AD from untrusted locations.  
 
-:o: The given solution is to enforce grant access control. If you check the image above, the grant control satisfies this requirement.
-
+:o: enforce grant access control. If you check the image above, the grant control satisfies this requirement.
 
 :x: Enforce session access control  
 the session control doesn't have options to require the use of MFA and AD joined devices.   
 
-
 :x: Go to the security option in Azure AD and configure MFA.
 ![Alt text](image-114.png)
 This given solution is to configure MFA in Azure AD security.  
+
 If you check the question again, there is a line `You have been tasked to implement a conditional access policy.`   
-This means that you must create a conditional access policy and enforce grant control. 
+- This means that you must create a conditional access policy and enforce grant control. 
+
 Also, **configuring MFA does not enable the option to require the use of an AD joined device.**
 
-## :star: AZ Cost Management x AZ policy 
+## :star: Usage of Cost Management x Tag
 
 :m: `Azure Cost Management + Billing`   
-- is a suite of tools provided by Microsoft that **helps you analyze, manage, and optimize the costs of your workloads** to ensure that your organization is taking advantage of the benefits provided by the cloud.
+- A suite of tools provided by Microsoft that **helps you analyze, manage, and optimize the costs of your workloads** to ensure that your organization is taking advantage of the benefits provided by the cloud.  
 
 Features of Billing
 - Conduct billing administrative tasks such as paying your bill
@@ -507,88 +514,104 @@ Features of Billing
 - Set spending thresholds
 - Identify opportunities for workload changes that can optimize your spending
 
-:m: **Azure Policy Tag Configuration**
-![Alt text](image-116.png)
+:m: Azure Policy Tag Configuration
+![Alt text](image-116.png)  
 - You apply tags to your `Azure resources`,` resource groups`, and `subscriptions` to logically organize them into a taxonomy. 
-- Each tag consists of a name and a value pair. 
-For example, you can apply the name Environment and the value Production to all the resources in production.
+- Each tag consists of a name and a value pair (key-value pair).  
+For example, you can apply the name Environment and the value Production to all the resources in production.  
 
 :m: **Download Usage report from Cost analysis**
-To download the usage report of each department, you must first assign a tag for each resource. 
+1. To download the usage report of each department, you must first assign a tag for each resource. 
+- These tags would help you filter the view in cost analysis.  
 
-These tags would help you filter the view in cost analysis.  
+**Take note that if you assign a tag by resource group, you won’t be able to classify which department uses that resource since each department uses resources in different resource groups.**
+- If you’ve already assigned tags to your resources, you can go to `Cost Manage + Billing` and open the scope in the Azure portal, and select `Cost analysis` in the menu. 
 
-Take note that if you assign a tag by resource group, you won’t be able to classify which department uses that resource since each department uses resources in different resource groups.
+2. Add a filter and select filter by Tag. 
 
-If you’ve already assigned tags to your resources, you can go to `Cost Manage + Billing` and open the scope in the Azure portal, and select `Cost analysis` in the menu. 
-
-Add a filter and select filter by Tag. 
-
-Then download it 
-- by selecting Export and selecting Download data to CSV or Download data to Excel. 
+3. Then Download it 
+   - By selecting Export and selecting Download data to CSV or Download data to Excel. 
 
 The Excel download provides more context on the view you used to generate the download, like scope, query configuration, total, and date generated.
+
+:link: 
+https://docs.microsoft.com/en-us/azure/cost-management-billing/costs/quick-acm-cost-analysis?tabs=azure-portal
+
+https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/tag-resources?tabs=json
 
 ---
 
 :question: **4-7**  
-The subscription has multiple resource groups that are used by three departments in your organization.  
+
+You are managing an Azure Subscription named Tagaytay-Subscription.   
+The subscription has multiple resource groups that are used by three departments in your organization.
+
 **You have been asked to send a usage report of each department to the accounting department.**   
 
-**ANS:**
-1. **Apply a tag to each Azure resource**
-(NOT ASSIGN A TAG in RESOURCE GROUP)
-2. Navigate to `cost analysis` and select a scope
-3. Filter the items by tag
-4. Download the usage data
+:a: : 
+1. **Apply a tag to each Azure resource**   
+(DO NOT ASSIGN A TAG in RESOURCE GROUP)
+1. Navigate to `cost analysis` and select a scope
+2. Filter the items by tag
+3. Download the usage data
 
 ## :star: User Account Type x Modify attributes in account x Hybrid Azure AD joined devices
 
-:question: :
+https://learn.microsoft.com/en-us/entra/fundamentals/how-to-manage-user-profile-info
+
+https://learn.microsoft.com/en-us/entra/identity/devices/concept-hybrid-join
+
+https://learn.microsoft.com/en-us/entra/identity/devices/hybrid-join-plan
+
+---
+
+:question: 4-8:
 Your company plans to implement a hybrid Azure Active Directory that will include the following users :  
+
 ![Alt text](image-117.png)   
 
 You have been assigned to modify the `Department` and `UsageLocation` attributes of the given users.
 
 Which attributes can you modify from Azure AD?
+1. Department   
+2. UsageLocation   
 
-**ANS :**
-Based on the given scenario, you need to modify the Department and UsageLocation attributes from Azure Active Directory. 
+:a: : 
 
-Once you encounter this kind of scenario, the most important info to look at is the source of the user.
+Based on the given scenario, you need to modify the Department and `UsageLocation` attributes from AZ AD.   
 
+Once you encounter this kind of scenario, the most important info to look at is the source of the user.  
 There are three sources:
 - Microsoft account
 - Windows Server AD
 - Azure AD
 
+![alt text](image-259.png)
+
 **Keep in mind that you cannot modify the Job Info of a user using Azure AD if the source is from Windows Server AD.**  
+- To update the information of users from this source, you must do it in the Windows Server AD.   
 
-To update the information of users from this source, you must do it in the Windows Server AD. 
-
-Lastly, since the `UsageLocation` is an attribute of Azure Active Directory, you can modify it for all users.
-
-- EmployeeID = Dev1 and Dev2 only
-- UsageLocation = Dev1, Dev2, Dev3, and Dev4
-
+Lastly, since the `UsageLocation` is an attribute of Azure Active Directory, you can modify it for all users.  
+- EmployeeID = Dev1 and Dev2 only   
+- UsageLocation = Dev1, Dev2, Dev3, and Dev4  
 
 ---
 
 Azure Active Directory (Azure AD) is a multi-tenant, cloud-based identity and access management service. 
 
-:star2: hybris AZ AD benefits
+:mag: hybris AZ AD benefits
 By implementing hybrid Azure AD joined devices, organizations with existing Active Directory implementations can benefit from some of the functionality provided by Azure Active Directory.  
 **These devices are joined to your on-premises Active Directory and registered with Azure Active Directory.**  
 
-:star2: Authentication 
+:mag: Authentication 
 To achieve a hybrid identity with Azure AD, one of three authentication methods can be used, depending on your scenarios. The three methods are:
 - Password hash synchronization (PHS)
 - Pass-through authentication (PTA)
 - Federation (AD FS)
 
-These authentication methods also provide single-sign-on capabilities. 
-
-:m: Single-sign on automatically signs your users in when they are on their corporate devices, connected to your corporate network.  
+:mag: ingle-sign-on
+- These authentication methods also provide single-sign-on capabilities.   
+- Single-sign on automatically signs your users in when they are on their corporate devices, connected to your corporate network.  
 
 ![Alt text](image-118.png)
 
@@ -607,7 +630,7 @@ The `TD-Subscription-02` contains the following resource groups
 
 you can move web app to any resource as long as its lock type is not `Read-Only`
 
-## Tags/Locks for Services
+## :star::star: Tags & Locks for Services
 
 :question:  
 
@@ -620,12 +643,14 @@ You need to track the resource consumption and prevent the deletion of resources
 
 The analytics, developments, and operations teams are able to use the resources given from the table above. 
 
-Which resources can you apply tags and locks?
+Which resources can you apply `tags` and `locks`?
 
+:a: : 
 
-:a: 
-**The only resource that we cannot apply a tag and lock is the Management Group.**   
-- **The Azure management groups are containers that helps you manage access, policy, and compliance across multiple subscriptions.**  
+![alt text](image-262.png)
+
+**The only resource that we cannot apply a tag and lock is the `Management Group`.**   
+- The Azure management groups are containers that helps you manage `access`, `policy`, and `compliance` across `multiple subscriptions`. 
 
 - Tags = tdvm, tdsa, and tdsub
 - Locks = tdvm, tdsa, and tdsub
@@ -646,22 +671,24 @@ means authorized users can still read and modify a resource, but they can’t de
 means authorized users can read a resource, but they can't delete or update the resource.
 
 
-## Administrative Unit
+## :star: Administrative Unit
 
 **Q 4-20**
+
 Your company has **five branch offices** and a Microsoft Entra ID to centrally manage all identities and application access.  
 
 You have been tasked with **granting permission to local administrators** to manage users and groups within their scope.  
 
-**ANS :**
+:a: : 
 ![Alt text](image-129.png)
 
 For more granular administrative control in Microsoft Entra ID, you can assign an Microsoft Entra ID role with a scope limited to one or more administrative units.
 
-Administrative units limit a role’s permissions to any portion of your organization that you define. You could, for example, use administrative units to delegate the Helpdesk Administrator role to regional support specialists, allowing them to manage users only in the region for which they are responsible.
+**Administrative units limit a role's permissions to any PORTION of your organization that you define.**  
+
+You could, for example, use administrative units to delegate the Helpdesk Administrator role to regional support specialists, allowing them to manage users only in the region for which they are responsible.
 
 它可以包含 使用者、群組 或 設備
-
 Hence, the correct answer is: Create an administrative unit.
 
 :x: Assign an Microsoft Entra ID role is incorrect 
@@ -681,18 +708,19 @@ https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/admin
 https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/administrative-units
 
 
-## Custom Domain Creation
+## :star2: Custom Domain Creation
 
-**Q 4-23**
+:question: 4-23
+
 There is a requirement wherein the users must use the suffix of `@tutorialsdojo.com` instead of `tutorialsdojo.onmicrosoft.com` domain name.
 
 Which four actions should you perform in sequence?  
 
 :a: : 
 1. Provision a Microsoft Entra Directory
-2. Add Tutorialsdojo.com to Microsoft Entra ID
+2. Add `Tutorialsdojo.com` to Microsoft Entra ID
 3. Add the Microsoft Entra ID DNS information to your domain provider
-4. Verify Tutorialsdojo.com
+4. Verify `Tutorialsdojo.com`
 
 ---
 
@@ -707,9 +735,11 @@ Adding custom domain names helps you to create user names that are familiar to y
 You can verify your custom domain name by using the following steps in order:
 
 :one: Provision an Microsoft Entra Directory
-- Sign in to the Azure portal for your directory, using an account with the Owner role for the subscription. The person who creates the tenant is automatically the Global administrator for that tenant. The Global administrator can add additional administrators to the tenant.
+- Sign in to the Azure portal for your directory, using an account with the Owner role for the subscription. 
+- The person who creates the tenant is automatically the Global administrator for that tenant. 
+- **The Global administrator can add additional administrators to the tenant**.
 
-:two: Add Tutorialsdojo.com to Microsoft Entra ID.
+:two: Add `Tutorialsdojo.com` to Microsoft Entra ID.
 - After you create your directory, you can add your custom domain name.  
 Head over to your Microsoft Entra ID resource and look for custom domain names and click add custom domain and enter `tutorialsdojo.com` as the domain name
 
@@ -727,18 +757,6 @@ After you've verified your custom domain name, you can delete your verification 
 https://learn.microsoft.com/en-us/entra/fundamentals/add-custom-domain
 
 https://learn.microsoft.com/en-us/entra/fundamentals/whatis
-
-
-## conditional access policy
-
-
-Your organization has an Azure AD subscription that is associated with the directory `TD-Siargao`.  
-
-You have been tasked to implement a conditional access policy.
-
-The policy must require the DevOps group to use multi-factor authentication and a hybrid Azure AD joined device when connecting to Azure AD from untrusted locations.
-
-Solution: Create a conditional access policy and enforce grant control.
 
 ## Role Assignment Reader & Owner
 

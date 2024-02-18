@@ -110,12 +110,17 @@ Build on demand, or fully automate builds with triggers such as source code comm
 
 ## Export ARM JSON form Resource
 
-:question: **Q :**
+https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/export-template-portal
+
+https://learn.microsoft.com/en-us/azure/azure-resource-manager/templates/overview
+
+---
+
+:question: 4-32
 A startup has an Azure subscription that contains the following resources:
 
 ![Alt text](image-153.png)
 - You have been tasked with replicating the current state of your resources in order to automate future deployments when a new feature needs to be added to the application.
-
 
 :o: Use the resource group export template.
 ![Alt text](image-152.png)
@@ -279,3 +284,63 @@ To grant the users in `tutorialsdojo.com` access to the cluster, you should crea
 - because a cluster is just a set of nodes that run containerized applications.  
 - Creating a new cluster is not necessary.  
 You need to create an authorization endpoint to grant the users access to the domain name.
+
+## :star2: Enable Azure Container Apps ingress
+
+:memo: What is AZ Container Apps Service
+- Azure Container Apps allows you to deploy containerized apps without managing complex infrastructure. 
+- You have the freedom to write code in your preferred language or framework, and create microservices that are fully supported by the Distributed Application Runtime (`Dapr`). 
+- **The scaling of your application can be automatically adjusted based on either HTTP traffic or events**, utilizing Kubernetes Event-Driven Autoscaling (KEDA).
+
+`Container App Resource | Settings | Ingress`
+![Alt text](image-151.png)
+
+:memo: Azure Container Apps ingress
+- **With Azure Container Apps ingress, you can make your container application accessible to the public internet, VNET, or other container apps within your environment.** 
+- **This eliminates the need to create an Azure Load Balancer, public IP address, or any other Azure resources to handle incoming HTTPS requests.** 
+- Each container app can have unique ingress configurations. 
+For instance, one container app can be publicly accessible while another can only be reached within the Container Apps environment.
+
+ 
+:link: https://learn.microsoft.com/en-us/azure/container-apps/ingress?tabs=bash
+
+:link: https://azure.microsoft.com/en-us/products/container-apps/
+
+---
+
+:question: 4-31
+A company deployed a Grafana image in Azure Container Apps with the following configurations:
+```bash 
+Resource Group: tdrg-grafana
+Region: Canada Central
+Zone Redundancy: Disabled
+Virtual Network: Default
+IP Restrictions: Allow
+```
+
+The container’s public IP address was provided to development teams in the `East US region` to allow users access to the dashboard. 
+
+However, you received a report that users can't access the application.  
+
+Which of the following options allows users to access Grafana with the least amount of configuration?
+- Configure ingress to generate a new endpoint.
+- Move the container app to the East US Region.
+- Disable IP Restrictions.
+- Add a custom domain and certificate.
+
+:a: : 
+
+:o: Configure ingress to generate a new endpoint.
+- The problem with the given scenario is that users are accessing the public IP address even though the ingress setting is not enabled during the creation of the container app. 
+- When you configure the ingress and target port and then save it, the app will generate a new endpoint depending on the ingress traffic that you’ve selected. 
+- Now when you try to access the application URL, you will be redirected to the target port of the container image.
+
+:x: Move the container app to the `East US Region` is incorrect 
+- because you can't move a container app to a different Region.
+
+:x: Disable IP Restrictions is incorrect 
+- because this won’t still help users access the Grafana app. Instead of denying traffic from source IPs, you only need to enable ingress and target port.
+
+:x: **Add a custom domain and certificate is incorrect** 
+- because even though you added a custom domain name, you still won’t be able to access the application since additional configurations must be done to allow VNET-scope ingress.  
+Therefore, the quickest way and least amount of configurations would be to enable ingress and get the application URL.
