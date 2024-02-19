@@ -165,33 +165,27 @@ NSG flow logs are only used to monitor traffic that is allowed or denied by a ne
 - **Network security group (NSG) flow logs are a feature of Azure Network Watcher** that allows you to log the source and destination IP address, port, protocol, and whether traffic was allowed or denied by an NSG. 
 - Flow data is sent to Azure Storage accounts from where you can access it as well as export it to any visualization tool, SIEM, or IDS of your choice.
 
-## Connection of on-premises and Azure VNet
+## Site-to-Site (VNet-OnPremise)VPN gateway connection
 
-:question: 3-9 
+A Site-to-Site VPN gateway connection is used to send encrypted traffic between an Azure virtual network and an on-premises location over the public Internet.   
+This type of connection requires a VPN device located on-premises that has an externally facing public IP address assigned to it.  
 
-Adatum Corporation is an insurance company that has a total of `5,000` employees with its headquarters located in Singapore and three satellite offices in Tokyo, Seattle, and London.
+---
 
-Your network contains an Active Directory forest named adatum.com. All servers and client computers are joined to Active Directory.
-
-A private connection is used for traffic in between offices.  
-
-Each office has a network device that can be used for VPN connections.  
-
-Adatum uses two web applications named AdatumApp1 and AdatumApp2.
+:question: 3-39
 
 You create an Azure virtual network named `TDVnet1`.
 
-You need to fulfill the connectivity requirement for the London office (on-premises).
+You need to fulfill the connectivity requirement for the London office (on-premise).
 
 What should you do on the Azure portal?   
 What should you do in the London office?  
+:a: : 
 
-:a: 
-
-A Site-to-Site VPN gateway connection is used to send encrypted traffic between an Azure virtual network and an on-premises location over the public Internet. This type of connection requires a VPN device located on-premises that has an externally facing public IP address assigned to it.
+![alt text](image-278.png)
 
 Take note that in this scenario, you must ensure that the London office can send encrypted traffic to Azure over the public Internet, and deploying a site-to-site VPN gateway connection satisfies the requirement.  
-- Therefore, you have to Deploy a virtual network gateway and a local network gateway on the Azure portal.  
+- Therefore, you have to Deploy a virtual network gateway and a local network gateway on the Azure portal.
 - Conversely, you must Configure a VPN device for site-to-site VPN connection in the London office.
 
 :x: Deploy a virtual network peering is incorrect 
@@ -207,21 +201,20 @@ Take note that in this scenario, you must ensure that the London office can send
 
 :x: Configure an ExpressRoute circuit is incorrect because an ExpressRoute circuit can only be deployed in Azure. You can not deploy an ExpressRoute circuit in your data center on your own. If you need to create an ExpressRoute connection, on the on-premises side, you need to contact your Internet service provider to assist you with connecting your on-premises network to Azure privately.
 
-
-References: 
+:link: 
 
 https://docs.microsoft.com/en-us/azure/virtual-network/virtual-networks-overview
 
 https://docs.microsoft.com/en-us/azure/vpn-gateway/tutorial-site-to-site-portal
 
 
-## Associate a public IP address to a SKU of Standard Public Load Balancer
+## :star: A public IP associated with a load balancer
 
 :link: https://docs.microsoft.com/en-us/azure/virtual-network/ip-services/public-ip-addresses
 
 :link: https://docs.microsoft.com/en-us/azure/virtual-network/ip-services/configure-public-ip-load-balancer
 
-A public IP associated with a load balancer serves as an `Internet-facing` frontend IP configuration.   
+A public IP associated with a load balancer serves as an `Internet-facing frontend IP` configuration.   
 - The frontend is used to access resources in the backend pool. (Internet -> Resource)
 - The frontend IP can be used for members of the backend pool to egress to the Internet. 
 
@@ -1381,4 +1374,48 @@ https://docs.microsoft.com/en-us/azure/network-watcher/network-watcher-ip-flow-v
 
 https://learn.microsoft.com/en-us/azure/network-watcher/network-watcher-connectivity-overview
 
- 
+## :star2::star2: AKS Networking Configuration
+
+
+> AKS is free; you only pay for the agent nodes within your clusters, not for the masters.
+
+![alt text](image-253.png)
+
+A Kubernetes cluster provides two options to configure your network:
+
+- By default, AKS clusters use `kubenet`, and a virtual network and subnet are created for you.  
+**With `kubenet`, nodes get an IP address from a VNet subnet.**
+
+- With Azure Container Networking Interface (CNI), every pod gets an IP address from the subnet and **can be accessed directly**.
+
+https://learn.microsoft.com/en-us/azure/aks/configure-azure-cni
+
+https://learn.microsoft.com/en-us/azure/aks/concepts-network
+
+---
+
+:question: 3-44
+
+Your company is planning to launch an internal web app using an AKS cluster.  
+
+The app should be accessible `via the pod's IP address`.  
+
+Which of network settings should you configure to meet this requirement?
+
+:a: : 
+
+Since you will connect to the app using the pod's IP address, you need to select Azure CNI upon creation of your cluster.
+
+Hence, the correct answer is: Azure CNI.
+
+:x: kubenet is incorrect 
+- because as stated in the scenario, you need to connect via the pods ip address. 
+- With this option, network address translation is then configured on the nodes, and pods receive an IP address behind the node IP.
+
+:x: Azure NSG is incorrect 
+- because you don’t need to allow or deny inbound and outbound network traffic.
+
+:x: Azure Private Link is incorrect 
+- because this just provides private access to Azure-hosted services. 
+- It will not allow you to configure the cluster network type to assign IP addresses to pods.
+

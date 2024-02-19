@@ -366,30 +366,9 @@ Hence, the correct answer is:
 - You have to use the respective parameters to list assignments to a specific user, or to list assignments on a specific resource group or resource.
 
 
-## Site-to-Site VPN gateway connection
-
-:question: 
-- Minimize administrative effort and cost whenever possible.
-- Ensure that the information technology department receives an email whenever the CPU utilization `vm3.adatum.com` reaches 75%.
-- Ensure that you create an Azure custom role named AdatumAdministrator that is based on the built-in Contributor role.
-- Enable Multi-Factor Authentication (MFA) for the information technology department only.
-- The servers in the Montreal office must be able to establish a connection over port `443` to `vm3.adatum.com.`
-- Ensure that the London office can send encrypted traffic to Azure over the public Internet.
-- Ensure that `AdatumWeb2` can automatically increase the number of instances based on CPU utilization.
-
-:a: : 
-
-Take note that in this scenario, you must ensure that the London office can send encrypted traffic to Azure over the public Internet, and deploying a site-to-site VPN gateway connection satisfies the requirement.
-- **Therefore, you have to Deploy a virtual network gateway and a local network gateway on the Azure portal.**  
-- **Conversely, you must Configure a VPN device for site-to-site VPN connection in the London office.**  
-
-
-A Site-to-Site VPN gateway connection is used to send encrypted traffic between an Azure virtual network and an on-premises location over the public Internet.   
-This type of connection requires a VPN device located on-premises that has an externally facing public IP address assigned to it.  
 
 
 ## Network watcher & IP Flow Verify
-
 
 :a:
 

@@ -86,23 +86,28 @@ Based on the given policy, the retention period for monthly backup is 36 months.
 
 ## :star::star: RSV Backup Solution in Azure
 
-:question: : 
+:question: : 3-35
 Tutorials Dojo is an online learning portal for technology-related topics that empowers its users to upgrade their skills and career. 
 
 Tutorials Dojo has users worldwide, ranging from the United States, Europe, and Asia.
 
 Existing Environment  
 Tutorials Dojo uses a wide range of servers for its business operations, including the following:
+
 - Domain Controller.
 - File Servers.
 - Microsoft SQL Servers.
-- Active Directory forest named tutorialsdojo.com. The servers and workstations are joined to the Active Directory.
-- A public-facing application named TutorialsDojoPortal compromises the following three tiers.
+- Active Directory forest named `tutorialsdojo.com`. 
+The servers and workstations are joined to the Active Directory.
+
+A public-facing application named TutorialsDojoPortal compromises the following three tiers.
+> A public-facing application is an application that can be accessed by anyone on the internet, not just by users within a private network.
 
 - A web tier.
 - A business tier.
 - A database tier.
 The web tier and business tier each consists of 5 virtual machines, while the database tier only has two, a primary and secondary SQL database server.
+
 
 Planned Changes
 Tutorials Dojo plans to implement the following changes to the infrastructure:
@@ -130,6 +135,7 @@ User Requirements
 - Ensure that only Administrators can create virtual machines.
 
 Your company has already migrated the `TutorialsDojoPortal` to Azure.  
+
 There is a requirement to implement a backup solution for `TutorialsDojoPortal`.  
 
 What should you create first?
@@ -139,7 +145,6 @@ What should you create first?
 - Recovery Plan
 
 :a: :
-
 > RSV backup is including Azure VMs, SQL and SAP databases, and **Azure file shares (Not Blob Container)**.
 
 When you back up data in Azure, you store that data in an Azure resource called a RSV. 
@@ -153,43 +158,87 @@ Here are the steps when you backup an Azure virtual machine:
 
 Hence, the correct answer is: Recovery Services Vault.  
 
-Backup policy is incorrect because you need to create a Recovery Services vault first. A backup policy is a schedule for how often and when recovery points are taken. A policy also includes the retention range for the recovery points.
+:x: Backup policy is incorrect 
+- because you need to create a Recovery Services vault first. A backup policy is a schedule for how often and when recovery points are taken. 
+- A policy also includes the retention range for the recovery points.
 
 :x: Microsoft Azure Backup Server is incorrect. 
 - Microsoft Azure Backup Server (MABS) is a server product that can be used **to back up on-premises physical servers, VMs, and apps running on them**. 
 - **The prerequisite of deploying a Microsoft Azure Backup Server is to have a Recovery Services Vault**.
 
 :x: Recovery Plan is incorrect. 
-- A recovery plan gathers machines into recovery groups for the purpose of failover. 
+- **A recovery plan gathers machines into recovery groups for the purpose of failover.** 
 - A recovery plan helps you to define a systematic recovery process, by creating small independent units that you can failover. 
 - A unit typically represents an app in your environment. The requirement is to implement a backup solution not a disaster recovery solution.
 
-## AZ CDN x Identify the storage requirement for media files
+## Migrate the media files to Azure.
 
-Azure Content Delivery Network (CDN) is a distributed network of servers that is used to cache and store content. These servers are in locations that are close to end-users to minimize latency.
+:question: 3-36
+
+There is a requirement to migrate the media files to Azure.
+
+What should you do?
+- Use file explorer to copy the files by mapping a drive using an Azure storage account access key for authorization.
+- Use Azure Storage Explorer to copy the files.
+- Use file explorer to copy the files by mapping a drive using a shared access signature (SAS) in the Azure storage account to grant temporary access.
+- Use Azure Import/Export service to copy the files.
+
+:a: :
+
+:o: Use Azure Storage Explorer to copy the files.
+
+Microsoft Azure Storage Explorer is a standalone app that is accessible, intuitive, feature-rich graphical user interface (GUI) for full management of cloud storage resources and makes it easy to work with Azure Storage data on Windows, macOS, and Linux. 
+
+![alt text](image-276.png)
+
+**You can upload, download, and manage Azure blobs, files, queues, and tables, as well as Azure Cosmos DB and Azure Data Lake Storage entities.**
+
+The requirements to be considered for this scenario are:
+1. Migrate the media files to **Azure over the Internet**.
+2. The media files must be stored in a Blob container and cached via Content Delivery Network.
+
+:x: Use Azure Import/Export service to copy the files is incorrect. 
+- Azure Import/Export service is primarily used to securely import large amounts of data to Azure Blob storage and Azure Files by shipping disk drives to an Azure datacenter. 
+- The requirement states that the transfer of the media files must be done over the Internet.
+
+The following options :arrow_down: are incorrect 
+- because **you cannot mount a Blob container using file explorer**. 
+
+Take note that the requirement states that the media files must be stored in a Blob container.
+
+- :x: Use file explorer to copy the files by mapping a drive using a shared access signature (SAS) in the Azure storage account to grant temporary access.
+- :x: Use file explorer to copy the files by mapping a drive using an Azure storage account access key for authorization.
+
+:link: https://azure.microsoft.com/en-us/features/storage-explorer/
+
+:link: https://docs.microsoft.com/en-us/azure/vs-azure-tools-storage-manage-with-storage-explorer
+
+
+## :star: AZ CDN to Identify the blob storage requirement for media files
+
+:mag: What is Azure CDN
+- **a distributed network of servers that is `used to cache and store content`.** 
+These servers are in locations that are close to end-users to minimize latency.
 - **You can use Azure CDN to cache content from a Blob container and configure the custom domain endpoint for your Blob container, provision custom TLS/SSL certificates, and configure custom rewrite rules.** 
 - Azure CDN also provides TLS encryption with your own certificate.
 
-The server locations are referred to as Point-of-presence (POP) locations.  
-CDNs store cached data on edge servers, or servers close to your users, in these POP locations.
+:memo: POP with CDN
+- The server locations are referred to as Point-of-presence (POP) locations.  
+- CDNs store cached data on edge servers, or servers close to your users, in these POP locations.
 
 https://docs.microsoft.com/en-us/azure/cdn/cdn-overview
 
 https://docs.microsoft.com/en-us/azure/cdn/cdn-create-a-storage-account-with-cdn
 
- 
 ---
 
 :question: 3-39
-You need to identify the storage requirements for TutorialsDojoPortal media files.
+
+You need to identify the storage requirements for `TutorialsDojoPortal` media files.
 
 :a: :
 
 ![alt text](image-258.png)
-
-- :x: Azure Files storage meets the storage requirements of TutorialsDojoPortal media files.		
-- :o: Azure Blob storage meets the storage requirements TutorialsDojoPortal media files.		
-- :x: Azure Table storage meets the storage requirements of TutorialsDojoPortal media files.		
 
 The requirement to be considered for this scenario is:
 - The media files must be stored in a Blob container and cached via Content Delivery Network.
@@ -203,49 +252,72 @@ The requirement to be considered for this scenario is:
 :x: Azure Files storage meets the storage requirements of TutorialsDojoPortal media files is incorrect. 
 - **Azure Files can be only accessed through SMB protocol and cannot be put directly behind an Azure CDN which only supports HTTP(80) and HTTPS(443) protocols.**
 
-## Migrate the media files to Azure.
+## Export Specific Role Definition 
 
-:question: 3-38
+You need to retrieve the JSON string of the Contributor role so you can customize it to create the `AdatumAdministrator` custom role.
 
-There is a requirement to migrate the media files to Azure.
-
-What should you do?
-- Use file explorer to copy the files by mapping a drive using an Azure storage account access key for authorization.
-- Use Azure Storage Explorer to copy the files.
-- Use file explorer to copy the files by mapping a drive using a shared access signature (SAS) in the Azure storage account to grant temporary access.
-- Use Azure Import/Export service to copy the files.
+Which command should you run?
+```
+Get-AzRoleDefinition -Name Contributor | ConvertTo-Json
+Get-AzRoleAssignment -Name Contributor | ConvertFrom-Json
+Get-AzRoleDefinition -Name Contributor | ConvertFrom-Json
+Get-AzRoleAssignment -Name Contributor | ConvertTo-Json
+```
 
 :a: :
 
-:o: the correct answer is: Use Azure Storage Explorer to copy the files.
+![alt text](image-277.png)
 
-Microsoft Azure Storage Explorer is a standalone app that is accessible, intuitive, feature-rich graphical user interface (GUI) for full management of cloud storage resources and makes it easy to work with Azure Storage data on Windows, macOS, and Linux. 
 
-**You can upload, download, and manage Azure blobs, files, queues, and tables, as well as Azure Cosmos DB and Azure Data Lake Storage entities.**
+If the Azure built-in roles don’t meet the specific needs of your organization, you can create your own custom roles. 
 
-The requirements to be considered for this scenario are:
-1. Migrate the media files to **Azure over the Internet**.
-2. The media files must be stored in a Blob container and cached via Content Delivery Network.
+Just like built-in roles, you can assign custom roles to `users`, `groups`, and `service principals at management group`, `subscription`, and `resource group scopes`.
 
-:x: Use Azure Import/Export service to copy the files is incorrect. 
-- Azure Import/Export service is primarily used to securely import large amounts of data to Azure Blob storage and Azure Files by shipping disk drives to an Azure datacenter. 
-- The requirement states that the transfer of the media files must be done over the Internet.
+Take note that in this scenario, you need to create a custom role named `AdatumAdministrator` that is based on the built-in policy Contributor role. 
+- You need to retrieve the JSON format file of the Contributor role so that you can customize it to your needs.
+
+To retrieve the JSON string of the Contributor role, you need to use the command:
+`Get-AzRoleDefinition -Name <role_name> | ConvertTo-Json`
+
+Hence, the correct answer is: Get-AzRoleDefinition -Name Contributor | ConvertTo-Json
+
+:x: `Get-AzRoleDefinition -Name Contributor | ConvertFrom-Json` is incorrect 
+- because the `ConvertFrom-Json` cmdlet just converts your JSON string to a `PSCustomObject` object that has a property for each field in the JSON string. 
+- Take note that you need to retrieve the JSON role so that you can customize it to your needs.
 
 The following options :arrow_down: are incorrect 
-- because you cannot mount a Blob container using file explorer. 
 
-Take note that the requirement states that the media files must be stored in a Blob container.
+because the `Get-AzRoleAssignment` simply allows you to list Azure RBAC role assignments at the specified scope. 
+- By default, it lists all role assignments in the selected Azure subscription. 
+- You have to use the respective parameters to list assignments to a specific user, or to list assignments on a specific resource group or resource.
+```
+Get-AzRoleAssignment -Name Contributor | ConvertTo-Json
+Get-AzRoleAssignment -Name Contributor | ConvertFrom-Json
+```
 
-:x: Use file explorer to copy the files by mapping a drive using a shared access signature (SAS) in the Azure storage account to grant temporary access.
+https://docs.microsoft.com/en-us/azure/role-based-access-control/overview
 
-:x: Use file explorer to copy the files by mapping a drive using an Azure storage account access key for authorization.
+https://docs.microsoft.com/en-us/azure/role-based-access-control/custom-roles-powershell
 
-:link: https://azure.microsoft.com/en-us/features/storage-explorer/
+## :star2: Stop backup before deleting A RSV
 
-:link: https://docs.microsoft.com/en-us/azure/vs-azure-tools-storage-manage-with-storage-explorer
+:memo: To delete a Recovery Services vault, you need to stop the continuous backup first. 
+- Because if you try to delete the vault without stopping the backup, you would receive an error notification.
+
+:warning: If you try to delete the vault without removing the dependencies, you'll encounter one of the following error messages:
+> Vault cannot be deleted as there are existing resources within the vault.
 
 
-## Delete A Recover Service Vault
+:red_circle: You can't delete a RSV with any of the following dependencies:
+- a vault that contains protected data sources  
+  - for example, IaaS VMs, SQL databases, Azure file shares.
+- a vault that contains backup data. 
+  - Once backup data is deleted, it will go into the soft deleted state.
+- a vault that contains backup data in the soft deleted state.
+- a vault that has registered storage accounts.
+
+RSV cannot be deleted as there are backup items in soft deleted state in the vault. 
+- The soft deleted items are permanently deleted after 14 days of delete operation.
 
 https://learn.microsoft.com/en-us/azure/backup/backup-azure-delete-vault?tabs=portal#delete-protected-items-in-the-cloud
 
@@ -266,23 +338,6 @@ You have been asked to delete `td-backup-labs` vault but it contains protected i
 
 :o: the correct answer is: Stop the backup of each item.
 
-:memo: To delete a Recovery Services vault, you need to stop the continuous backup first. 
-- Because if you try to delete the vault without stopping the backup, you would receive an error notification.
-
-:red_circle: You can't delete a RSV with any of the following dependencies:
-- a vault that contains protected data sources  
-  - for example, IaaS VMs, SQL databases, Azure file shares.
-- a vault that contains backup data. 
-  - Once backup data is deleted, it will go into the soft deleted state.
-- a vault that contains backup data in the soft deleted state.
-- a vault that has registered storage accounts.
-
-:warning: If you try to delete the vault without removing the dependencies, you’ll encounter one of the following error messages:
-> Vault cannot be deleted as there are existing resources within the vault.
-
-RSV cannot be deleted as there are backup items in soft deleted state in the vault. 
-- The soft deleted items are permanently deleted after 14 days of delete operation.
-
 :x: Modify the lock type of RSV is incorrect 
 - because there's no lock type configured in scenario. 
 - Even if you modify the lock type, you still won’t be able to delete the vault.
@@ -293,51 +348,7 @@ RSV cannot be deleted as there are backup items in soft deleted state in the vau
 :x: Modify the backup policy is incorrect 
 - because you won’t still be able to delete the RSV even if you modify the backup policy. 
 
-## :star2::star2: AKS Networking Configuration
-
-:question: 3-44
-
-Your company is planning to launch an internal web app using an AKS cluster.  
-
-The app should be accessible via the pod's IP address.  
-
-Which of the following network settings should you configure to meet this requirement?
-
-:a: : 
-
-AKS is free; you only pay for the agent nodes within your clusters, not for the masters.
-
-![alt text](image-253.png)
-
-A Kubernetes cluster provides two options to configure your network:
-
-- By default, AKS clusters use `kubenet`, and a virtual network and subnet are created for you.  
-With `kubenet`, nodes get an IP address from a virtual network subnet.
-
-- With Azure Container Networking Interface (CNI), every pod gets an IP address from the subnet and can be accessed directly.
-
-Since you will connect to the app using the pod's IP address, you need to select Azure CNI upon creation of your cluster.
-
-Hence, the correct answer is: Azure CNI.
-
-:x: kubenet is incorrect 
-- because as stated in the scenario, you need to connect via the pods ip address. 
-- With this option, network address translation is then configured on the nodes, and pods receive an IP address behind the node IP.
-
-:x: Azure NSG is incorrect 
-- because you don’t need to allow or deny inbound and outbound network traffic.
-
-:x: Azure Private Link is incorrect 
-- because this just provides private access to Azure-hosted services. 
-- It will not allow you to configure the cluster network type to assign IP addresses to pods.
-
-https://learn.microsoft.com/en-us/azure/aks/configure-azure-cni
-
-https://learn.microsoft.com/en-us/azure/aks/concepts-network
-
 ## Replication Strategies & Regions
-
-https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview
 
 Locally redundant storage (LRS) 
 1. copies your data synchronously three times within a single physical location in the primary region. 
@@ -377,8 +388,10 @@ Which of the following data redundancy options should you recommend?
 
 **ANS :**
 
+:o: Read-access geo-redundant storage  
+
 With Geo-redundant storage, your media assets are stored in multiple availability zones and multiple regions. 
-**But read access will only be available in the secondary region if you or Microsoft initiates a failover from the primary region to the secondary region.**
+- But read access will only be available in the secondary region if you or Microsoft initiates a failover from the primary region to the secondary region.
 
 **In order to have read access in the primary and secondary region at all times without having the need to initiate a failover**, you need to recommend **Read-access geo-redundant storage**.
 
@@ -386,11 +399,11 @@ With Geo-redundant storage, your media assets are stored in multiple availabilit
 - because the requirement states that you need read access to the primary and secondary regions. With GRS, the data in the secondary region isn’t available for read access. 
 - You can only have read access in the secondary region if a failover from the primary region to the secondary region is initiated by you or Microsoft.
 
-## :star::star: Rehydrate a blob data In archive tier
+## :star::star: Rehydrate a blob data from archive tier
 
-:warning: Rehydrate a blob data : 
+:warning: Rehydrate a blob data (offline to online): 
 - To work with the data of in an archived blob, you must rehydrate it by moving it to an online tier (either the hot or cool tier).
-- The process of restoring an archived blob to an online tier and can take hours to complete.
+- The process of restoring an archived blob to an online tier and **can take hours to complete**.
 
 Offline Blob Data , Archive Tier : 
 - data that is considered offline and cannot be read or modified
@@ -405,9 +418,9 @@ You can rehydrate an archived blob by copying it to a new blob in the hot or coo
 **This is the recommended option for most scenarios.**
 - `Change` an archived blob's access tier:   
 You can also rehydrate an archived blob by changing its access tier directly using the Set Blob Tier operation.
-![Alt text](image-115.png)
 
-Rehydration Priority:
+![Alt text](image-115.png)
+Rehydration Priority :arrow_up: :
 1. :red_circle: High-priority rehydration 
 Prioritized over standard requests, may complete in less than one hour for objects under 10 GB.
    1. costs more but is faster.   
@@ -416,7 +429,7 @@ Prioritized over standard requests, may complete in less than one hour for objec
 Processed in the order received, may take up to 15 hours for objects under 10 GB.
 
 :mag: Billing
-- :red_circle: A rehydration operation with Set Blob Tier is billed for data `read transactions` and data` retrieval size`. 
+- :red_circle: A rehydration operation with Set Blob Tier is billed for data `read transactions` and data `retrieval size`. 
 - :red_circle: High-priority rehydration shows up as a separate line item on your bill.
 
 :link: https://azure.microsoft.com/en-us/services/storage/archive/
@@ -438,7 +451,7 @@ Processed in the order received, may take up to 15 hours for objects under 10 GB
 :x: You can access your blob data that is in archive tier  
 - because blob data stored in the archive tier is considered to be offline and can’t be read or modified.
 
-## :star::star: File Share Authentication for On-premise and Cloud connection
+## :star::star::star: File Share Authentication for On-premise and Cloud access
 
 https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction
 
@@ -451,7 +464,7 @@ Azure Files NFS file shares are accessible from Linux or macOS clients.
 
 --- 
 
-**Q 4-10**
+:question: 4-10
 You have an Azure subscription named `Davao-Subscription` that contains an Azure Files named `Baguio-Share`.
 
 You have several Azure virtual machine that is domain joined to an on-premises Active Directory domain controller and a site-to-site VPN connection for cross-premises connectivity.
@@ -462,11 +475,14 @@ Your domain-joined machines must be able to mount Baguio-Share using your active
 
 Which four actions should you perform in sequence?
 
-![Alt text](image-121.png)
+:a: :
 
 Enabling AD DS authentication for your Azure file shares allows you to authenticate to your Azure file shares with your on-premise AD DS credentials. 
+- Further, it allows you to better manage your permissions to allow granular access control.  
 
-Further, it allows you to better manage your permissions to allow granular access control.  
+
+![Alt text](image-121.png)
+
 To enable AD DS authentication, you must do the following in sequence:  
 
 :one: `Sync` on-premises AD with Azure AD Connect  
@@ -475,7 +491,7 @@ To enable AD DS authentication, you must do the following in sequence:
 
 :two: Enable AD DS authentication
 - To enable AD DS authentication over SMB for Azure file shares, you need to register your storage account with AD DS and then set the required domain properties on the storage account.  
-- You can think of this process as if it were like creating an account representing an on-premises Windows file server in your AD DS.
+- You can think of **this process as if it were like creating an account representing an on-premises Windows file server in your AD DS.**
 
 :three: Assign share and directory permissions
 - After enabling AD DS authentication, you must configure share-level permissions in order to get access to your file shares. 
@@ -512,11 +528,14 @@ In order to delete the resource group, you must first delete/remove the followin
 - If the lock level is set to `Delete` or `Read-only`, the users in your organization are prevented from accidentally deleting or modifying critical resources. 
 - The lock overrides any permissions the user might have.
 
-:two: Backup data in Recovery Services vault
-- If you try to delete a vault that contains backup data, you’ll encounter a message: 
-  > Vault cannot be deleted as there are existing resources within the vault. Please ensure there are no backup items, protected servers, or backup management servers associated with this vault.
+:two: Delete Backup data in Recovery Services vault
 
 ![alt text](image-261.png)
+
+
+**If you try to delete a vault that contains backup data, you’ll encounter a message:**
+> Vault cannot be deleted as there are existing resources within the vault. Please ensure there are no backup items, protected servers, or backup management servers associated with this vault.
+
 
 After you deleted the lock and backup data, you can now delete the resource group.
 
@@ -574,9 +593,8 @@ Storage accounts have a default access tier setting that indicates in which onli
 - The default access tier setting can be either hot or cool only. 
 
 The behavior of this setting is slightly different depending on the type of storage account:
-
-Since the scenario states that your colleagues infrequently access the data, this means that you do not need to store your data in the Hot tier.  
-- You can park the data in the Cool tier and automatically transition it to Archive using the data lifecycle.
+- Since the scenario states that your colleagues infrequently access the data, this means that you do not need to store your data in the Hot tier.  
+You can park the data in the Cool tier and automatically transition it to Archive using the data lifecycle.
 
 Hence, the correct answers are:
 - Create a lifecycle management rule to move the inactive data to the Archive tier after 120 days of inactivity.
@@ -615,36 +633,40 @@ Which two storage account features should you use to satisfy requirements?
 
 :a: : 
 Storage Account
-![alt text](image-140.png)
-Under the networking tab, you can use IP network rules to allow access from specific public internet IP address ranges by creating IP network rules. 
+![alt text](image-140.png)  
 
-Each storage account supports up to 200 rules. 
+:one: Under the `networking` tab, you can use IP network rules to allow access from specific public internet IP address ranges by creating IP network rules. 
+- Each storage account supports up to 200 rules. 
+- These rules grant access to specific internet-based services and on-premises networks and blocks general internet traffic.
 
-These rules grant access to specific internet-based services and on-premises networks and blocks general internet traffic.
-
-You can use IP network rules to allow access from specific public internet IP address ranges by creating IP network rules. Each storage account supports up to 200 rules. These rules grant access to specific internet-based services and on-premises networks and blocks general internet traffic.
-
-Under the data protection tab, soft delete protects your data from being accidentally or erroneously modified or deleted. 
-- When container soft delete is **enabled** for a storage account, a container, and its contents may be recovered after it has been deleted within a retention period that you specify.
+:two: Under the `data protection` tab, `soft delete` protects your data from being accidentally or erroneously modified or deleted. 
+- When container `soft delete` is **enabled** for a storage account, a container, and its contents may be recovered after it has been deleted within a retention period that you specify.
 
 Therefore, the correct answers are:
-
 - Requirement 1 = Networking
 - Requirement 2 = Data protection
 
-Access Control is incorrect because Manila user can already upload images to the tutorialsdojo storage account. Access control or role-based access control (RBAC) helps you manage who has access to Azure resources, what they can do with those resources, and what areas they have access to.
+:x: Access Control is incorrect 
+- because Manila user can already upload images to the tutorialsdojo storage account. 
+- Access control or role-based access control (RBAC) helps you manage who has access to Azure resources, what they can do with those resources, and what areas they have access to.
 
-Redundancy is incorrect because you only need to protect data that have been accidentally deleted. Redundancy copies your data so that it is protected from transient hardware failures, network or power outages, and natural disasters.
+:x: Redundancy is incorrect 
+- because you only need to protect data that have been accidentally deleted. Redundancy copies your data so that it is protected from transient hardware failures, network or power outages, and natural disasters.
 
-Object replication is incorrect because this simply copies blobs asynchronously from a source storage account to a destination account. You only need to implement soft delete to satisfy the requirement.
+:x: Object replication is incorrect 
+- because this simply copies blobs asynchronously from a source storage account to a destination account. 
+- You only need to implement soft delete to satisfy the requirement.
 
-Lifecycle management is incorrect because this just allows you to transition your data to the appropriate access tiers or expire at the end of the data’s lifecycle.
+:x: **Lifecycle management** is incorrect 
+- because this just allows you to transition your data to the appropriate access tiers or expire at the end of the data’s lifecycle.
 
 https://learn.microsoft.com/en-us/azure/storage/common/storage-network-security
 
 https://learn.microsoft.com/en-us/azure/storage/blobs/soft-delete-container-enable
 
-## RBAC with File Share
+## :star: RBAC share-level permissions to access File Share
+
+Refer to 4-10
 
 :question: 4-41
 
@@ -657,9 +679,11 @@ You registered `TDShare1` to use AD DS authentication and Azure AD Connect sync 
 You need to give your active directory users access to `TDShare1`.
 
 **ANS**
-Once you’ve enabled an Active Directory (AD) source for your storage account, you must configure share-level permissions in order to get access to your file share. There are two ways you can assign share-level permissions. 
+Once you've enabled an Active Directory (AD) source for your storage account, you must configure share-level permissions in order to get access to your file share. 
 
-You can assign them to specific Azure AD users/groups, and you can assign them to all authenticated identities as a default share-level permission.
+
+There are two ways you can assign share-level permissions. 
+1. You can assign them to specific Azure AD users/groups, and you can assign them to all authenticated identities as a default share-level permission.
 
 Since we are handling sensitive data, we want our users to be able to access files that they are only allowed to. Due to this, we need to assign specific Azure AD users or groups to access Azure file share resources.
 
@@ -667,22 +691,29 @@ In order for share-level permissions to work for specific Azure AD users or grou
 
 Sync the users and the groups from your local AD to Azure AD using either the on-premises Azure AD Connect sync application or Azure AD Connect cloud sync.
 Add AD synced groups to RBAC role so they can access your storage account.
+
 Hence, the correct answer is: Configure role-based access control (RBAC).
 
-:x: Enable anonymous access to the storage account is incorrect as it allows anyone to access the storage account and its contents without authentication.
+:x: Enable anonymous access to the storage account is incorrect 
+- as it allows anyone to access the storage account and its contents without authentication.
 
-:x: Create a shared access signature (SAS) with a stored access policy is incorrect because while SAS tokens can provide limited access to a storage account, they are not a suitable authentication mechanism for controlling access to sensitive data.
+:x: Create a shared access signature (SAS) with a stored access policy is incorrect 
+- because while SAS tokens can provide limited access to a storage account, they are not a suitable authentication mechanism for controlling access to sensitive data.
 
-:x: Use the storage account access keys for authentication is incorrect because storage account keys provide full control over the storage account, which means that anyone with the key can perform any operation on the storage account. This makes them a less secure option, especially for sensitive data that requires fine-grained access control.
+:x: Use the storage account access keys for authentication is incorrect 
+- because storage account keys provide full control over the storage account, which means that anyone with the key can perform any operation on the storage account. 
+- This makes them a less secure option, especially for sensitive data that requires fine-grained access control.
 
 ![Alt text](image-141.png)
 
 https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction
 
-https://learn.microsoft.com/en-us/azure/storage/files/storage-files-identity-ad-ds-assign-permissions
 
+[Share-level permissions for specific Microsoft Entra users or groups](https://learn.microsoft.com/en-us/azure/storage/files/storage-files-identity-ad-ds-assign-permissions?tabs=azure-portal#share-level-permissions-for-specific-microsoft-entra-users-or-groups)
 
-## :star: File Share for sku and kind
+[Share-level permissions for all authenticated identities](https://learn.microsoft.com/en-us/azure/storage/files/storage-files-identity-ad-ds-assign-permissions?tabs=azure-portal#share-level-permissions-for-all-authenticated-identities)
+
+## :star: Azure CLI to create storage account
 
 :question: 4-42
 
@@ -701,13 +732,16 @@ The requirements in the scenario are:
 - Data must still be available if a single availability zone experiences an outage.
 - It must provide consistent high performance and low latency.
 
-Premium file shares are backed by solid-state drives (SSDs) and provide consistent high performance and low latency, within single-digit milliseconds for most IO operations, for IO-intensive workloads. Premium file shares are suitable for a wide variety of workloads like databases, website hosting, and development environments. Premium file shares can be used with both Server Message Block (SMB) and Network File System (NFS) protocols.
+:memo: Premium File  
+Premium file shares are backed by solid-state drives (SSDs) and provide consistent high performance and low latency, within single-digit milliseconds for most IO operations, for IO-intensive workloads. 
+- Premium file shares are suitable for a wide variety of workloads like databases, website hosting, and development environments. 
+- Premium file shares can be used with both Server Message Block (SMB) and Network File System (NFS) protocols.
 
 Zone redundant storage (ZRS) provides high availability by synchronously writing three replicas of your data across three different Azure Availability Zones, thereby protecting your data from the cluster, data center, or entire zone outage. Zonal redundancy enables you to read and write data even if one of the availability zones is unavailable.
 
 Currently, the SKUs supported for premium file share are `premium_lrs` and `premium_zrs` only.
 
-Therefore, your –sku flag should be `Premium_ZRS`, since you need your data to be available even if there is an availability zone outage.
+Therefore, your `–sku` flag should be `Premium_ZRS`, since you need your data to be available even if there is an availability zone outage.
 Conversely, your `–kind` flag should be `FileStorage`, as this allows you to deploy premium file shares
 
 https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction
@@ -715,40 +749,54 @@ https://docs.microsoft.com/en-us/azure/storage/files/storage-files-introduction
 https://learn.microsoft.com/en-us/azure/storage/files/storage-files-planning
 
 
-## SAS for external users 
+## :o SAS for external users 
 
 https://learn.microsoft.com/en-us/azure/storage/common/storage-sas-overview
 
 https://learn.microsoft.com/en-us/azure/cognitive-services/translator/document-translation/how-to-guides/create-sas-tokens
 
-
 :question: 4-49
-You have an Azure subscription with a storage account named TD1. An external auditor has requested access to TD1 for a duration of 2 weeks.
+You have an Azure subscription with a storage account named TD1. 
+
+An external auditor has requested access to TD1 for a duration of 2 weeks.
 
 You need to deploy a solution without compromising the integrity and security of your primary data access methods.
 
-A shared access signature is a token that is appended to the URI for an Azure Storage resource. The token that contains a special set of query parameters that indicate how the resources may be accessed by the client. One of the query parameters, the signature, is constructed from the SAS parameters and signed with the key that was used to create the SAS. This signature is used by Azure Storage to authorize access to the storage resource.
+A shared access signature is a token that is appended to the URI for an Azure Storage resource. 
 
-With shared access signature (SAS), you have granular control over how a client can access your data. This makes it the ideal solution for this scenario. For example:
+The token that contains a special set of query parameters that indicate how the resources may be accessed by the client. 
+
+One of the query parameters, the signature, is constructed from the SAS parameters and signed with the key that was used to create the SAS. 
+
+This signature is used by Azure Storage to authorize access to the storage resource.
+
+With shared access signature (SAS), you have granular control over how a client can access your data.  
+This makes it the ideal solution for this scenario. For example:  
 – What resources the client may access.
 – What permissions do they have to those resources.
 – How long the SAS is valid.
 
 Hence, the correct answer is: Shared Access Signatures (SAS).
 
-Role-Based Access Control (RBAC) is incorrect because this is a system that provides fine-grained access management to Azure resources. By using RBAC, you can assign specific permissions to users, groups, and applications at a certain scope.
+:x: Role-Based Access Control (RBAC) is incorrect 
+- because this is a system that provides fine-grained access management to Azure resources. By using RBAC, you can assign specific permissions to users, groups, and applications at a certain scope.
 
-Service Endpoints is incorrect because this feature simply provides secure and direct connectivity to Azure service resources from a virtual network. This feature ensures that Azure service traffic remains on the Azure backbone network.
+:x: Service Endpoints is incorrect 
+- because this feature simply provides secure and direct connectivity to Azure service resources from a virtual network. This feature ensures that Azure service traffic remains on the Azure backbone network.
 
-Connection Strings is incorrect. Connection strings are a way to provide necessary information for applications to connect to various services, including databases or storage accounts. They typically contain the access keys, which you wouldn’t want to share with an external auditor if you’re trying to avoid sharing the primary or secondary keys.
+:x: **Connection Strings is incorrect.**
+- Connection strings are a way to provide necessary information for applications to connect to various services, including databases or storage accounts. 
+- **They typically contain the access keys, which you wouldn’t want to share with an external auditor if you’re trying to avoid sharing the primary or secondary keys.**
 
 ---
 
-A shared access signature (SAS) is a URI that grants restricted access rights to Azure Storage resources. You can provide a shared access signature to clients who shouldn’t be trusted with your storage account key but who need access to certain storage account resources.
+A shared access signature (SAS) is a URI that grants restricted access rights to Azure Storage resources. 
+
+You can provide a shared access signature to clients who shouldn’t be trusted with your storage account key but who need access to certain storage account resources.
 ![Alt text](image-145.png)
 
 
-## Storage Container : the maximum number of named access policies
+## Storage Container : the maximum number :five: of named access policies
 
 :question: 4-50
 
@@ -762,7 +810,7 @@ You can set a maximum of `five` access policies on a container, table, queue, or
 
 Each `SignedIdentifier` field, with its unique Id field, corresponds to one access policy. 
 
-**Trying to set more than five access policies at one time causes the service to return status code 400 (Bad Request).**
+**Trying to set more than five access policies at one time causes the service to return status code `400` (Bad Request).**
 
 Hence, the correct answer is: 5.
 
@@ -781,7 +829,7 @@ https://learn.microsoft.com/en-us/azure/storage/common/storage-account-overview
 https://learn.microsoft.com/en-us/rest/api/storageservices/define-stored-access-policy
 
 
-## Persist data in az container instance to Azure Storage 
+## :o Mount an Azure file share in Azure Container Instances 
 
 :memo: Azure Container Instance
 - By default, Azure Container Instances are stateless.   
@@ -801,7 +849,7 @@ If the container crashes or stops, all of its states are lost.
 
 https://docs.microsoft.com/en-us/azure/container-instances/container-instances-overview
 
-https://docs.microsoft.com/en-us/azure/container-instances/container-instances-volume-azure-files
+[Mount an Azure file share in Azure Container Instances](https://docs.microsoft.com/en-us/azure/container-instances/container-instances-volume-azure-files)
 
 ---
 
@@ -816,7 +864,7 @@ You are tasked with deploying a new Azure Container Instance that will **run a c
 
 ![Alt text](image-69.png)
 
-:o: Azure Files. (mount an azure file share)  
+:o: Azure Files. (mount it in Web Container Instances)  
 
 :x: Azure Queue Storage is incorrect 
 - because this service is simply used for storing large numbers of messages to enable communication between components of a distributed application.
@@ -826,26 +874,10 @@ You are tasked with deploying a new Azure Container Instance that will **run a c
 
 ## :star::star: AZ image x AzCopy `make` x UNC for blob 
 
-**:question: 3-3**
-
 https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview
 
 https://docs.microsoft.com/en-us/azure/storage/common/storage-ref-azcopy-make
 
----
-
-![alt text](image-232.png)
-
-Blob storage is designed for:
-- Serving images or documents directly to a browser.
-- Storing files for distributed access.
-- Streaming video and audio.
-- Writing to log files.
-- Storing data for backup and restore disaster recovery, and archiving.
-- Storing data for analysis by an on-premises or Azure-hosted service.
-
-A container organizes a set of blobs, similar to a directory in a file system. 
-- A storage account can include an unlimited number of containers, and a container can store an unlimited number of blobs. 
 
 :mag: VHD File x AZ Images
 <font color="red">VHD files can be used to create custom images that can be stored in an Azure Blob container</font>, which are used to provision virtual machines.
@@ -855,6 +887,8 @@ AzCopy is a command-line utility that you can use to copy blobs or files to or f
 > The `azcopy make` command is commonly used to create a container or a file share.
 
 ---
+
+**:question: 3-3**
 
 Your company has an Azure subscription that contains an Azure Storage account named tutorialsdojoaccount.
 
@@ -870,15 +904,14 @@ azcopy make "https://[account-name].blob.core.windows.net/[top-level-resource-na
 
 **:bell: ANS :**  
 
-:o: 
-
-:m: Take note that it is mentioned in the scenario that container images and instances are used.
-
+Take note that it is mentioned in the scenario that container images and instances are used.
 ```bash
 AzCopy = Make
-
+```
+```bash 
 https://tutorialsdojoaccount.____.core.windows.net/tdimage = Blob
 ```
+
 
 :x: `Copy` is incorrect  
 - because it simply copies source data to a destination location.
@@ -901,7 +934,10 @@ https://tutorialsdojoaccount.____.core.windows.net/tdimage = Blob
 - `AzCopy` is a command-line utility that you can use to copy blobs or files to or from a storage account.
 
 :memo: `AzCopy make`
-- **The `AzCopy make` command is commonly used to create a container or a file share.**    
+- **The `AzCopy make` command is commonly used to `create` a container or a file share.**    
+
+
+![alt text](image-232.png)
 
 :memo: Storage Container   
 - A container organizes a set of blobs, similar to a directory in a file system.     
@@ -924,10 +960,6 @@ for `analysis` by an on-premises or Azure-hosted service.
 `video and audio`.
 - Writing   
 to `log` files.
-
-:memo: VHD Files for VMs
-- **VHD files can be used to create custom IMAGE that can be stored in an Azure Blob container**, which are used to provision VMs.   
-
 
 ## UNC path for File Share
 
@@ -1081,7 +1113,7 @@ https://docs.microsoft.com/en-us/azure/import-export/storage-import-export-servi
 
 https://docs.microsoft.com/en-us/azure/import-export/storage-import-export-data-to-files
 
-## :star::star: Configure Azure Storage firewalls and virtual networks
+## :star::star: Configure Whitelist in Azure Storage firewalls 
 
 :question: 4-35
 
@@ -1102,14 +1134,15 @@ Which two actions should you perform ?
 
 > You must know how to configure firewall and VNet for secure you storage account endpoint access.  
 
-![alt text](image-268.png)  
+:mag: NSG secure rule 
 To secure your storage account, you should first configure a rule to deny access to traffic from all networks (including Internet traffic) on the public endpoint, by default.   
-Then, you should configure rules that grant access to traffic from specific VNets.   
+Then, you should configure rules that grant access to traffic from specific VNets.  
 
-You can also configure rules to grant access to traffic from selected public Internet IP address ranges, enabling connections from specific Internet or on-premises clients. 
 
-This configuration enables you to build a secure network boundary for your applications.   
-To whitelist a public IP address, you must:
+:mag: Whitelist a public IP Address
+![alt text](image-268.png)  
+You can also configure rules to grant access to traffic from selected public Internet IP address ranges, enabling connections from specific Internet or on-premises clients.  
+:m: This configuration enables you to build a secure network boundary for your applications. To whitelist a public IP address, you must:
 1. Go to the storage account you want to secure.
 2. Select on the `settings` menu called `Networking`.
 3. Under `Firewalls and virtual networks`, select `Selected networks`.
@@ -1117,7 +1150,7 @@ To whitelist a public IP address, you must:
 
 Hence, the following statements are correct:
 - Set the Allow access from field to `Selected networks under the Firewalls` and virtual networks blade of `tdstorageaccount1`.
-- Add the `131.107.1.23` IP address under `Firewalls and virtual networks` blade of `tdstorageaccount1`.
+- Add the `131.107.1.23` IP address under `Firewalls and virtual networks` blade of `tdstorageaccount1`.  
 
 :x: From the networking settings, add TDVnet1 under Firewalls and virtual networks is incorrect 
 - because adding TDVnet1 will not allow the user to connect to tdstorageaccount1. The requirement states that the workstation of the user must have access to tdstorageaccount1. 
@@ -1136,7 +1169,17 @@ https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blobs-overview
 
 https://docs.microsoft.com/en-us/azure/storage/common/storage-network-security
 
-## :star2: How to use Azure Site Recovery in a VM
+## :star2: How to use Azure Site Recovery for a VM
+
+:exclamation: Azure Site Recovery service contributes to your business continuity and disaster recovery (BCDR) strategy by keeping your business applications online during planned and unplanned outages. 
+
+:exclamation: **Site Recovery manages and orchestrates disaster recovery of on-premises machines and Azure virtual machines (VM)**, including `replication`, `failover`, and `recovery`.
+
+:link: https://learn.microsoft.com/en-us/azure/site-recovery/site-recovery-overview
+
+:link: https://learn.microsoft.com/en-us/azure/site-recovery/azure-to-azure-quickstart
+
+---
 
 :question: 4-45
 
@@ -1159,11 +1202,11 @@ Enabling replication for a virtual machine (VM) for disaster recovery purposes i
 - `[Registering]` Site Recovery Mobility service extension with Azure Site Recovery. 
 - `[Replicate]` During replication, any disk writes from the VM are first sent to a cache storage account in the source region.   
 Subsequently, the data is transferred to the target region, where `recovery points` are generated from it.   
-- `[failover]` During a disaster recovery failover of the VM, a recovery point is used to restore the VM in the target region.  
+- `[Failover]` During a disaster recovery failover of the VM, a recovery point is used to restore the VM in the target region.  
 
 :mag: Here's how to set up disaster recovery for a VM with Azure Site Recovery:
-- `[Replication Setup]`First, you need to create a Recovery Services Vault (RSV) in the secondary region, which will serve as the target location for the VM during a failover.
-- `[Select VM to Replicate]`Next, you need to install and configure the Azure Site Recovery agent on the VMs that you want to protect.  
+- `[REV Replication Setup]`First, you need to create a Recovery Services Vault (RSV) in the secondary region, which will serve as the target location for the VM during a failover.
+- `[Select VM to Replicate (Configure a Agent on VM)]`Next, you need to install and **configure the Azure Site Recovery agent on the VMs** that you want to protect.  
 The agent captures data changes on the VM disks and sends them to Azure Site Recovery for replication to the secondary region.
 - `[Design Recovery Plan]`Once the replication is set up, you need to design a recovery plan that outlines the steps to orchestrate the `failover` and `failback` operations.  
 This includes :arrow_down:
@@ -1171,12 +1214,17 @@ This includes :arrow_down:
     2. any dependencies between VMs, 
     3. and the desired recovery point objective (RPO) 
     4. and recovery time objective (RTO) for each VM.
-- `[disk writes -> cache in source region -> target region -> generate recovery points]` During replication, VM disk writes are sent to a cache storage account in the source region, and from there to the target region, where recovery points are generated from the data. 
-- `[What recovery points are used]` **In the event of a disaster or planned failover, a recovery point is used to restore the VM in the target region, allowing the business to continue operations without significant downtime or data loss**.
+
+
+:memo: Replication
+`[disk writes -> cache in source region -> target region -> generate recovery points]` During replication, VM disk writes are sent to a cache storage account in the source region, and from there to the target region, where recovery points are generated from the data. 
+
+:memo: Apply a recovery point
+`[What recovery points are used]` **In the event of a disaster or planned failover, a recovery point is used to restore the VM in the target region, allowing the business to continue operations without significant downtime or data loss**.
 
 :o: Hence, the correct answer is: 
 - Create an RSV in the secondary region, 
-- install and configure the Azure Site Recovery agent on the VMs, and design a recovery plan to orchestrate failover and failback operations.
+- install and configure the Azure Site Recovery agent on the VMs, and design a recovery plan to orchestrate `failover` and `failback` operations.
 
 :x: Create an RSV in the primary region, install and configure the Azure Site Recovery agent on the VMs, and design a replication policy to replicate the data to the secondary region is incorrect 
 - because although this will replicate the data to the secondary region, it does not include the necessary steps to perform failover. You still need to create a Recovery Services vault in the secondary region, not the primary region, to perform failover.
@@ -1186,13 +1234,3 @@ This includes :arrow_down:
 
 :x: Create an Azure Traffic Manager profile to load-balance traffic between the primary and secondary regions, install and configure the Azure Site Recovery agent on the VMs, and design a replication policy to replicate the data to the secondary region is incorrect 
 - because this will just load-balance traffic between the primary and secondary regions but won’t be able to perform failover. You will still need to create a Recovery Services vault in the secondary region to perform failover.
-
----
-
-:exclamation: Azure Site Recovery service contributes to your business continuity and disaster recovery (BCDR) strategy by keeping your business applications online during planned and unplanned outages. 
-
-:exclamation: **Site Recovery manages and orchestrates disaster recovery of on-premises machines and Azure virtual machines (VM)**, including `replication`, `failover`, and `recovery`.
-
-:link: https://learn.microsoft.com/en-us/azure/site-recovery/site-recovery-overview
-
-:link: https://learn.microsoft.com/en-us/azure/site-recovery/azure-to-azure-quickstart

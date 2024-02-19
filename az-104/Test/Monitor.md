@@ -68,7 +68,7 @@ Technical Requirements
 7. Ensure that `AdatumWeb2` can automatically increase the number of instances based on CPU utilization.  
 8. According to the sales department, `vm3.adatum.com` does not have connectivity to the Montreal office.  
 
-You need to determine if a NSG is causing the issue.  
+You need to determine if a network security group is causing the issue.
 
 What Azure Network Watcher feature should you use?  
 - NSG Flow Logs
