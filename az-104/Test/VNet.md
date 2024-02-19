@@ -197,15 +197,15 @@ Take note that in this scenario, you must ensure that the London office can send
 :x: Deploy a virtual network peering is incorrect 
 - because you only use this if you need to seamlessly connect two or more Virtual Networks in Azure. In this scenario, you need to connect the on-premises network in London to Azure.
 
-The statement that says: Deploy an ExpressRoute circuit only is incorrect. ExpressRoute lets you extend your on-premises networks into the Microsoft cloud over a private connection with the help of a connectivity provider. Remember that the requirement states that the traffic to Azure must go through the Internet gateway and not via a private connection.
+:x: Deploy an ExpressRoute circuit only is incorrect. ExpressRoute lets you extend your on-premises networks into the Microsoft cloud over a private connection with the help of a connectivity provider. Remember that the requirement states that the traffic to Azure must go through the Internet gateway and not via a private connection.
 
-The statement that says: Deploy an ExpressRoute circuit only and a local network gateway is incorrect because you do not need to deploy a local network gateway when you create an ExpressRoute connection. Also, you need to deploy a site-to-site VPN connection instead of an ExpressRoute circuit.
+:x: Deploy an ExpressRoute circuit only and a local network gateway is incorrect because you do not need to deploy a local network gateway when you create an ExpressRoute connection. Also, you need to deploy a site-to-site VPN connection instead of an ExpressRoute circuit.
 
-The statement that says: Configure a VPN device for point-to-site VPN connection is incorrect because you need to connect the London office to Azure and you can only achieve that by using a site-to-site VPN connection. A point-to-site VPN connection is typically used for remote work wherein you need a computer to have a secure connection to your Azure virtual network.
+:x: Configure a VPN device for point-to-site VPN connection is incorrect because you need to connect the London office to Azure and you can only achieve that by using a site-to-site VPN connection. A point-to-site VPN connection is typically used for remote work wherein you need a computer to have a secure connection to your Azure virtual network.
 
-The statement that says: Configure a local network gateway is incorrect because a local network gateway is deployed in Azure only and not on your on-premises data center.
+:x: Configure a local network gateway is incorrect because a local network gateway is deployed in Azure only and not on your on-premises data center.
 
-The statement that says: Configure an ExpressRoute circuit is incorrect because an ExpressRoute circuit can only be deployed in Azure. You can not deploy an ExpressRoute circuit in your data center on your own. If you need to create an ExpressRoute connection, on the on-premises side, you need to contact your Internet service provider to assist you with connecting your on-premises network to Azure privately.
+:x: Configure an ExpressRoute circuit is incorrect because an ExpressRoute circuit can only be deployed in Azure. You can not deploy an ExpressRoute circuit in your data center on your own. If you need to create an ExpressRoute connection, on the on-premises side, you need to contact your Internet service provider to assist you with connecting your on-premises network to Azure privately.
 
 
 References: 
@@ -619,13 +619,31 @@ Log Analytics is incorrect because this is just a tool to edit and run log queri
 
 VPN troubleshoot is incorrect because this only provides the capability to troubleshoot virtual network gateways and their connections. This is primarily used for diagnosing the traffic between your on-premises resources and Azure virtual networks.
 
-## dynamic/static public IP address x routine maintenance
+## :star::star: routine maintenance & reassign static public IP address
+
+Public IP addresses allow Internet resources to communicate inbound to Azure resources. 
+
+Public IP addresses enable Azure resources to communicate with the Internet and public-facing Azure services. 
+
+The address is dedicated to the resource until it's unassigned by you. 
+- A resource without a public IP assigned can communicate outbound.
+
+IP addresses in Azure can be either dynamic or static. 
+
+By default, Azure assigns a dynamic IP address to the VM. When the VM is started, Azure assigns it an IP address, and when the VM is stopped (deallocated), that IP address is returned to the pool and can be assigned to a different VM. 
+- This means that **when you stop and start a VM, it can get a different public IP address, which can cause problems if you have systems or services that rely on the specific IP address of that VM, such as an external service that whitelists specific IP addresses.**
+
+A static IP address, unlike a dynamic IP address, does not change when the VM is deallocated. 
+- Once a static IP address is assigned to a VM, that IP is reserved for the VM and won’t be assigned to any other VM, even when the original VM is stopped. 
+- This means the VM would keep the same IP address throughout its lifecycle, regardless of its state.
+
+---
 
 :question: 4-46
 
-You have an Azure subscription containing an Azure virtual machine named `Siargao` with an assigned dynamic public IP address.
+You have an Azure subscription containing an Azure virtual machine named `Siargao` with an assigned dynamic public IP address.  
 
-During routine maintenance, `Siargao` was deallocated and then started again.
+During routine maintenance, `Siargao` was deallocated and then started again.  
 
 The development team reports that their application hosted on `Siargao` has lost its connection with an external service. 
 
@@ -639,81 +657,28 @@ What should you do?
 - Enable an Azure VPN gateway for Siargao.
 - Modify Siargao to use a static public IP address.
 
+
+:a: :
+
 ![Alt text](image-148.png)
-
-Public IP addresses allow Internet resources to communicate inbound to Azure resources. Public IP addresses enable Azure resources to communicate with the Internet and public-facing Azure services. The address is dedicated to the resource until it’s unassigned by you. A resource without a public IP assigned can communicate outbound.
-
-IP addresses in Azure can be either dynamic or static. By default, Azure assigns a dynamic IP address to the VM. When the VM is started, Azure assigns it an IP address, and when the VM is stopped (deallocated), that IP address is returned to the pool and can be assigned to a different VM. This means that when you stop and start a VM, it can get a different public IP address, which can cause problems if you have systems or services that rely on the specific IP address of that VM, such as an external service that whitelists specific IP addresses.
-
-A static IP address, unlike a dynamic IP address, does not change when the VM is deallocated. Once a static IP address is assigned to a VM, that IP is reserved for the VM and won’t be assigned to any other VM, even when the original VM is stopped. This means the VM would keep the same IP address throughout its lifecycle, regardless of its state.
 
 In this case, to solve the issue, we need to modify Siargao to use a static public IP address instead of a dynamic public IP address.
 
 Hence, the correct answer is: Modify Siargao to use a static public IP address.
 
-The statement that says: Enable an Azure VPN gateway for Siargao is incorrect. Azure VPN Gateway is used to establish secure, cross-premises connectivity between your virtual network within Azure and your on-premises network, but it doesn’t provide static public IP functionality for individual VMs.
+:x: **Enable an Azure VPN gateway for Siargao is incorrect.** 
+- **Azure VPN Gateway is used to establish secure, cross-premises connectivity between your virtual network within Azure and your on-premises network**, but it doesn't provide static public IP functionality for individual VMs.
 
-The statement that says: Attach multiple dynamic public IP addresses to Siargao is incorrect because assigning multiple dynamic public IP addresses would not solve the issue, as these dynamic IP addresses can still change when the VM is deallocated.
+:x: Attach multiple dynamic public IP addresses to Siargao is incorrect 
+- because assigning multiple dynamic public IP addresses would not solve the issue, as these dynamic IP addresses can still change when the VM is deallocated.
 
-The statement that says: Provision an Azure NAT gateway to provide outbound internet connectivity is incorrect because Azure NAT Gateway is a service that provides outbound-only internet connectivity for the VMs in your virtual network. However, it doesn’t help in maintaining the same public IP address of a VM during its deallocation and reallocation.  
+:x: Provision an Azure NAT gateway to provide outbound internet connectivity is incorrect 
+- because Azure NAT Gateway is a service that provides outbound-only internet connectivity for the VMs in your virtual network. 
+- However, it doesn’t help in maintaining the same public IP address of a VM during its deallocation and reallocation.  
 
 https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/public-ip-addresses
 
 https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/default-outbound-access
-
-## How to use Azure Site Recovery in a VM
-
-:question: **Q :**
-Your company is currently running a mission-critical application in a primary Azure region.
-
-You plan to implement a disaster recovery by configuring failover to a secondary region using Azure Site Recovery.
-
-What should you do?
-
-Select `Virtual Machine Resource | Operations | Disaster Recovery` :arrow_down:
-![Alt text](image-149.png)
-Enabling replication for a virtual machine (VM) for disaster recovery purposes involves 
-- Installing the **Site Recovery Mobility service extension** on the VM 
-- Registering Site Recovery Mobility service extension with Azure Site Recovery. 
-- During replication, any disk writes from the VM are first sent to a cache storage account in the source region. 
-- Subsequently, the data is transferred to the target region, where `recovery points` are generated from it. 
-- During a disaster recovery failover of the VM, a recovery point is used to restore the VM in the target region.
-
-:mag: Here's how to set up disaster recovery for a VM with Azure Site Recovery:
-- `[Replication Setup]`First, you need to create a Recovery Services Vault (RSV) in the secondary region, which will serve as the target location for the VM during a failover.
-- `[Select VM to Replicate]`Next, you need to install and configure the Azure Site Recovery agent on the VMs that you want to protect.  
-The agent captures data changes on the VM disks and sends them to Azure Site Recovery for replication to the secondary region.
-- `[Design Recovery Plan]`Once the replication is set up, you need to design a recovery plan that outlines the steps to orchestrate the `failover` and `failback` operations.  
-This includes :arrow_down:
-    1. defining the order in which VMs should be failed over, 
-    2. any dependencies between VMs, 
-    3. and the desired recovery point objective (RPO) 
-    4. and recovery time objective (RTO) for each VM.
-- `[disk writes -> cache in source region -> target region -> generate recovery points]` During replication, VM disk writes are sent to a cache storage account in the source region, and from there to the target region, where recovery points are generated from the data. 
-- `[What recovery points are used]` **In the event of a disaster or planned failover, a recovery point is used to restore the VM in the target region, allowing the business to continue operations without significant downtime or data loss**.
-
-:o: Hence, the correct answer is: 
-- Create an RSV in the secondary region, 
-- install and configure the Azure Site Recovery agent on the VMs, and design a recovery plan to orchestrate failover and failback operations.
-
-:x: Create an RSV in the primary region, install and configure the Azure Site Recovery agent on the VMs, and design a replication policy to replicate the data to the secondary region is incorrect 
-- because although this will replicate the data to the secondary region, it does not include the necessary steps to perform failover. You still need to create a Recovery Services vault in the secondary region, not the primary region, to perform failover.
-
-:x: Create a virtual network and subnet in the secondary region, install and configure the Azure Site Recovery agent on the VMs, and design a recovery plan to orchestrate failover and failback operations is incorrect 
-- because, just like the other options, you will still need to create a Recovery Services vault in the secondary region, install and configure the Azure Site Recovery agent on the virtual machines, and create a recovery plan to orchestrate failover and failback operations.
-
-:x: Create an Azure Traffic Manager profile to load-balance traffic between the primary and secondary regions, install and configure the Azure Site Recovery agent on the VMs, and design a replication policy to replicate the data to the secondary region is incorrect 
-- because this will just load-balance traffic between the primary and secondary regions but won’t be able to perform failover. You will still need to create a Recovery Services vault in the secondary region to perform failover.
-
----
-
-:exclamation: Azure Site Recovery service contributes to your business continuity and disaster recovery (BCDR) strategy by keeping your business applications online during planned and unplanned outages. 
-
-:exclamation: **Site Recovery manages and orchestrates disaster recovery of on-premises machines and Azure virtual machines (VM)**, including `replication`, `failover`, and `recovery`.
-
-:link: https://learn.microsoft.com/en-us/azure/site-recovery/site-recovery-overview
-
-:link: https://learn.microsoft.com/en-us/azure/site-recovery/azure-to-azure-quickstart
 
 
 ## NSG assignment with VNet (REGION)

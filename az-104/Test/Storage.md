@@ -1,3 +1,5 @@
+# Storage 
+
 ## Access Tiers & Replication Strategies
 
 :mag: Access Tiers
@@ -12,7 +14,8 @@ Archive (陳年)
 
 :mag: Storage Account Type for Copies Of Data
 ![Alt text](image-73.png)  
-- Only 3 for LRS and GRS and 6 for GRS and GZRS.
+- Only 3 for LRS and GRS 
+- 6 for GRS and GZRS.
 
 https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview
 
@@ -29,13 +32,14 @@ You created an Azure storage account named tutorialsdojostorage using the follow
 ![Alt text](image-72.png)
 
 1. How many copies of your data will be maintained by the Azure storage account at the minimum? 
-2. The files that you will host in tutorialsdojostorage are frequently accessed files. What setting should you modify?
+2. The files that you will host in `tutorialsdojostorage` are frequently accessed files. 
+What setting should you modify?
 
 :a: : 
 
 :o: :arrow_down:
 1. you will have a total of 6 copies maintained because its replication setting is Geo-redundant storage (GRS)
-2. if you store frequently accessed files, you must modify the access tier to the hot tier from the cool tier.
+2. if you store frequently accessed files, you must modify the access tier to the `hot` tier from the `cool` tier.
 
 :x: `Account Kind` is incorrect 
 - because it simply offers several types of storage accounts, such as StorageV2, Storage, and BlobStorage. 
@@ -531,7 +535,69 @@ The solution must minimize costs and administrative effort.
 Upgrade TD1 and TD2 to general-purpose v2
 ![Alt text](image-135.png)
 
-## 
+## :star: Azure Storage lifecycle management
+
+:question: 4-39
+
+Your organization has a standard general-purpose v2 storage account with an access tier of Hot. 
+
+The files uploaded to the storage account are infrequently accessed by your colleagues.
+
+You were tasked with modifying the storage account with the following requirements:
+- Inactive data must automatically transition to the archive tier after 120 days.
+- Data uploaded must be accessed instantly, provided that it has not been transitioned to the archive tier yet.
+- Minimize costs.
+- Minimize administrative effort.
+
+Which two actions should you perform? Choose two.
+- Set the default access tier of the storage account to the Archive tier.
+- Set the default access tier of the storage account to the Cool tier.
+- Manually copy the inactive data using the Copy Blob operation to the archive tier after 120 days of inactivity.
+- Create a lifecycle management rule to move the inactive data to the Archive tier after 120 days of inactivity.
+- Create an Azure Function to move the inactive data to the archive tier after 120 days of inactivity.
+- Automatically archive data on upload.
+
+:a: :
+
+> Data sets have unique lifecycles. 
+
+Early in the lifecycle, people access some data often.   
+But the need for access often drops drastically as the data ages.   
+Some data remains idle in the cloud and is rarely accessed once stored.  
+
+Some data sets expire days or months after creation, while other data sets are actively read and modified throughout their lifetimes. 
+
+![alt text](image-275.png)  
+Azure Storage lifecycle management offers a rule-based policy that you can use to transition blob data to the appropriate access tiers or to expire data at the end of the data lifecycle.  
+
+Storage accounts have a default access tier setting that indicates in which online tier a new blob is created. 
+- The default access tier setting can be either hot or cool only. 
+
+The behavior of this setting is slightly different depending on the type of storage account:
+
+Since the scenario states that your colleagues infrequently access the data, this means that you do not need to store your data in the Hot tier.  
+- You can park the data in the Cool tier and automatically transition it to Archive using the data lifecycle.
+
+Hence, the correct answers are:
+- Create a lifecycle management rule to move the inactive data to the Archive tier after 120 days of inactivity.
+- Set the default access tier of the storage account to the Cool tier.
+
+:x: Create an Azure Function to move the inactive data to the archive tier after 120 days of inactivity is incorrect because you can achieve the same goal using lifecycle management. Remember that one of the requirements is minimizing administrative effort.
+
+:x: Set the default access tier of the storage account to the Archive tier is incorrect 
+- because the supported default access tiers for storage accounts are Hot and Cool tiers. What you can do is move the data to the cool tier if your data is infrequently accessed and then create a lifecycle policy to transition unmodified data to the Archive tier after a set amount of time.
+
+:x: Manually copy the inactive data using the Copy Blob operation to the archive tier after 120 days of inactivity is incorrect 
+- because manually copying the inactive data to the Archive tier is a tedious task if you have thousands of data. One of the requirements states that you must lessen the administrative effort. Use lifecycle management instead.
+
+:x: Automatically archive data on upload is incorrect 
+- one of the requirements states that you need your data that is not in the archive tier to be accessible instantly. Data in the Archive tier takes hours before you can access it.  
+
+https://docs.microsoft.com/en-us/azure/storage/common/storage-account-overview
+
+https://docs.microsoft.com/en-us/azure/storage/blobs/lifecycle-management-overview
+
+## Storage Networking & Data Protection
 
 :question: 4-40 
 
@@ -547,8 +613,7 @@ Which two storage account features should you use to satisfy requirements?
 - Requirement 1?  
 - Requirement 2?  
 
-
-**ANS**
+:a: : 
 Storage Account
 ![alt text](image-140.png)
 Under the networking tab, you can use IP network rules to allow access from specific public internet IP address ranges by creating IP network rules. 
@@ -1016,44 +1081,43 @@ https://docs.microsoft.com/en-us/azure/import-export/storage-import-export-servi
 
 https://docs.microsoft.com/en-us/azure/import-export/storage-import-export-data-to-files
 
-## 
+## :star::star: Configure Azure Storage firewalls and virtual networks
 
 :question: 4-35
 
 Your company has an Azure subscription that contains a storage account named `tdstorageaccount1` and a virtual network named `TDVNET1` with an address space of `192.168.0.0/16`.
 
-You have a user that needs to connect to the storage account from her workstation which has a public IP address of 131.107.1.23.
+You have a user that needs to connect to the storage account from her workstation which has a public IP address of `131.107.1.23`.   
 
-You need to ensure that the user is the only one who can access `tdstorageaccount1`.
+You need to ensure that the user is the only one who can access `tdstorageaccount1`.  
 
-
-Set the Allow access from field to Selected networks under the Firewalls and virtual networks blade of tdstorageaccount1.
-
-From the networking settings, enable TDVnet1 under Firewalls and virtual networks.
-From the networking settings, select service endpoint under Firewalls and virtual networks.
-From the networking settings, select “Allow trusted Microsoft services to access this storage account” under Firewalls and virtual networks.
-
-Add the 131.107.1.23 IP address under Firewalls and virtual networks blade of tdstorageaccount1.
+Which two actions should you perform ? 
+- Add the `131.107.1.23` IP address under Firewalls and virtual networks blade of `tdstorageaccount1`.
+- From the networking settings, select service endpoint under Firewalls and virtual networks.  
+- From the networking settings, enable `TDVnet1` under Firewalls and virtual networks.  
+- Set the Allow access from field to Selected networks under the Firewalls and virtual networks blade of `tdstorageaccount1`.
+- From the networking settings, select "Allow trusted Microsoft services to access this storage account" under Firewalls and virtual networks.
 
 :a: :
 
-![alt text](image-268.png)
+> You must know how to configure firewall and VNet for secure you storage account endpoint access.  
 
-To secure your storage account, you should first configure a rule to deny access to traffic from all networks (including Internet traffic) on the public endpoint, by default. 
+![alt text](image-268.png)  
+To secure your storage account, you should first configure a rule to deny access to traffic from all networks (including Internet traffic) on the public endpoint, by default.   
+Then, you should configure rules that grant access to traffic from specific VNets.   
 
-Then, you should configure rules that grant access to traffic from specific VNets. 
+You can also configure rules to grant access to traffic from selected public Internet IP address ranges, enabling connections from specific Internet or on-premises clients. 
 
-You can also configure rules to grant access to traffic from selected public Internet IP address ranges, enabling connections from specific Internet or on-premises clients. This configuration enables you to build a secure network boundary for your applications.
-
+This configuration enables you to build a secure network boundary for your applications.   
 To whitelist a public IP address, you must:
 1. Go to the storage account you want to secure.
 2. Select on the `settings` menu called `Networking`.
 3. Under `Firewalls and virtual networks`, select `Selected networks`.
-4. Under `firewall`, add the public IP address then save.
+4. Under `firewall`, add the public IP address then save.  
 
 Hence, the following statements are correct:
-- Set the Allow access from field to Selected networks under the Firewalls and virtual networks blade of tdstorageaccount1.
-- Add the 131.107.1.23 IP address under Firewalls and virtual networks blade of `tdstorageaccount1`.
+- Set the Allow access from field to `Selected networks under the Firewalls` and virtual networks blade of `tdstorageaccount1`.
+- Add the `131.107.1.23` IP address under `Firewalls and virtual networks` blade of `tdstorageaccount1`.
 
 :x: From the networking settings, add TDVnet1 under Firewalls and virtual networks is incorrect 
 - because adding TDVnet1 will not allow the user to connect to tdstorageaccount1. The requirement states that the workstation of the user must have access to tdstorageaccount1. 
@@ -1062,7 +1126,7 @@ Hence, the following statements are correct:
 :x: From the networking settings, select service endpoint under Firewalls and virtual networks is incorrect 
 - because it only allows you to create network rules that allow traffic only from selected VNets and subnets, which creates a secure network boundary for their data. Service endpoints only extend your VNet private address space and identity to the Azure services, over a direct connection.
 
-:x: From the networking settings, select Allow trusted Microsoft services to access this storage account under Firewalls and virtual networks is incorrect 
+:x: From the networking settings, select `Allow trusted Microsoft services to access this storage account` under `Firewalls and virtual networks` is incorrect 
 - because this simply grants a subset of trusted Azure services access to the storage account, while maintaining network rules for other apps. 
 - These trusted services will then use strong authentication to securely connect to your storage account but won’t restrict access to a particular subnetwork or IP address.
 
@@ -1071,3 +1135,64 @@ References:
 https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blobs-overview
 
 https://docs.microsoft.com/en-us/azure/storage/common/storage-network-security
+
+## :star2: How to use Azure Site Recovery in a VM
+
+:question: 4-45
+
+Your company is currently running a mission-critical application in a primary Azure region.
+
+You plan to implement a disaster recovery by configuring failover to a secondary region using Azure Site Recovery.  
+
+What should you do ?
+- Create an Azure Traffic Manager profile to load-balance traffic between the primary and secondary regions, install and configure the Azure Site Recovery agent on the VMs, and design a replication policy to replicate the data to the secondary region.
+- Create an RSV in the primary region, install and configure the Azure Site Recovery agent on the VMs, and design a replication policy to replicate the data to the secondary region.
+- Create an RSV in the secondary region, install and configure the Azure Site Recovery agent on the VMs, and design a recovery plan to orchestrate failover and failback operations.
+- Create a virtual network and subnet in the secondary region, install and configure the Azure Site Recovery agent on the VMs, and design a recovery plan to orchestrate failover and failback operations.
+
+:a: : 
+
+Select `Virtual Machine#Resource | Operations | Disaster Recovery` :arrow_down:
+![Alt text](image-149.png)
+Enabling replication for a virtual machine (VM) for disaster recovery purposes involves 
+- `[Installing]` the **Site Recovery Mobility service extension** on the VM 
+- `[Registering]` Site Recovery Mobility service extension with Azure Site Recovery. 
+- `[Replicate]` During replication, any disk writes from the VM are first sent to a cache storage account in the source region.   
+Subsequently, the data is transferred to the target region, where `recovery points` are generated from it.   
+- `[failover]` During a disaster recovery failover of the VM, a recovery point is used to restore the VM in the target region.  
+
+:mag: Here's how to set up disaster recovery for a VM with Azure Site Recovery:
+- `[Replication Setup]`First, you need to create a Recovery Services Vault (RSV) in the secondary region, which will serve as the target location for the VM during a failover.
+- `[Select VM to Replicate]`Next, you need to install and configure the Azure Site Recovery agent on the VMs that you want to protect.  
+The agent captures data changes on the VM disks and sends them to Azure Site Recovery for replication to the secondary region.
+- `[Design Recovery Plan]`Once the replication is set up, you need to design a recovery plan that outlines the steps to orchestrate the `failover` and `failback` operations.  
+This includes :arrow_down:
+    1. defining the order in which VMs should be failed over, 
+    2. any dependencies between VMs, 
+    3. and the desired recovery point objective (RPO) 
+    4. and recovery time objective (RTO) for each VM.
+- `[disk writes -> cache in source region -> target region -> generate recovery points]` During replication, VM disk writes are sent to a cache storage account in the source region, and from there to the target region, where recovery points are generated from the data. 
+- `[What recovery points are used]` **In the event of a disaster or planned failover, a recovery point is used to restore the VM in the target region, allowing the business to continue operations without significant downtime or data loss**.
+
+:o: Hence, the correct answer is: 
+- Create an RSV in the secondary region, 
+- install and configure the Azure Site Recovery agent on the VMs, and design a recovery plan to orchestrate failover and failback operations.
+
+:x: Create an RSV in the primary region, install and configure the Azure Site Recovery agent on the VMs, and design a replication policy to replicate the data to the secondary region is incorrect 
+- because although this will replicate the data to the secondary region, it does not include the necessary steps to perform failover. You still need to create a Recovery Services vault in the secondary region, not the primary region, to perform failover.
+
+:x: Create a virtual network and subnet in the secondary region, install and configure the Azure Site Recovery agent on the VMs, and design a recovery plan to orchestrate failover and failback operations is incorrect 
+- because, just like the other options, you will still need to create a Recovery Services vault in the secondary region, install and configure the Azure Site Recovery agent on the virtual machines, and create a recovery plan to orchestrate failover and failback operations.
+
+:x: Create an Azure Traffic Manager profile to load-balance traffic between the primary and secondary regions, install and configure the Azure Site Recovery agent on the VMs, and design a replication policy to replicate the data to the secondary region is incorrect 
+- because this will just load-balance traffic between the primary and secondary regions but won’t be able to perform failover. You will still need to create a Recovery Services vault in the secondary region to perform failover.
+
+---
+
+:exclamation: Azure Site Recovery service contributes to your business continuity and disaster recovery (BCDR) strategy by keeping your business applications online during planned and unplanned outages. 
+
+:exclamation: **Site Recovery manages and orchestrates disaster recovery of on-premises machines and Azure virtual machines (VM)**, including `replication`, `failover`, and `recovery`.
+
+:link: https://learn.microsoft.com/en-us/azure/site-recovery/site-recovery-overview
+
+:link: https://learn.microsoft.com/en-us/azure/site-recovery/azure-to-azure-quickstart
