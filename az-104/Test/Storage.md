@@ -252,53 +252,6 @@ The requirement to be considered for this scenario is:
 :x: Azure Files storage meets the storage requirements of TutorialsDojoPortal media files is incorrect. 
 - **Azure Files can be only accessed through SMB protocol and cannot be put directly behind an Azure CDN which only supports HTTP(80) and HTTPS(443) protocols.**
 
-## Export Specific Role Definition 
-
-You need to retrieve the JSON string of the Contributor role so you can customize it to create the `AdatumAdministrator` custom role.
-
-Which command should you run?
-```
-Get-AzRoleDefinition -Name Contributor | ConvertTo-Json
-Get-AzRoleAssignment -Name Contributor | ConvertFrom-Json
-Get-AzRoleDefinition -Name Contributor | ConvertFrom-Json
-Get-AzRoleAssignment -Name Contributor | ConvertTo-Json
-```
-
-:a: :
-
-![alt text](image-277.png)
-
-
-If the Azure built-in roles don’t meet the specific needs of your organization, you can create your own custom roles. 
-
-Just like built-in roles, you can assign custom roles to `users`, `groups`, and `service principals at management group`, `subscription`, and `resource group scopes`.
-
-Take note that in this scenario, you need to create a custom role named `AdatumAdministrator` that is based on the built-in policy Contributor role. 
-- You need to retrieve the JSON format file of the Contributor role so that you can customize it to your needs.
-
-To retrieve the JSON string of the Contributor role, you need to use the command:
-`Get-AzRoleDefinition -Name <role_name> | ConvertTo-Json`
-
-Hence, the correct answer is: Get-AzRoleDefinition -Name Contributor | ConvertTo-Json
-
-:x: `Get-AzRoleDefinition -Name Contributor | ConvertFrom-Json` is incorrect 
-- because the `ConvertFrom-Json` cmdlet just converts your JSON string to a `PSCustomObject` object that has a property for each field in the JSON string. 
-- Take note that you need to retrieve the JSON role so that you can customize it to your needs.
-
-The following options :arrow_down: are incorrect 
-
-because the `Get-AzRoleAssignment` simply allows you to list Azure RBAC role assignments at the specified scope. 
-- By default, it lists all role assignments in the selected Azure subscription. 
-- You have to use the respective parameters to list assignments to a specific user, or to list assignments on a specific resource group or resource.
-```
-Get-AzRoleAssignment -Name Contributor | ConvertTo-Json
-Get-AzRoleAssignment -Name Contributor | ConvertFrom-Json
-```
-
-https://docs.microsoft.com/en-us/azure/role-based-access-control/overview
-
-https://docs.microsoft.com/en-us/azure/role-based-access-control/custom-roles-powershell
-
 ## :star2: Stop backup before deleting A RSV
 
 :memo: To delete a Recovery Services vault, you need to stop the continuous backup first. 

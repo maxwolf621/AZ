@@ -331,6 +331,7 @@ Whether you're an upcoming startup trying to optimize resources or a large enter
 - You can use it for optimizing network flows, monitoring throughput, verifying compliance, detecting intrusions, and more.
 
 :memo: IP flow verify 
+`[檢查 Packet (connectivity) 在哪個 NSG的 Rule 被拒絕/接受]`
 Checks if a packet is allowed or denied to or from a virtual machine.  
 - If the packet is denied by a security group, **the name of the rule** that denied the packet is returned.  
 
@@ -339,15 +340,25 @@ IP flow verify looks at the rules for all Network Security Groups (NSGs) applied
 Traffic flow is then verified based on the configured settings to or from that network interface. 
 
 IP flow verify is useful in confirming if a rule in a Network Security Group is blocking ingress or egress traffic to or from a virtual machine.
+-  IP flow verify helps administrators quickly diagnose connectivity issues from or to the Internet and from or to the on-premises environment.
 
 Therefore, you have to use the NSG flow logs to capture information about the IP traffic going to and from a network security group.
 Conversely, to diagnose connectivity issues to or from an Azure virtual machine, you need to use IP flow verify.
 
+How IP VERIFY FLOW done
+1. `[Look at NSG for NIC & Subnet]`IP flow verify first looks at the rules for all Network Security Groups (NSGs) applied to the network interface, such as a subnet or virtual machine NIC. 
+2. `[Check Setting]`Traffic flow is then verified based on the configured settings to or from that network interface. 
+
 :x: `[Traffic會被傳送到哪]` Next hop is incorrect 
 - because this simply helps you determine if traffic is being `directed` to `the intended destination`, or whether the traffic is being sent nowhere.
+- Take note that in this scenario, you need to determine if the network security group is blocking the ingress or egress traffic.
 
 :x: `[蒐集NSG Flow Log Data並讓你可以分析]`Traffic analytics is incorrect 
 - because this just allows you to process your NSG Flow Log data that enables you to visualize, query, analyze, and understand your network traffic.
+
+:x: Traffic Analytics is incorrect 
+- `[視覺化Traffic分析且讓你查詢]`because this just allows you to process your `NSG Flow Log` data that enables you to visualize, query, analyze, and understand your network traffic.
+
 
 ## SKU of load balancer for Health Probe
 

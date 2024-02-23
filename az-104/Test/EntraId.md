@@ -1,4 +1,4 @@
-## Manage Azure Identities and Governance
+# Manage Azure Identities and Governance
 
 ## Azure Policy Exclusion
 
@@ -18,7 +18,8 @@ Your company created a new Azure policy.
 You need to interpret the permissions that are allowed or denied by the policy shown below:
 ![Alt text](image-90.png)  
 
-:a: 
+:a: :
+
 ![Alt text](image-91.png)    
 In the given policy, the resource group TD-RG is excluded in the effect of the policy. 
 
@@ -38,7 +39,7 @@ For example, in an environment with applications and a central network, you want
 :mag: Traffic Analytics 
 Traffic analytics is a powerful feature within Azure Network Watcher that provides visibility into `user` and `application activity` in your cloud networks.
 
-![Alt text](image-85.png)
+![Alt text](image-85.png)  
 
 To enable traffic analytics, your account must have any of the following Azure roles at the subscription scope: 
 - owner, 
@@ -61,7 +62,7 @@ https://learn.microsoft.com/en-us/azure/network-watcher/traffic-analytics
 
 You created a new Azure AD group for Network Administrators in your organization Azure Subscription.  
 
-You need to make sure that the users in the group can enable Traffic Analytics and visualize traffic distribution.  
+You need to make sure that the users in the group can ENABLE Traffic Analytics and visualize traffic distribution.  
 
 ![alt text](image-256.png)
 
@@ -79,34 +80,6 @@ Which Solution is Correct ?
 - By assigning this role, the users in the group won’t be able to enable traffic analytics
 
 :o: Assign a Contributor role to the group.
-
-## Azure RBAC
-
-:question: : 
-The subscription has a user named `ManilaUser01` which has the following roles:
-```
-Backup Reader
-Storage Blob Data Contributor
-DevTest Labs User
-```
-
-:a: : 
-
-The four fundamental Azure roles are 
-- `Owner`, `Contributor`, `Reader`, and `User Access Administrator`. 
-
-To assign a Reader role to ALL the users in the Azure subscription, you must grant the user a `User Access Administrator role`. 
-
-This role allows you to manage user access to the Azure resources.
-
-
-:x: Assign the Virtual Machine Contributor role is incorrect 
-- because this role just lets you manage virtual machines. 
-- Take note that this role doesn't allow you to access virtual machines directly nor assign a Reader role to all the users in the subscription.
-
-:x: Assign the Security Admin role is incorrect. 
-- This role has the same permissions as the Security Reader role. 
-- The only difference is that it can update the security policy and dismiss alerts and recommendations.
 
 ## Moving Web-App to Resource Group 
 
@@ -128,24 +101,23 @@ What is the effect of moving the web app to a different resource group?
 
 :a: : 
 
-:o: the correct answer is: 
-The TD-App3 remains in the North Europe region and the policy applied to the resource will be Policy 1.
+:o: the correct answer is: The TD-App3 remains in the North Europe region and **the policy applied to the resource will be Policy 1**.
 
 ---
 
 :mag: Region
 **Take note that you cannot change an App Service plan’s region**. 
-**Also, if you move a resource to a new resource group or subscription, the location of the resource would not change.** 
+- **Also, if you move a resource to a new resource group or subscription, the location of the resource would not change.** 
 
 
 :mag: Policy 
 **Remember that the assigned policy on the resource group will also be applied to the resources.** 
-You can also assign multiple policies in one resource group.
+- You can also assign multiple policies in one resource group.
 
-:mag: app cloning
+:star: App Cloning
 If you need to run your app in a different region, one alternative is app cloning. Cloning makes a copy of your app in a new or existing App Service plan in any region.
 
-## User Access Administrator role
+## User Access Administrator role Assignment in subscription
 
 https://docs.microsoft.com/en-us/azure/role-based-access-control/rbac-and-directory-admin-roles
 
@@ -159,24 +131,25 @@ Your company has an Azure subscription named ManilaSubscription that contains mu
 
 The subscription has a user named ManilaUser01 which has the following roles:
 
-Backup Reader
-Storage Blob Data Contributor
-DevTest Labs User
+- Backup Reader
+- Storage Blob Data Contributor
+- DevTest Labs User
 
 Which of the following actions should you do first?
-Assign the Security Admin role.
-Assign the Virtual Machine Contributor role.
-Assign the Security Reader role.
-Assign the User Access Administrator role.
+- Assign the Security Admin role.
+- Assign the Virtual Machine Contributor role.
+- Assign the Security Reader role.
+- Assign the User Access Administrator role.
 
 :a: : 
 
 ![alt text](image-247.png)
 
 :o: Assign the User Access Administrator role.
-- The four fundamental Azure roles are Owner, Contributor, Reader, and User Access Administrator. 
+- The four fundamental Azure roles are   
+`Owner`, `Contributor`, `Reader`, and `User Access Administrator`. 
 
-To assign a Reader role to all the users in the Azure subscription, you must grant the user a User Access Administrator role. 
+**To assign a Reader role to all the users in the Azure subscription, you must grant the user a `User Access Administrator role`.** 
 - This role allows you to manage user access to the Azure resources.
 
 
@@ -191,26 +164,26 @@ To assign a Reader role to all the users in the Azure subscription, you must gra
 - This role has the same permissions as the Security Reader role. 
 - **The only difference is that it can update the security policy and dismiss alerts and recommendations.**
 
-## Managed Identity of the VM
+## :star: Managed Identity of the VM
 
 ![Alt text](image-96.png)
 
 There are two types of managed identities:
-- System-assigned : 
+- `System-assigned` : 
 some Azure services allow you to enable a managed identity directly on a service instance.  
-- When you enable a system-assigned managed identity, an identity is created in Microsoft Entra ID that is tied to the lifecycle of that service instance.  
+**When you enable a system-assigned managed identity, an identity is created in Microsoft Entra ID that is tied to the lifecycle of that service instance**.  
 So when the resource is deleted, Azure automatically deletes the identity for you.  
-By design, only that Azure resource can use this identity to request tokens from Microsoft Entra ID.
-- User-assigned:  
-you may also create a managed identity as a standalone Azure resource.   
+By design, only that Azure resource can use this identity to request tokens from Microsoft Entra ID.  
+- `User-assigned` :  
+you may also create a managed identity as a standalone Azure resource.  
 You can create a user-assigned managed identity and assign it to one or more instances of an Azure service.   
-In the case of user-assigned managed identities, the identity is managed separately from the resources that use it.  
+**In the case of user-assigned managed identities, the identity is managed separately from the resources that use it.**   
 
 
-<font color="red">Take note that this identity is restricted to only one resource. 
-- You can grant permissions to the managed identity by using Azure RBAC.   
-- The managed identity is authenticated with Microsoft Entra ID, so you don’t have to store any credentials.   
-</font>
+:warning: <font color="red"> Take note that this identity is restricted to only one resource. </font>
+- <font color="red"> You can grant permissions to the managed identity by using Azure RBAC.</font>   
+- <font color="red">The managed identity is authenticated with Microsoft Entra ID, so you don't have to store any credentials.</font>   
+
 
 https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resources/qs-configure-portal-windows-vm
 
@@ -222,7 +195,7 @@ https://learn.microsoft.com/en-us/entra/identity/managed-identities-azure-resour
 
 You are managing an Azure subscription that contains a resource group named TD-RG1 which has a virtual machine named TD-VM1.
 
-`TD-VM1` has services that will deploy new resources on `TD-RG1`.
+TD-VM1 has services that will deploy new resources on D-RG1.
 
 You need to make sure that the services running on `TD-VM1` should be able to manage the resources in `TD-RG1` using its identity.
 
@@ -235,12 +208,18 @@ Which of the following actions should you do first?
 **ANS :**
 
 In this scenario, you can use the system-assigned managed identity. 
+:o: Hence, the correct answer is: Configure the managed identity of TD-VM1.
 
-Hence, the correct answer is: Configure the managed identity of TD-VM1.
+:x: Configure the security settings of TD-RG1 is incorrect 
+- because it only provides security recommendations and security alerts for your resource group. 
+- As per the scenario, you need to ensure that the services running on TD-VM1 are able to manage the resources in TD-RG1 using its identity. 
+- Therefore, you need to configure the managed identity settings of TD-VM1.
 
-:x: Configure the security settings of TD-RG1 is incorrect because it only provides security recommendations and security alerts for your resource group. As per the scenario, you need to ensure that the services running on TD-VM1 are able to manage the resources in TD-RG1 using its identity. Therefore, you need to configure the managed identity settings of TD-VM1.
-
-:x: Configure the access control of TD-VM1 and Configure the access control of TD-RG1 are incorrect because these are only adding role assignments to an Azure resource. A role assignment is a process of attaching a role definition to a user, group, or service principal to provide access to a specific resource. Remember that access is granted by creating a role assignment, and access is revoked by removing a role assignment. You have to configure a managed identity instead.
+:x: Configure the access control of TD-VM1 and Configure the access control of TD-RG1 are incorrect 
+- because these are only adding role assignments to an Azure resource. 
+- A role assignment is a process of attaching a role definition to a user, group, or service principal to provide access to a specific resource.   
+Remember that access is granted by creating a role assignment, and access is revoked by removing a role assignment.   
+You have to configure a managed identity instead.  
 
 ## :star2::star2: Account reset Methods
 
@@ -258,11 +237,12 @@ Your company has an Azure subscription with an Azure AD tenant named `tutorialsd
 ![Alt text](image-98.png)  
 
 You are instructed to enable self-service password reset for `tutorialsdojo.onmicrosoft.com`  
-![Alt text](image-99.png)  
+![Alt text](image-99.png)   
 
 You have configured the authentication methods for password reset as illustrated below.
-![Alt text](image-100.png)  
+![Alt text](image-100.png)   
 
+Which question is correct ?
 - If TD-User3 has forgotten its password, a mobile phone app can be used to reset the password.  
 - TD-User1 can add security questions for password reset.    
 - The password can be reset immediately after TD-User2 answers the three security questions correctly.  
@@ -276,23 +256,26 @@ If a user's account is locked or they forget their password, they can follow pro
 
 This ability reduces help desk calls and loss of productivity when a user can’t sign in to their device or an application.
 
-Remember that users can only reset their password if they have registered an authentication method that the administrator has enabled. These are the authentication methods available for SSPR: 
-Mobile app notification, Mobile app code, Mobile phone, Office phone, Email, and Security questions.
+Remember that users can only reset their password if they have registered an authentication method that the administrator has enabled. 
 
-**You also need to use an account with Global Administrator privileges to allow users to unlock their account or reset passwords using Azure Active Directory self-service password reset since a user with a User Administrator role does not have permission to manage MFA.** 
+These are the authentication methods available for SSPR: 
+- Mobile app notification, Mobile app code, Mobile phone, Office phone, Email, and Security questions.
 
-:x: TD-User1 can add security questions for password reset is incorrect 
+**You also need to use an account with `Global Administrator` privileges to allow users to unlock their account or reset passwords using Azure Active Directory self-service password reset since `a user with a User Administrator role does not have permission to manage MFA`.** 
+
+:x: TD-User1 can add security questions for password reset is incorrect  
 - because the role of TD-User1 is a **User Administrator**. 
 - Take note that the `User Administrator role` does not have permission to modify security questions. 
 - If TD-User1 needs to add security questions for a password reset, you should assign a `Global Administrator role`.
 
 :x: The password can be reset immediately after TD-User2 answers the three security questions correctly is incorrect 
 - because the number of methods required for password reset is set to two. 
-- This means that you also need to use the second method (Mobile phone) to reset your password. :o: `3 + 1`
+- This means that you also need to use the second method (Mobile phone) to reset your password. ()`3 + 1`)
 
 :x: If `TD-User3` has forgotten its password, a mobile phone app can be used to reset the password is incorrect 
-- because TD-User3 is assigned to TD-Group2. Take note that the password reset is configured on TD-Group1. 
-- Therefore, TD-User3 won’t be able to reset its password.
+- because TD-User3 is assigned to TD-Group2.   
+Take note that the password reset is configured on TD-Group1.  
+Therefore, TD-User3 won’t be able to reset its password.  
 
 ## Management Group x Azure Policy
 
@@ -328,8 +311,9 @@ this policy enables you to specify the resource types that your organization can
 - For example, if there is a Deny policy at the tenant root group, then the policy will be applied to the hierarchy of management groups and subscriptions. 
 
 **Remember that a Deny policy always overrides an Allow policy.**
- 
-:x: You can create a virtual machine in TD-Subscription2 is incorrect 
+- e.g. deny in sub management group can override allow policy in root management group  
+
+:x: You can create a virtual machine in TD-Subscription2 is incorrect  
 - because the Tenant Root Group has a Deny policy that restricts it, as well as its related resource groups (e.g. TD-Management-Group11), from deploying virtual networks.**If you can’t create a virtual network, then you also can’t deploy a virtual machine.** 
 - To allow the creation of a virtual machine, you need to remove the assigned policy.
 
@@ -341,58 +325,54 @@ this policy enables you to specify the resource types that your organization can
 - because you are allowed to move subscriptions between management groups. 
 - **Take note that a subscription can only have one parent management group. Therefore, you can’t assign a subscription to multiple management groups.**
 
-## Custom Role 
+## Export Specific Role Definition & Create A Custom Role based on it
 
 :question: 3-38 
 
-If the Azure built-in roles don’t meet the specific needs of your organization, you can create your own custom roles. Just like built-in roles, you can assign custom roles to users, groups, and service principals at management group, subscription, and resource group scopes.
+You need to retrieve the JSON string of the Contributor role so you can customize it to create the AdatumAdministrator custom role.
+
+Which command should you run?
+```
+Get-AzRoleDefinition -Name Contributor | ConvertTo-Json
+Get-AzRoleAssignment -Name Contributor | ConvertFrom-Json
+Get-AzRoleDefinition -Name Contributor | ConvertFrom-Json
+Get-AzRoleAssignment -Name Contributor | ConvertTo-Json
+```
+
+:a: :
+
+![alt text](image-277.png)
+
+If the Azure built-in roles don’t meet the specific needs of your organization, you can create your own custom roles. 
+
+Just like built-in roles, you can assign custom roles to `users`, `groups`, and `service principals at management group`, `subscription`, and `resource group scopes`.  
 
 Take note that in this scenario, you need to create a custom role named `AdatumAdministrator` that is based on the built-in policy Contributor role. 
-
-You need to retrieve the JSON format file of the Contributor role so that you can customize it to your needs.
+- You need to retrieve the JSON format file of the Contributor role so that you can customize it to your needs.
 
 To retrieve the JSON string of the Contributor role, you need to use the command:
 `Get-AzRoleDefinition -Name <role_name> | ConvertTo-Json`
 
-Hence, the correct answer is: 
-`Get-AzRoleDefinition -Name Contributor | ConvertTo-Json`
+Hence, the correct answer is: Get-AzRoleDefinition -Name Contributor | ConvertTo-Json
 
 :x: `Get-AzRoleDefinition -Name Contributor | ConvertFrom-Json` is incorrect 
-- because the `ConvertFrom-Json` cmdlet just converts your JSON string to a PSCustomObject object that has a property for each field in the JSON string. 
+- because the `ConvertFrom-Json` cmdlet just converts your JSON string to a `PSCustomObject` object that has a property for each field in the JSON string. 
+- Take note that you need to retrieve the JSON role so that you can customize it to your needs.
 
-:x: `Get-AzRoleAssignment` 
-- it simply allows you to list Azure RBAC role assignments at the specified scope. 
+The following options :arrow_down: are incorrect 
+
+because the `Get-AzRoleAssignment` simply allows you to list Azure RBAC role assignments at the specified scope. 
 - By default, it lists all role assignments in the selected Azure subscription. 
 - You have to use the respective parameters to list assignments to a specific user, or to list assignments on a specific resource group or resource.
+```
+Get-AzRoleAssignment -Name Contributor | ConvertTo-Json
+Get-AzRoleAssignment -Name Contributor | ConvertFrom-Json
+```
 
+https://docs.microsoft.com/en-us/azure/role-based-access-control/overview
 
+https://docs.microsoft.com/en-us/azure/role-based-access-control/custom-roles-powershell
 
-
-## Network watcher & IP Flow Verify
-
-:a:
-
-:o: IP flow verify.
-`[檢查 Packet (connectivity) 在哪個 NSG的 Rule 被拒絕/接受]`
-IP flow verify checks if a packet is allowed or denied to or from a virtual machine. 
-- If the packet is denied by a security group, the name of the rule that denied the packet is returned. 
-
-It is useful in confirming if a rule in a NSG is blocking ingress or egress traffic to or from a virtual machine.
-- IP flow verify helps administrators quickly diagnose connectivity issues from or to the Internet and from or to the on-premises environment.
-
-How it done
-1. `[Look at NSG for NIC & Subnet]`IP flow verify first looks at the rules for all Network Security Groups (NSGs) applied to the network interface, such as a subnet or virtual machine NIC. 
-2. `[Check Setting]`Traffic flow is then verified based on the configured settings to or from that network interface. 
-
-:x: Next hop is incorrect 
-- `[決定Traffic去向]`because this simply helps you determine if traffic is being directed to the intended destination, or whether the traffic is being sent nowhere. 
-- Take note that in this scenario, you need to determine if the network security group is blocking the ingress or egress traffic.
-
-:x: NSG Flow Logs is incorrect. 
-- `[Log IP Traffic Flowing 去向]`It is only a feature of Azure Network Watcher that allows you to log information about IP traffic flowing through a network security group.
-
-:x: Traffic Analytics is incorrect 
-- `[視覺化Traffic分析且讓你查詢]`because this just allows you to process your NSG Flow Log data that enables you to visualize, query, analyze, and understand your network traffic.
 
 ## RBAC role : Contributor & Owner
 
@@ -429,7 +409,7 @@ Difference btw Owner and Contributor
 
 
 
-## :star2: Condition Access
+## :star2::star2: Condition Access
 
 https://docs.microsoft.com/en-us/azure/active-directory/conditional-access/overview
 
@@ -446,10 +426,16 @@ The policy must require the DevOps group to use multi-factor authentication and 
 
 Solutions
 - Create a conditional access policy and enforce session control.
-- Create a conditional access policy and enforce grant control.
 - Go to the security option in Azure AD and configure MFA.
 
 :a: : 
+
+Go to Microsoft Entra-->Protection-->Security Center-->Conditional Access Page-->Modify Grant Control (Not Session Control) -->Grant Access
+(Microsoft Entra Premium is required to implement Conditional Access policy)
+
+1. the best way to enforce MFA is by Conditional Access
+2. the device has to be identified by azure AD as A AD joined Device.
+3. the trusted ip must be configured.
 
 ![Alt text](image-111.png)  
 ![Alt text](image-137.png)  
@@ -461,7 +447,7 @@ Conditional access policies are enforced after the first-factor authentication h
 There are two types of access controls in a conditional access policy:  
 1. Grant (RESOURCE)
 enforces `grant` or `block` access to resources.
-2. Session (CLOUD APPLICATION)
+1. Session (CLOUD APPLICATION)
 enable limited experiences within specific cloud applications
 
 In this scenario, the requirement is to enforce a policy to the members of the `DevOps` group to use `MFA` and a `hybrid Azure AD joined device` when connecting to Azure AD from untrusted locations.  
