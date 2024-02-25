@@ -3,7 +3,6 @@
 ![alt text](image-280.png)
 ![alt text](image-281.png)
 
-
 ![alt text](image-282.png)
 Answer is B ( No )
 Initial will perform a full sync and add the user account created but it will take time,
@@ -401,36 +400,45 @@ Answer is correct, both Tags and Locks are available to Subscriptions, Resource 
 N, N, N
 
 
---- 
 
-![alt text](image-336.png)
+## Role to enable Traffic Analytics
+
+![alt text](image-336.png)  
 
 ---
 
 ![alt text](image-337.png)
 
----
+## :o LB & User Access Administrator & VM Contributor Role
 
 ![alt text](image-338.png)
 ![alt text](image-339.png)
 
----
+
+## Owner Role can assign the Reader Role to Other User
 
 ![alt text](image-340.png)
 
-B. Owner correct
+`Owner` 
+- Grants full access to manage all resources, including the ability to assign roles in Azure RBAC.
 
-Owner = Grants full access to manage all resources, including the ability to assign roles in Azure RBAC.
+`Contributor` (MANGE BUT NO GRANT FOR ASSIGNMENT)
+- Grants full access to manage all resources, but does NOT allow you to assign roles in Azure RBAC. (you cannot add users or changes their rights)
 
-Contributor = Grants full access to manage all resources, but does NOT allow you to assign roles in Azure RBAC. (you cannot add users or changes their rights)
+`User Access Administrator` (MANGE ACCESS)
+- 這個角色允許你管理使用者對 Azure 資源的存取。具體來說，你可以使用這個角色來授予或撤銷使用者對特定資源的權限。
+- 例如，你可以使用這個角色來指派使用者對某個儲存帳戶或虛擬機的存取權限
 
-User Access Administrator = Lets you manage user access to Azure resources.
+`Reader`
+- View all resources, but does not allow you to make any changes.
 
-Reader = View all resources, but does not allow you to make any changes.
+`Security Admin`
+- View and update permissions for Security Center. 
+- Same permissions as the Security Reader role
+- Can also update the security policy and dismiss alerts and recommendations.
 
-Security Admin = View and update permissions for Security Center. Same permissions as the Security Reader role and can also update the security policy and dismiss alerts and recommendations.
-
-Network Contributor = Lets you manage networks, but not access to them. (so you can add VNET, subnet, etc)
+`Network Contributor` (MANGE NOT ACCESS)
+- Lets you manage networks, but not access to them. (so you can add VNET, subnet, etc)
 
 ---
 
@@ -439,7 +447,12 @@ Network Contributor = Lets you manage networks, but not access to them. (so you 
 
 ![alt text](image-342.png)
 
-the answer is wrong. you are not defining a policy but a custom role.
+correct answer is `dataActions` and `assignableScopes`
+
+the answer is wrong.   
+
+you are not defining a policy but a custom role.
+
 You need to provide either of the following in DataActions:
 ```bash 
 Microsoft.Compute/virtualMachines/login/action
@@ -449,13 +462,12 @@ Microsoft.Compute/virtualMachines/loginAsAdmin/action
 > https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles?source=recommendations#virtual-machine-administrator-login
 
 
-correct answer is `dataActions` and `assignableScopes`
 
----
+## Enable AD DS Authentication for storage  
 
-![alt text](image-343.png)
+![alt text](image-343.png)  
 
----
+## 
 
 ![alt text](image-344.png)
 
@@ -470,46 +482,57 @@ You have two Azure subscriptions named Sub1 and Sub2.
 
 An administrator creates a custom role that has an assignable scope to a resource group named RG1 in Sub1.
 
-You need to ensure that you can apply the custom role to any resource group in Sub1 and Sub2. The solution must minimize administrative effort.
+You need to ensure that you can apply the custom role to any resource group in Sub1 and Sub2. 
 
----
+The solution must minimize administrative effort.
+
+
+## Reader & Storage Data Contributor Role For Storage
 
 ![alt text](image-345.png)
 
----
+## Configure App-Level Credentials For FTPS
 
 ![alt text](image-346.png)
 
----
+## Bulk Insertion 
 
 ![alt text](image-347.png)
 
-The Answer supplied is correct, it is No.
-Reason:
-The question states "You have a CSV file that contains the names and email addresses of 500 external users."
+The question states 
+> "You have a CSV file that contains the names and email addresses of 500 external users."
+
 This implies that the required fields (Email and Redirection URL)are missing from the .csv file.
-Here are the csv field pre-requisites that are needed for bulk upload of external users:
+
+Here are the csv field pre-requisites that are needed for bulk upload of external users:  
 https://learn.microsoft.com/en-us/azure/active-directory/external-identities/tutorial-bulk-invite#prerequisites
 
----
+
+## Built-in AD roles can't be cloned but built-in subscription roles 
 
 ![alt text](image-348.png)
 
-Role3: Role1 and built-in Azure subscription roles only
-Role4: Role2 only
+Correct Ans : 
+- Role3: Role1 and built-in Azure subscription roles only
+- Role4: Role2 only
 
-Explanation: Built-in AD roles can't be cloned, but built-in subscription roles can be. Custom roles of either type can be cloned.
+> Built-in AD roles can't be cloned, but built-in subscription roles can be. 
+> Custom roles of either type can be cloned.
 
 ---
 
 Can be used as:
 ```json
 "AssignableScopes": [
-"/subscriptions/{Sub1}",
-"/subscriptions/{Sub2}",
+    "/subscriptions/{Sub1}",
+    "/subscriptions/{Sub2}",
+]
 ```
-Note: Custom role example:
-The following shows what a custom role looks like as displayed using Azure PowerShell in JSON format. This custom role can be used for monitoring and restarting virtual machines.
+
+:a: 
+The following shows what a custom role looks like as displayed using Azure PowerShell in JSON format.   
+
+This custom role can be used for monitoring and restarting virtual machines.
 ```json
 {
     "Name": "Virtual Machine Operator",
@@ -536,140 +559,180 @@ The following shows what a custom role looks like as displayed using Azure Power
     "/subscriptions/{subscriptionId1}",
     "/subscriptions/{subscriptionId2}",
     "/providers/Microsoft.Management/managementGroups/{groupId1}"
-]
+    ]
 }
 ```
 
-To ensure that you can apply the custom role to any resource group in Sub1 and Sub2 while minimizing administrative effort, you should select the custom role and add both Sub1 and Sub2 to the assignable scopes.
+To ensure that you can apply the custom role to any resource group in Sub1 and Sub2 while minimizing administrative effort, you should select the custom role and add both Sub1 and Sub2 to the assignable scopes.  
+```json
+    "AssignableScopes": [
+    "/subscriptions/{subscriptionId1}",
+    "/subscriptions/{subscriptionId2}",
+    "/providers/Microsoft.Management/managementGroups/{groupId1}"
+    ]
+```
+- By adding both `Sub1` and `Sub2` to the assignable scopes of the custom role, you can ensure that the role can be applied to any resource group in both subscriptions. 
+
 In the Azure portal, navigate to the custom role that has been created and click on it.
-By adding both Sub1 and Sub2 to the assignable scopes of the custom role, you can ensure that the role can be applied to any resource group in both subscriptions. This minimizes administrative effort by eliminating the need to create separate custom roles for each subscription.
+
+
+
+This minimizes administrative effort by eliminating the need to create separate custom roles for each subscription.
 Option B is not recommended as it would require creating a separate custom role for each subscription, which would increase administrative effort.
 Option C is not recommended as it would only allow the custom role to be applied to resource groups in Sub1 and not Sub2.
 Option D is not recommended as it would require creating a separate custom role for Sub2, which would increase administrative effort.
 
 
----
 
-• User1 must view the data in any storage account.
-• User2 must assign users the Contributor role for storage accounts
+## Reader and Data Access Role & Owner Role  
 
-![alt text](image-349.png)
+- User1 must view the data in any storage account.
+- User2 must assign users the Contributor role for storage accounts  
 
-"Reader and Data Access":
-"Lets you view everything but will not let you delete or create a storage account or contained resource. It will also allow read/write access to all data contained in a storage account via access to storage account keys."
+![alt text](image-349.png)  
 
-"Owner" is needed to manage permissions, as "User Access Administrator" is not offered as an option.
+`Reader and Data Access` :
+- Lets you `view everything` but will not let you `delete` or `create` a storage account or contained resource. 
+- It will also allow `read/write access` to all data contained in a storage account via access to storage account keys.
 
----
+`Owner` : 
+- is needed to manage permissions, as "User Access Administrator" is not offered as an option.
+
+
+## 
 
 ![alt text](image-350.png)
 
----
-
-## :star::star:
+## :star::star: Access Package & LifeCycle Management
 
 2-70
 
-You have an Azure AD tenant named contoso.com.
+You have an Azure AD tenant named `contoso.com`.
 
-You have two external partner organizations named fabrikam.com and litwareinc.com. Fabrikam.com is configured as a connected organization.
+You have two external partner organizations named `fabrikam.com` and `litwareinc.com`.   
 
-You create an access package as shown in the Access package exhibit.
+`Fabrikam.com` is configured as a connected organization.  
 
+You create an access package as shown in the Access package exhibit.  
 ![alt text](image-351.png)
+
 ![alt text](image-352.png)
 
 ![alt text](image-353.png)
-N - Because not Connected
-Y - Because when it expires it is removed from the group. Proof to follow
-Y - Because..math
-https://learn.microsoft.com/en-us/azure/active-directory/governance/entitlement-management-access-package-resources
+
+N 
+- Because not Connected
+
+Y 
+- Because when it expires it is removed from the group.
 When a user's access package assignment expires, they are removed from the group or team, unless they currently have an assignment to another access package that includes 
 
----
+Y 
+- `365 + 30` 
 
-## Private Link
+
+> https://learn.microsoft.com/en-us/azure/active-directory/governance/entitlement-management-access-package-resources
+
+
+## Private Link to ensure all the traffic from VM to storage
 
 ![alt text](image-354.png)
 
-
-## :o Roles
+## :o Network Contributor & Storage Account & Contributor
 
 You have an Azure subscription that contains a user named User1 and the resources shown in the following table.
 
 ![alt text](image-355.png)
 
-NSG1 is associated to networkinterface1.
+![alt text](image-356.png)  
 
-User1 has role assignments for NSG1 as shown in the following table.
-![alt text](image-357.png)
-![alt text](image-356.png)
+:a:
 
-Correct Answers. YES, No, Yes
-(YES)User1 can create a storage account in RG1, since User1 has Storage Account Contribute Role inherited from Resource Group.
-(NO) User1 can modify the DNS settings of networkinterface1, since it requires Network Contribute role referring to the following link.
-https://learn.microsoft.com/en-us/azure/virtual-network/virtual-network-network-interface?tabs=network-interface-portal#permissions
-(YES) User1 can create an inbound security rule to filter inbound traffic to networkinterface1, since User1 has Contributor role for NSG1
+> NSG1 is associated to `networkinterface1`.
 
-## :star: 360 & Security Group Assignment
+YES
+- User1 can create a storage account in RG1, since User1 has Storage Account Contributor Role inherited from Resource Group.
+
+NO 
+- User1 can modify the DNS settings of `networkinterface1`, since it requires `Network Contributor Role` referring to the following link.  
+
+> https://learn.microsoft.com/en-us/azure/virtual-network/virtual-network-network-interface?tabs=network-interface-portal#permissions
+
+YES
+- User1 can create an inbound security rule to filter inbound traffic to `networkinterface1`, since User1 has `Contributor` role for NSG1
+
+## :star: MS 360 & Security Group Assignment
 
 ![alt text](image-358.png)
 ![alt text](image-359.png)
 
-You have a resource group named RG1   
 1. No
 2. No
 3. Yes
 
----
+## Access Administrator Role
 
 ![alt text](image-360.png)
 
-B is correct, You need to have the Owner Role or Access Administrator role to assign roles but Access Administrator role is preferred as it is least privilege.
+You need to have the Owner Role or Access Administrator role to assign roles but Access Administrator role is preferred as it is least privilege.
 
-
-## User who has User Access Ad and Reader Role
+## User who has User Access Administrator & Reader Role
 
 ![alt text](image-361.png)
 
-1) GROUP1 Reader access, provides access to view all items, except secrets
-https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#reader
-1) To Assign OWNER role, you need to either Owner role or User Administrator Access Role
-https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal-subscription-admin#prerequisites
-1) Neither User Access Admin Role nor the Reader Role allows to create new resources.
-https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-steps
+1) Reader Role provides access to view all items, except secrets
 
+> https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles#reader
 
-## Assign user SMB Share Contributor for file share
+2) To Assign `OWNER` role, you need to either Owner role or User Administrator Access Role
+
+> https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal-subscription-admin#prerequisites
+
+3) Neither User Access Admin Role nor the Reader Role allows to create new resources.
+
+> https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-steps
+
+## Assign user SMB Share Contributor for file share (IDENTITY-BASED Data Access)
 
 ![alt text](image-362.png)
 
-It should be A,
+Should be A
 I just created a storage account,
 then created a file share,
 went to IAM,
 and it says : To give individual accounts access to the file share (Kerberos), enable identity-based authentication for the storage account.
 
-## Assign License to Group
+## :star: Assign Premium P2 License to Security Group
 
 ![alt text](image-363.png)
 
 ![alt text](image-364.png)
 
-1) Y, You can assign users MS Defender for Cloud Apps on a per user basis.
-2) N, You cannot remove the P2 license as User1 is in Group1.
-3) N, nested group assignments don't work
+1) Y
+- You can assign users MS Defender for Cloud Apps on a per user basis.
+
+2) N, 
+- You cant remove the P2 license as User1 is in Group1.
+
+1) N, 
+- Nested group assignments don't work
 
 
-## Users syncing from an On Prem AD to AAD
+## Users syncing from an On-Prem AD to AAD
 
 ![alt text](image-365.png)
 
-JobTitle: User1 (Member and AzureAD Source) and User3 (Guest and Microsoft Account) only
+JobTitle :   
+- User1 (Member and AzureAD Source)  
+- User3 (Guest and Microsoft Account) only  
 
-UsageLocation: all users (User1, User2 and User3)
+Users syncing from an On Prem AD to AAD cannot have the job title altered in AAD. 
+**it would need to be done in local AD** , as AAD by default synchronizes the jobTitle property. 
 
-Users syncing from an On Prem AD to AAD cannot have the job title altered in AAD. it would need to be done in local AD , as AADC by default synchronizes the jobTitle property. Usage location is set only on the cloud side for all users, and Guest users can have their job titles set as well as cloud native (AAD) users.
+UsageLocation: 
+- All users (User1, User2 and User3)
+
+**UsageLocation is set only on the cloud side** for all users, and Guest users can have their job titles set as well as cloud native (AAD) users.
 
 ## Bulk User
 
@@ -678,60 +741,69 @@ Users syncing from an On Prem AD to AAD cannot have the job title altered in AAD
 :x: Solution: You create a PowerShell script that runs the New-MgUser cmdlet for each external user.
 :o: You create a PowerShell script that runs the New-MgInvitation cmdlet for each external user.
 
-## authenticate guest by using email 
+## authenticate guest by using email & B2B collaboration  
 
-![alt text](image-367.png)
-![alt text](image-368.png)
+![alt text](image-367.png)  
+![alt text](image-368.png)  
 
-
-## Storage Blob Data Contributor Read, write, and delete Azure Storage containers and blobs.
+ 
+## Storage Blob Data Contributor : Read, write, and delete Storage containers and blobs.
 
 ![alt text](image-369.png)
 
-## Assign a licensee to securityEnabled
+## :star: Condition of assigning a Premium P2 License to 360 & Security Group
 
 ![alt text](image-370.png)
 
 Answer is B:
-"The feature can only be used with security groups, and Microsoft 365 groups that have securityEnabled=TRUE."
+- The feature can only be used with security groups, and Microsoft 365 groups that have `securityEnabled=TRUE`.
 
-## 
+## Modify the Default user role permissions settings
 
 You have an Azure AD tenant.
+- You need to modify the Default user role permissions settings for the tenant. 
 
-You need to modify the Default user role permissions settings for the tenant. 
+The solution must meet the following requirements :
+- Standard users must be prevented from creating new service principals.
+- Standard users must only be able to use PowerShell or Microsoft Graph to manage their own Azure resources.
 
-The solution must meet the following requirements:
-
-• Standard users must be prevented from creating new service principals.
-• Standard users must only be able to use PowerShell or Microsoft Graph to manage their own Azure resources.
 ![alt text](image-373.png)
 
-## Custom Role
+## :star: Condition for Role 
 
-![alt text](image-371.png)
+![alt text](image-371.png)  
 
-![alt text](image-372.png)
+![alt text](image-372.png)  
 
-The conditions are difficult to read, but they mean (according to reference 1):
-a. If the user performs a reading operation, then he may only read from “cont1”
-b. If the user performs a writing operation, then he may only write to blobs like “*2*”
+The conditions are difficult to read, but they mean (according to reference 1):  
+- If the user performs a reading operation, then he may only read from `cont1`  
+- If the user performs a writing operation, then he may only write to blobs like `*2*`  
+
 Given that, then:
-1- User 1 can read Blob2 - No, because he is reading, then the condition a. applies, and he is not reading cont1
-2- User 1 can read Blob3 - No, because he is reading, then the condition a. applies, and he is not reading cont1
-3- User 2 can read blob1 - Yes. He is not writing, so the condition b. does not apply. He has permissions granted by the role on the scope he is reading - Storage Blob Data Owner on storage1, which contains blob1
+1. User 1 can read Blob2
+No, because he is reading, then the condition a. applies, and he is not reading cont1
+2. User 1 can read Blob3
+No, because he is reading, then the condition a. applies, and he is not reading cont1
+3. User 2 can read blob1
+Yes, He is not writing, so the condition b. does not apply.   
+He has permissions granted by the role on the scope he is reading - Storage Blob Data Owner on storage1, which contains blob1.  
 
-## co-administrators role
+## Co-administrators Role can only be assigned at the subscription scope  
 
-![alt text](image-375.png)
-Co-administrators can only be assigned at the subscription scope. You cannot assign co-administrators to resource groups, management groups, or virtual machines.
+![alt text](image-375.png)  
+- **Co-administrators Role can only be assigned at the subscription scope.**  
+You cant assign co-administrators to resource groups, management groups, or VMs.  
 
-## Delete User and Group with/without a license
+## You cant delete Groups having a license
 
 ![alt text](image-374.png)  
 
-Users = User1, User2, User3, User4 (can delete all users whether a license is assigned directly or via inheritance from a group membership)
-Groups = Group 2 and Group 4 (Groups with active license assignments cannot be deleted. You get an error)
+Users = User1, User2, User3, User4 
+- can delete all users whether a license is assigned directly or via inheritance from a group membership
+
+Groups = Group 2 and Group 4 
+- Groups with active license assignments cannot be deleted.
+You get an error
 
 ## Service Endpoint & Private Endpoint x  Microsoft backbone network.
 
@@ -744,86 +816,96 @@ Groups = Group 2 and Group 4 (Groups with active license assignments cannot be d
 Run `New-AzDeployment –Location westus –TemplateFile “deploy.json”`
 
 ![alt text](image-378.png)
-1- It's N, because it creates 4 Resource Groups and not 3 Resource Groups (RGS0, RGS1, RGroup4 and ResGrp8);
-1.1: The Resource Group named with "[concat('RGS', copyIndex())]", creates RGS0 and RGS1;
-1.2: The Resource Group named with "[concat('ResGrp', '8')]", creates ResGrp8;
-1.3: The Resource Group named with "[concat('RGroup', length(parameters('obj1')))]", creates RGroup4 (As we can see, obj1 parameter has a length of 4 'propA', 'propB', 'propC' and 'propD');
-2 - It's N, because it doesn't create a resourcer group named RGroup5;
-3 - It's Y, because all resource groups were created in the East US Azure Region.
+
+1. No
+Because it creates 4 Resource Groups and not 3 Resource Groups (RGS0, RGS1, RGroup4 and ResGrp8);  
+1.1: The Resource Group named with "`[concat('RGS', copyIndex())]`", creates RGS0 and RGS1;  
+1.2: The Resource Group named with "`[concat('ResGrp', '8')]`", creates ResGrp8;  
+**1.3: The Resource Group named with "`[concat('RGroup', length(parameters('obj1')))]`", creates RGroup4 (As we can see, obj1 parameter has a length of 4 'propA', 'propB', 'propC' and 'propD');**  
+2. No
+because it doesn't create a resource group named `RGroup5`;
+1. Yes
+because all resource groups were created in the East US Azure Region.
 
 
-## File Export/Import
+## :star: Account Kind & Storage Type can apply for File Export/Import
 
 ![alt text](image-379.png)
 
 Correct Answer: D
 
 Azure Import/Export service supports the following of storage accounts:
-✑ Standard General Purpose v2 storage accounts (recommended for most scenarios)
-✑ Blob Storage accounts
-✑ General Purpose v1 storage accounts (both Classic or Azure Resource Manager deployments),
+- Standard General Purpose v2 
+recommended for most scenarios
+- Blob Storage
+- General Purpose v1 
+both Classic or Azure Resource Manager deployments
 
 Azure Import/Export service supports the following storage types:
-✑ Import supports Azure Blob storage and Azure File storage
-✑ Export supports Azure Blob storage. Azure Files not supported.
+- Import supports **Azure Blob storage and Azure File storage**
+- Export supports **Azure Blob storage** only.
 
 Only storage4 can be exported.
 
-## 
+## App uses Managed Identity to access storage 
 
-![alt text](image-380.png)
+![alt text](image-380.png)  
 
-Box 1: Access Control (IAM)
-Since the App1 uses Managed Identity, App1 can access the Storage Account via IAM. As per requirement, we need to minimize the number of secrets used, so Access keys is not ideal.
+Box 1: Access Control (IAM)  
+- Since the App1 **uses Managed Identity, App1 can access the Storage Account via IAM**.  
+- As per requirement, we need to minimize the number of secrets used, so Access keys is not ideal.  
 
-Box 2: Shared access signatures (SAS)
-We need temp access for App2, so we need to use SAS.
+Box 2: Shared access signatures (SAS)  
+- We need temp access for App2, so we need to use SAS.  
 
-## 
+## SKU & kind for az storage create
 
-![alt text](image-381.png)
+![alt text](image-381.png)    
+Box 1: StorageV2   
+Box 2: Standard_GRS  
 
-Box 1: StorageV2
+## :star::star:  Policy will identify the VM as not compliant but will not put VM in deallocate   
 
-Box 2: Standard_GRS
+![alt text](image-382.png)  
 
-## :star::star:
+The status of VM1 is Running.   
 
-![alt text](image-382.png)
-The status of VM1 is Running.
+You assign an Azure policy  
+![alt text](image-383.png)  
 
-You assign an Azure policy 
-![alt text](image-383.png)
-
-Parameter
+Parameters 
+```bash 
 Microsoft.ClassicNetwork/virtualNetworks
 Microsoft.Network/virtualNetworks
 Microsoft.Compute/virtualMachines
-
+```
+  
 ![alt text](image-384.png) 
 N-N-N  
-Policy will identify the VM as not compliant but will not put VM in deallocate  
+Policy will identify the VM as not compliant but will not put VM in deallocate   
 
-
-## File export/import
+## Actions of File export/import
 
 Step 1: Prepare the drives (Attach an external disk to Server1 and then run waimportexport.exe)
-Step 2: Create an import job (From the Azure portal, create an import job)
-Step 3: Ship the drives to the Azure datacenter (Detach the external disks from Server1 and ship the disks to an Azure data center)
-Step 4: Update the job with tracking information (From the Azure portal, update the import job)
+
+Step 2: Create an IMPORT JOB (From the Azure portal, create an import job)
+
+Step 3: SHIP the drives to the Azure datacenter (Detach the external disks from Server1 and ship the disks to an Azure data center)
+
+Step 4: UPDATE the job with tracking information (From the Azure portal, update the import job)  
 
 
-## 
+## :star: File added to Cloud or Server Endpoint to Sync
 
 ![alt text](image-385.png)
 
-Correct Answer:
+File1: 
+- Endpoint1 only  
+It is a cloud endpoint, and it is scanned by the detection job every 24 hours.  
 
-File1: Endpoint1 only
-It is a cloud endpoint, and it is scanned by the detection job every 24 hours.
-
-File2: Endpoint1, Endpoint2 and Endpoint3
-With the on-premises servers the file is scanned and synced automatically after it's being added.
+File2: 
+- Endpoint1, Endpoint2 and Endpoint3
+- **With the on-premises servers the file is scanned and synced automatically after it's being added**.
 
 Note: They changed the question in Exam from "within 24 hours" to "after 24 hours".
 So, the answer is:
@@ -831,38 +913,37 @@ File1: Endpoint1, Endpoint2 and Endpoint3
 File2: Endpoint1, Endpoint2 and Endpoint3
 
 
-## 
+## Import Job DataSet and driveSet CSV
 
 ![alt text](image-386.png)
 
-
-## Access Storage Account for RSV service & VM
+## Enable RSV backup Service & VM to access Storage Account
 
 ![alt text](image-387.png)
 
 ![alt text](image-388.png)
 
-1. The 10.2.9.0/24 subnet is not whitelisted.
-
-2. Must enable Allow trusted Microsoft services to access this storage account 
+1. The 10.2.9.0/24 subnet is not whitelisted.  
+2. Must enable `Allow trusted Microsoft services` to access this storage account   
 ![alt text](image-389.png)
 
-## File Share Sync 
-
+## Actions File Share Sync 
 
 - Create a Storage Sync Service
 The deployment of Azure File Sync starts with placing a Storage Sync Service resource into a resource group of your selected subscription.
 
-- Install the Azure File Sync agent on Server1
+- Install the Azure File Sync AGENT on Server1
 The Azure File Sync agent is a downloadable package that enables Windows Server to be synced with an Azure file share
 
 - Register Server1.
 Register Windows Server with Storage Sync Service
 Registering your Windows Server with a Storage Sync Service establishes a trust relationship between your server (or cluster) and the Storage Sync Service.
 
-- Add a server endpoint -
-Create a sync group and a cloud endpoint.
+- Add a server endpoint 
+:warning: wCreate a sync group and a cloud endpoint.
 A sync group defines the sync topology for a set of files. Endpoints within a sync group are kept in sync with each other. A sync group must contain one cloud endpoint, which represents an Azure file share and one or more server endpoints. A server endpoint represents a path on registered server.
+
+---
 
 1. Prepare Windows Server to use with Azure File Sync
 2. Deploy the Storage Sync Service
@@ -878,23 +959,27 @@ A sync group defines the sync topology for a set of files. Endpoints within a sy
 
 ![alt text](image-390.png)
 
-## Stop backup before Deleting RSV
+## Stop backup items (File Share, SQL and VM) before Deleting RSV
 
 ![alt text](image-391.png)
 
-## Add Service to RSV
+## Only VM and File Share is allowed to Backup
 
 ![alt text](image-392.png)
 
-Box 1: VM1 only
-VM1 is in the same region as Vault1. File1 is not in the same region as Vautl1. SQL is not in the same region as Vault1. Blobs cannot be backup up to service vaults.
 Note: To create a Vault to protect VMs, the Vault must be in the same Region as the VMs.
 
-Box 2: Share1 only
-Storage1 is in the same region as Vault2. Share1 is in Storage1.
-Note: Only VM and Fileshare is allowed to Backup.
+Box 1: VM1 only
+VM1 is in the same region as Vault1. 
+File1 is not in the same region as Vautl1.   
+SQL is not in the same region as Vault1.   
+**Blobs cannot be backup up to service vaults.**
 
-## Dest of AZ import/export 
+Box 2: Share1 only
+Storage1 is in the same region as Vault2. 
+Share1 is in Storage1.
+
+## Dest of AZ import/export job is File Share
 
 ![alt text](image-393.png)
 
@@ -902,7 +987,7 @@ Azure Import/Export service is used to securely import large amounts of data to 
 
 This service can also be used to transfer data from Azure Blob storage to disk drives and ship to your on-premises sites. 
 
-**Data from one or more disk drives can be imported either to Azure Blob storage or Azure Files.** 
+**Data from one or more disk drives can be imported either to Azure Blob storage or Azure Files.**   
 - The maximum size of an Azure Files Resource of a file share is 5 TB.
 
 Note: There are several versions of this question in the exam. 
@@ -912,18 +997,18 @@ The question has two correct answers:
 2. Azure Blob Storage
 
 The question can have other incorrect answer options, including the following:
-✑ Azure Data Lake Store
-✑ Azure SQL Database
-✑ Azure Data Factory
+- Azure Data Lake Store
+- Azure SQL Database
+- Azure Data Factory
 
-
-## AZ for blob and file only
+## AzCopy Command is for blob and file only
 
 ![alt text](image-394.png)
 
-## Authentication with Blob & File for AzCopy
+## Authentication with Blob & File via AzCopy
 
 You need to use AzCopy to copy data to the blob storage and file storage in storage1.
+
 Which authentication method should you use for each type of storage?
 
 You can provide authorization credentials by using Azure Active Directory (AD), or by using a Shared Access Signature (SAS) token.
@@ -953,22 +1038,30 @@ VMs in the same fault domain share common storage as well as a common power sour
 ## 
 
 ![alt text](image-396.png)
-- NO - only one cloud endpoint can be added to sync1
-- YES - Server2 has been registered to Sync1 but data2 is not added to server endpoint. So we can add data2 as additional server endpoint for Sync1
-- NO - We have to register Server3 first
 
+- NO
+Only one cloud endpoint can be added to sync1
+- YES
+Server2 has been registered to Sync1 but data2 is not added to server endpoint.   
+So we can add data2 as additional server endpoint for Sync1
+- NO 
+We have to register Server3 first  
 
-## Add Storage and Log Analytics workspace to RSV
+## Add Storage Account and Log Analytics workspace to RSV
 
 ![alt text](image-397.png)
 
 You plan to configure Azure Backup reports for Vault1.
 You are configuring the Diagnostics settings for the AzureBackupReports log.
+
 Which storage accounts and which Log Analytics workspaces can you use for the Azure Backup reports of Vault1?
 
-storage 3
-analytics 1,2 & 3
-this is correct as analytics are independent of locations!
+:a: : 
+
+> analytics are independent of locations
+
+1. `storage3`
+2. `analytics 1,2 & 3`
 
 ## :star::star: Storage Account type & Access Tier
 
@@ -977,15 +1070,13 @@ this is correct as analytics are independent of locations!
 ![alt text](image-399.png)
 
 Box 1: `contoso104 only`
-Premium file shares are hosted in a special purpose storage account kind, called a FileStorage account.
+- Premium file shares are hosted in a special purpose storage account kind, called a `FileStorage` account.
 
-Box 2: contoso101 and contos103 only
-Object storage data tiering between hot, cool, and archive is supported in Blob Storage and General Purpose v2 (GPv2) accounts. 
+Box 2: `contoso101 and contos103 only`
+- Object storage data tiering between hot, cool, and archive is supported in `Blob Storage and General Purpose v2 (GPv2) `accounts. 
 
-General Purpose v1 (GPv1) accounts don't support tiering.
-
-The archive tier supports only LRS, GRS, and RA-GRS.
-
+General Purpose v1 (GPv1) accounts don't support tiering.   
+The archive tier supports only LRS, GRS, and RA-GRS.  
 
 ## SAS configuration
 
@@ -994,7 +1085,9 @@ The archive tier supports only LRS, GRS, and RA-GRS.
 
 It should be no access for both cases.
 - for first case, cause the IP is not matching the SAS requirements
-- for second case, since it is using "net use" where it uses SMB. The SMB (Server Message Broker) protocol does not support SAS. it still asks for username/password. Accordingly, it will give error wrong username/pass and will not provide access.
+- for second case, since it is using "net use" where it uses SMB. 
+**The SMB (Server Message Broker) protocol does not support SAS. it still asks for username/password**.     
+Accordingly, it will give error wrong username/pass and will not provide access.  
 
 ## Switch to OTher RSV
 
@@ -1009,7 +1102,7 @@ D. From the RSV1 blade, click Backup Jobs and export the VM2 job
 
 If you want to change the recovery service vault you need to disassociate the previous RSV and delete the backup data. To delete backup data, you need to stop the backup first.
 So:
-1. Stop the backup in RSV1 (D)
+1. Stop the backup in RSV1
 2. Remove the backup data.
 3. Disassociate the VM in RSV1.
 4. Associate the VM in RSV2.
@@ -2671,9 +2764,7 @@ All resources moved to the new resource groups, but the region did not change
 
 ![alt text](image-540.png)
 
-##
-
-
+## enable Desired State Configuration for VM
 You create an Azure VM named VM1 that runs Windows Server 2019.
 VM1 is configured as shown
 ![alt text](image-541.png)  
@@ -2684,6 +2775,664 @@ B. Start VM1.
 C. Capture a snapshot of VM1.  
 D. Configure a DNS name for VM1.  
 
+:a: 
 Correct Answer: B
 
-Status is Stopped (Deallocated). The DSC extension for Windows requires that the target Virtual Machine is able to communicate with Azure. First you start the VM, because you need VM online to deploy DSC Extension.
+> Status is Stopped (Deallocated). 
+
+The DSC extension for Windows requires that the target Virtual Machine is able to communicate with Azure. 
+
+First you start the VM, 
+- because you need VM online to deploy DSC Extension.
+
+## Connect to RDB from TCP
+
+You have an Azure subscription that contains the following resources:
+- A virtual network that has a subnet named `Subnet1`
+- Two network security groups (NSGs) named `NSG-VM1` and `NSG-Subnet1`
+- A virtual machine named `VM1` that has the required Windows Server configurations to allow Remote Desktop connections
+
+`NSG-Subnet1` has the default inbound security rules only.
+
+`NSG-VM1` has the default inbound security rules and the following custom inbound security rule:
+```bash 
+Priority: 100
+Source: Any
+Source port range: *
+Destination: *
+Destination port range: 3389
+Protocol: UDP
+Action: Allow
+```
+
+`VM1` has a public IP address and is connected to Subnet1. 
+
+NSG-VM1 is associated to the network interface of VM1.   
+NSG-Subnet1 is associated to Subnet1.  
+
+You need to be able to establish Remote Desktop connections from the internet to VM1.
+
+Solution: 
+1. :x: You add an inbound security rule to NSG-Subnet1 that allows connections from the internet source to the VirtualNetwork destination for port range 3389 and uses the UDP protocol.  
+- The default port for RDP is TCP port 3389.  
+2. You add an inbound security rule to NSG-Subnet1 and NSG-VM1 that allows connections from the internet source to the VirtualNetwork destination for port range 3389 and uses the TCP protocol.  
+
+##  
+
+You have a virtual network named VNet1 that has the configuration  
+![alt text](image-542.png)   
+![alt text](image-543.png)  
+
+## AZ-CLI move the `adatum.com` zone to an Azure DNS zone in Subscription1  
+
+![alt text](image-544.png)
+
+## An inbound NAT rule Most with RDB
+
+![alt text](image-545.png)
+
+
+## Basic Load Balancer ans Subnet
+
+![alt text](image-546.png)  
+
+![alt text](image-547.png)  
+
+- Basic SKU LB : Balance Virtual machines in a single availability set or virtual machine scale set  
+ 
+Basic Load Balancer:  
+- Backend pool endpoints for Virtual machines in a single availability set or virtual machine scale set.  
+
+- Subnet12 Association will be used to assign an IP for the internal load balancer, not to load balance the VMs in the Subnet.    
+
+Box 1: Yes  
+- VM1 and VM are in the Availability Set.  
+
+Box 2: No    
+- Both VMs are not part of any Availability Set or Scale Set.  
+
+Box 3: No  
+- Both VMs are not part of any Availability Set or Scale Set.  
+
+## You can only link VNETs to private DNS zones only
+
+![alt text](image-548.png)  
+
+Box 1: Private
+Box 2: Private
+
+You can only link VNETs to private DNS zones only and accordingly auto register a VNET only to a private DNS zones. 
+- Private DNS zones can be linked with VNETs (not public ones). 
+- And VM can auto-register to any private DNS zone linked with the VNet and with auto-registration option set.
+
+To resolve the records of a private DNS zone from your VNet, you must link the virtual network with the zone. 
+- Linked virtual networks have full access and can resolve all DNS records published in the private zone.
+
+## Actions of Site to Site VPN
+
+You have an on-premises network that you plan to connect to Azure by using a site-so-site VPN.
+
+In Azure, you have an Azure virtual network named VNet1 that uses an address space of 10.0.0.0/16 VNet1 contains a subnet named Subnet1 that uses an address space of 10.0.0.0/24.
+
+You need to create a site-to-site VPN to Azure.
+Which four actions should you perform in sequence? 
+
+:a: : 
+
+:one: Start with a Gateway subnet. 
+- You need the subnet in place first before you can associate a VPN gateway with it, which is what is created next.
+
+:two: Create a VPN gateway. Associate the VPN gateway with the gateway subnet you created (there are other steps but for the sake of what is available for answers, the prem side is now configured)
+
+Now for the on-premise side.
+
+:one: Create a local gateway. You need the local gateway in order to complete the tunnel, then you can create a VPN connection
+
+## VM configuration managed disks & Availability options
+
+You need to ensure that VM1 can be created in an Availability Zone.
+
+Which two settings should you modify
+
+:a: 
+Correct Answer: A and C
+
+In Basic
+A: Your VMs should use managed disks if you want to move them to an Availability Zone by using Site Recovery.
+
+In Disks 
+C: When you create a VM for an Availability Zone, Under Settings > High availability, select one of the numbered zones from the Availability zone dropdown.
+
+Reference:
+https://docs.microsoft.com/en-us/azure/site-recovery/move-azure-vms-avset-azone
+https://docs.microsoft.com/en-us/azure/virtual-machines/windows/create-portal-availability-zone
+https://docs.microsoft.com/en-us/azure/virtual-machines/manage-availability
+https://docs.microsoft.com/en-us/azure/availability-zones/az-overview#availability-zones
+
+## Add VM to VS scale set
+
+![alt text](image-549.png)
+
+## 
+
+
+You have a computer named Computer1 that has a point-to-site VPN connection to an Azure virtual network named VNet1. The point-to-site connection uses a self-signed certificate.
+From Azure, you download and install the VPN client configuration package on a computer named Computer2.
+You need to ensure that you can establish a point-to-site VPN connection to VNet1 from Computer2.
+
+
+Solution: You modify the Azure Active Directory (Azure AD) authentication policies.
+
+Solution: You join Computer2 to Azure Active Directory (Azure AD).
+
+
+Instead export the client certificate from Computer1 and install the certificate on Computer2.
+
+A Point-to-Site (P2S) VPN gateway connection lets you create a secure connection to your virtual network from an individual client computer. A P2S connection is established by starting it from the client computer. This solution is useful for telecommuters who want to connect to Azure VNets from a remote location, such as from home or a conference. P2S VPN is also a useful solution to use instead of S2S VPN when you have only a few clients that need to connect to a VNet. This article applies to the Resource Manager deployment model.
+
+
+##
+
+You have an Azure subscription that contains 10 virtual networks. The virtual networks are hosted in separate resource groups.
+Another administrator plans to create several network security groups (NSGs) in the subscription.
+
+You need to ensure that when an NSG is created, it automatically blocks TCP port 8080 between the virtual networks.
+
+Solution: 
+:x: You create a resource lock, and then you assign the lock to the subscription.
+:x: You assign a built-in policy definition to the subscription.
+
+
+## All VM can resolve DNS using DNS service on a VM
+
+![alt text](image-550.png)  
+
+## SKU load balancer
+
+![alt text](image-551.png)
+
+Solutions 
+
+You create a Basic SKU public IP address, associate the address to the network interface of VM1, and then start VM1.
+
+You create a Standard SKU public IP address, associate the address to the network interface of VM1, and then stop VM2.
+
+:o: You create two Standard SKU public IP addresses and associate a Standard SKU public IP address to the network interface of each virtual machine.
+
+You can only attach virtual machines that are in the same location and on the same virtual network as the LB. Virtual machines must have a standard SKU public IP or no public IP.
+
+The LB needs to be a standard SKU to accept individual VMs outside an availability set or vmss. VMs do not need to have public IPs but if they do have them they have to be standard SKU. Vms can only be from a single network. When they don’t have a public IP they are assigned an ephemeral IP.
+
+Also, when adding them to a backend pool, it doesn’t matter in which status are the VMs.
+
+Note: Load balancer and the public IP address SKU must match when you use them with public IP addresses.
+
+## 
+
+![alt text](image-552.png)
+
+You deploy a web server on VM1, and then create a secure website that is accessible by using the HTTPS protocol. VM1 is used as a web server only.
+You need to ensure that users can connect to the website from the Internet.
+What should you do?
+A. Modify the protocol of Rule4
+B. Delete Rule1
+C. For Rule5, change the Action to Allow and change the priority to 401 Most Voted
+D. Create a new inbound rule that allows TCP protocol 443 and configure the rule to have a priority of 501.
+
+
+Correct Answer: C
+
+HTTPS uses port 443.
+Rule2, with priority 500, denies HTTPS traffic.
+Rule5, with priority changed from 2000 to 401, would allow HTTPS traffic.
+
+Note: Priority is a number between 100 and 4096. Rules are processed in priority order, with lower numbers processed before higher numbers, because lower numbers have higher priority. Once traffic matches a rule, processing stops. As a result, any rules that exist with lower priorities (higher numbers) that have the same attributes as rules with higher priorities are not processed.
+
+##
+
+You have Azure virtual machines that run Windows Server 2019
+![alt text](image-554.png)
+
+
+## Location of NIC and VNET
+
+![alt text](image-553.png)
+
+## Configure Public name server Domain Registrar
+
+![alt text](image-556.png)
+
+You create a public Azure DNS zone named adatum.com and a private Azure DNS zone named contoso.com.
+
+For `controso.com`, you create a virtual network link named link1.
+![alt text](image-555.png)
+
+You discover that VM1 can resolve names in `contoso.com` but cannot resolve names in adatum.com. 
+
+VM1 can resolve other hosts on the Internet.
+
+You need to ensure that VM1 can resolve host names in `adatum.com`.
+
+Correct Answer: B
+
+`Adatum.com` is a public DNS zone. 
+
+The Internet top level domain DNS servers need to know which DNS servers to direct DNS queries for `adatum.com` to. 
+- You configure this by configuring the name servers for `adatum.com` at the domain registrar.
+
+
+## 
+
+You plan to use Azure Network Watcher to perform the following tasks:
+- Task1: Identify a security rule that prevents a network packet from reaching an Azure virtual machine.
+- Task2: Validate outbound connectivity from an Azure virtual machine to an external host.
+
+
+Box 1: IP flow verify
+At some point, a VM may become unable to communicate with other resources, because of a security rule. The IP flow verify capability enables you to specify a source and destination IPv4 address, port, protocol (TCP or UDP), and traffic direction (inbound or outbound). IP flow verify then tests the communication and informs you if the connection succeeds or fails. If the connection fails, IP flow verify tells you which.
+
+Box 2: Connection troubleshoot
+Diagnose outbound connections from a VM: 
+- The connection troubleshoot capability enables you to test a connection between a VM and another VM, an FQDN, a URI, or an IPv4 address.
+
+The test returns similar information returned when using the connection monitor capability, but tests the connection at a point in time, rather than monitoring it over time, as connection monitor does. 
+
+## NIC configured DNS servers takes precedence over VNET configured DNS servers.
+
+![alt text](image-558.png)
+![alt text](image-559.png)
+
+The virtual machines can successfully connect to the DNS server that has an IP address of `192.168.10.15` and the DNS server that has an IP address of
+`193.77.134.10`.
+
+![alt text](image-557.png)
+
+NIC configured DNS servers takes precedence over VNET configured DNS servers.
+
+Box 1: Yes
+VM1 uses the VNET configured DNS 193.77.134.10.
+You can specify DNS server IP addresses in the VNet settings. The setting is applied as the default DNS server(s) for all VMs in the VNet.
+The DNS is set on the VNET level.
+
+Box 2: No
+VM2 uses the NIC configured DNS 192.168.10.15.
+You can set DNS servers per VM or cloud service to override the default network settings.
+This VM has 192.168.10.5 set as DNS server, so it overrides the default DNS set on VNET1.
+
+Box 3: Yes
+VM3 uses the NIC configured DNS 192.168.10.15
+You can set DNS servers per VM or cloud service to override the default network settings.
+This VM has 192.168.10.5 set as DNS server, so it overrides the default DNS set on VNET1.
+
+
+## Move Resource with Lock 
+
+![alt text](image-561.png)
+
+![alt text](image-560.png)
+
+RO or Delete locks does not have any impact for Move operation and it doesn`t matter if it comes from RG level or are directly attached to the resource.
+
+
+## 
+
+You add a network interface named vm1173 to VM1
+
+From Computer1, you attempt to connect to VM1 by using Remote Desktop, but the connection fails.
+
+You need to establish a Remote Desktop connection to VM1.
+
+Start VM1
+
+## 
+
+You have an Azure subscription that contains 10 virtual networks. The virtual networks are hosted in separate resource groups.
+Another administrator plans to create several network security groups (NSGs) in the subscription.
+You need to ensure that when an NSG is created, it automatically blocks TCP port 8080 between the virtual networks.
+
+
+Solution: 
+
+:x: From the Resource providers blade, you unregister the Microsoft.ClassicNetwork provider.
+
+:o: You configure a custom policy definition, and then you assign the policy to the subscription.
+
+:a:
+
+You need to use a custom policy definition, because there is not a built-in policy.
+
+Resource policy definition used by Azure Policy enables you to establish conventions for resources in your organization by describing when the policy is enforced and what effect to take. By defining conventions, you can control costs and more easily manage your resources.
+
+##
+
+```
+VNET1: 10.10.10.0 - 10.10.10.255
+VNET2: 172.16.0.0 - 172.16.255.255
+VNETA: 10.10.128.0 - 10.10.255.255
+```
+
+![alt text](image-562.png)
+
+Box 1: No
+To create a VNet to VNet VPN you need to have a special Gateway Subnet. Here, the VNet has no sufficient address space to create a Gateway Subnet and thus to establish a VNet to VNet VPN connection.
+
+Box 2: Yes
+For VNet peering the only consideration is that the VNets do not overlap. VNET1 and VNET2 do not overlap.
+
+Box 3: Yes
+For VNet peering the only consideration is that the VNets do not overlap. VNET1 and VNETA do not overlap.
+
+##
+
+You have an app named App1 that is installed on two Azure virtual machines named VM1 and VM2. Connections to App1 are managed by using an Azure Load
+Balancer.
+
+NSG for VM2
+![alt text](image-563.png)
+
+You discover that connections to App1 from 131.107.100.50 over TCP port 443 fail.
+You verify that the Load Balancer rules are configured correctly.
+You need to ensure that connections to App1 can be established successfully from 131.107.100.50 over TCP port 443.
+
+
+:x: You delete the BlockAllOther443 inbound security rule.  
+:x: You modify the priority of the Allow_131.107.100.50 inbound security rule.  
+:o: You create an inbound security rule that allows any traffic from the AzureLoadBalancer source and has a cost of 150.
+
+
+> "Attach network interface" Button is enabeld! That means, VM is Stopped and deallocated!
+
+
+## RTT & Connection Monitor 
+
+You have two Azure virtual networks named VNet1 and VNet2. VNet1 contains an Azure virtual machine named VM1. VNet2 contains an Azure virtual machine named VM2.
+VM1 hosts a frontend application that connects to VM2 to retrieve data.
+Users report that the frontend application is slower than usual.
+You need to view the average round-trip time (RTT) of the packets from VM1 to VM2.
+
+Which Azure Network Watcher feature should you use?
+A. IP flow verify
+B. Connection troubleshoot
+C. Connection monitor Most Voted
+D. NSG flow logs
+
+##
+
+![alt text](image-564.png)
+![alt text](image-565.png)
+
+##
+
+You have an on-premises data center and an Azure subscription. 
+
+The data center contains two VPN devices. The subscription contains an Azure virtual network named VNet1. 
+
+VNet1 contains a gateway subnet.
+You need to create a site-to-site VPN. 
+
+The solution must ensure that if a single instance of an Azure VPN gateway fails, or a single on-premises VPN device fails, the failure will not cause an interruption that is longer than two minutes.
+
+What is the minimum number of public IP addresses, virtual network gateways, and local network gateways required in Azure? To answer, select the appropriate options in the answer area.
+
+![alt text](image-574.png)
+
+The "local network gateway" IS an azure resource (the on-prem VPN thing is called "VPN Device" in Microsoft Azure terminology)
+(Hence correct answer is: 2-1-2)
+You can try to create a "Local NW GW" yourself in Portal "Create a local network gateway to represent the on-premises site that you want to connect to a virtual network. The local network gateway specifies the public IP address of the VPN device and IP address ranges located on the on-premises site. Later, create a VPN gateway connection between the virtual network gateway for the virtual network, and the local network gateway for the on-premises site."
+
+And if you try to create a VPN Gateway Standard in Active-Active mode you will see that only one VNet is required. The A-A config takes care of the rest.
+
+Hence the following _in Azure_:
+2 Public IPs (assuming Active-Active, which comes from <2 minutes requirement)
+1 VNet (see config of VPN GW in Azure)
+2 Local Gateways (as you have 2 "VPN Devices" on-prem)
+
+##
+
+![alt text](image-566.png)
+
+## ARM VNET
+
+You plan to use an Azure Resource Manager template to deploy a virtual network named VNET1 that will use Azure Bastion.
+How should you complete the template? 
+
+![alt text](image-567.png)
+. All Azure Bastion resources deployed in subnets of size /27 prior to this date are unaffected by this change and will continue to work, but we highly recommend increasing the size of any existing AzureBastionSubnet to /26 in case you choose to take advantage of host scaling in the future.
+
+##
+
+You need to inspect all the network traffic from VM1 to VM2 for a period of three hours.
+Solution: From Azure Network Watcher, you create a packet capture.
+
+## Route-base S2P
+
+![alt text](image-568.png)  
+P2S client doesn't have fixed IPs.  
+Policy based on combinations of prefixes from both networks to define how traffic is encrypted/decrypted through IPsec tunnels.    
+
+
+
+##
+
+![alt text](image-570.png)
+
+In Azure, you create a private DNS zone named adatum.com. You set the registration virtual network to VNet2. The adatum.com zone is configured as shown in the following  
+![alt text](image-571.png)
+
+![alt text](image-569.png)
+
+VNet1 (NOT A Registration Network) : VM5
+VNet2 (IS A Registration Network) : 
+- VM1, VM6 and VM9
+
+So here we go:
+
+1. VM5 is in VNet1 - answer is NO.
+2. VM5 is in VNet1 - answer is NO.
+3. VM6 is in VNet2 - answer is YES.
+
+##
+
+![alt text](image-573.png)  
+
+A virtual network can be linked to private DNS zone as a registration or as a resolution virtual network.  
+
+Registration virtual network:
+- A private DNS zone can have multiple registration virtual networks. 
+- However, every virtual network can only have one registration zone associated with it.
+
+Resolution virtual network:
+- One private DNS zone can have multiple resolution virtual networks and a virtual network can have multiple resolution zones associated to it.
+
+![alt text](image-572.png)
+
+
+1. Yes
+No registration zone for VNET2.
+
+2. Yes
+A virtual network can have multiple resolution zones associated to it.
+
+3. Yes
+No registration zone for VNET2.
+
+## 
+
+![alt text](image-575.png)  
+
+1) Remove the Public IP addresses. They are basic Public IPs and we're using a Standard Load Balancer which aren't compatible.
+2) Create a backend pool and health probes.
+3) Create a load balancer rule.
+
+## S2S
+
+You have an Azure subscription that contains two on-premises locations named site1 and site2.
+You need to connect site1 and site2 by using an Azure Virtual WAN.
+Which four actions should you perform in sequence
+
+Correct answer:
+1. Create Azure Virtual WAN
+2. Create Virtual Hub
+3. Create VPN sites
+4. Connect VPN sites to virtual hub
+
+
+##
+
+![alt text](image-576.png)
+
+DNS in Peered VNets
+
+Independent DNS Configuration: Each VNet in Azure can be configured with its own DNS servers. When you peer VNets, these configurations remain independent. A VNet does not inherit or override the DNS server settings of the VNet it is peered with.
+
+Resolution Across Peered VNets: Resources in peered VNets can resolve DNS names as per their respective VNet’s DNS settings. If a resource in VNet A needs to resolve a name managed by a DNS server in VNet B, it can do so if the DNS server in VNet B is accessible and if the necessary DNS forwarding or conditional forwarding is set up.
+
+Custom DNS Scenarios: In scenarios where you have custom DNS servers, you might need to configure DNS forwarding or conditional forwarding to ensure proper name resolution across peered VNets.
+
+Azure-Provided DNS: If you are using Azure-provided DNS, the resolution of names for resources in Azure (like VMs) works across peered VNets without additional configuration
+
+
+## DNS Record Type
+
+![alt text](image-577.png)
+
+Correct Answer C: comp2.contoso.com only
+
+A record: Is used to map a DNS/domain name to an IP  
+Ref:https://www.cloudflare.com/learning/dns/dns-records/dns-a-record/  
+
+TXT records in a lot of cases get used to prove ownership of a domain, it has other purposes too.  
+Reference:  
+https://support.google.com/a/answer/2716800?hl=en#:~:text=TXT%20records%20are%20a%20type,and%20to%20ensure%20email%20security.  
+
+PTR: A Reverse DNS lookup is used by remote hosts to determine who 'owns' an IP address.  
+Reference:    
+https://www.mailenable.com/kb/content/article.asp?ID=ME020206   
+
+CNAME records get used to redirect a DNS name or subdomain name to another DNS name or domain name or subdomain name.  
+reference: https://support.dnsimple.com/articles/cname-record/   
+
+## SKU of LB and public IP addresses must be the same 
+![alt text](image-578.png)
+
+## restrict network traffic between the pods with Calico Net Policy
+
+![alt text](image-579.png)
+
+## 
+
+![alt text](image-580.png)
+
+
+Box 1: 10.0.0.0/16
+Address prefix
+destination-> Vnet 1 (Address space of Vnet1)
+
+Box 2: Virtual appliance
+Next hop type
+VM1 ->Virtual Appliance. You can specify IP address of VM 1 when configuring next hop as Virtual appliance.
+
+Box 3: Gateway Subnet
+Assigned to
+This route is to be followed by Gateway Subnet for the incoming traffic. You can associate routing table to the Subnet from Rout Table -> subnet ->Associate.
+
+
+## Load balancing rule that will load balance HTTPS traffic between VM1 and VM2
+
+
+You have an Azure subscription that contains two virtual machines named VM1 and VM2.
+You create an Azure load balancer.
+You plan to create a load balancing rule that will load balance HTTPS traffic between VM1 and VM2.
+Which two additional load balancer resources should you create before you can create the load balancing rule?
+
+
+A. a frontend IP address  
+B. an inbound NAT rule   
+C. a virtual network   
+D. a backend pool  
+E. a health probe  
+
+D and E.  
+You can't create a LB without FrontEnd IP, so if we have a LB we also have a FrontEnd IP already. You can however create a LB without a backend pool and without any rules.   
+- If you want to add a rule to your LB later you have to create a backend pool and health probe first. 
+
+Those are mandatory properties for a rule. I also tested it in my lab to be sure.
+
+## 
+
+You have an on-premises network that contains a database server named dbserver1.
+You have an Azure subscription.
+
+You plan to deploy three Azure virtual machines. 
+
+Each virtual machine will be deployed to a separate availability zone.
+
+You need to configure an Azure VPN gateway for a site-to-site VPN. 
+
+The solution must ensure that the virtual machines can connect to dbserver1.  
+
+Which type of public IP address SKU and assignment should you use for the gateway?
+ 
+A. a basic SKU and a static IP address assignment  
+B. a standard SKU and a static IP address assignment 
+C. a basic SKU and a dynamic IP address assignment  
+
+##
+
+![alt text](image-581.png)
+
+
+YES -For VM1,server1.contoso.com resolves to 131.107.3.3
+
+VM1 is connected to VNET1 which has Default(Azure-Provided) DNS Server and linked to Azure Private DNS Server contoso.com (131.107.3.3 and 131.107.3.4 DNS Servers). That means VM1 has these 2 DNS servers for resloving.
+DNS Servers for VNET1
+server1.contoso.com = 131.107.3.3
+server2.contoso.com = 131.107.3.4
+
+NO-For VM2,server1.contoso.com resolves to 131.107.3.3
+
+VM2 belongs to VNET2 has Custom DNS:192.168.0.5 IP of VM4 ( not takes from dedault Azure: the server1.contoso.com = 131.107.3.4 and server2.contoso.com = 131.107.3.4) -NO
+VM2 will resolve from VM4 (DNS Server1.contoso.com=131.107.2.3 and Server2.contoso.com=131.107.2.4)
+
+YES- For VM3,server2.contoso.com resolves to 131.107.2.4
+
+VM3 belongs to VNET3 has Custom DNS:192.168.0.5 IP of VM4 ( not takes from default Azure: the server1.contoso.com = 131.107.3.4 and server2.contoso.com = 131.107.3.4)
+VM3 will resolve from VM4 (DNS Server1.contoso.com=131.107.2.3 and Server2.contoso.com=131.107.2.4)
+
+## 
+
+![alt text](image-582.png)
+- `fabrikam.com`, you add a virtual network link to vnet1 and enable auto registration.
+- For `contoso.com`, you assign vm1 and vm2 the Owner role.
+
+![alt text](image-583.png)
+
+N Y Y
+
+Only private AZ DNS Zones can use auto registration. The set DNS search suffix in the client changes nothing about that https://docs.microsoft.com/en-us/azure/dns/private-dns-autoregistration
+
+A virtual machine with a DNS suffix configured in Windows will register its DNS record to the private DNS zone. However, the Azure DHCP service ignores any DNS suffix when it registers the private DNS zone. For example, if your virtual machine is configured for 'contoso.com' as the primary DNS suffix, but the virtual network is linked to the 'fabrikam.com' private DNS zone, the virtual machine's registration appears in the 'fabrikam.com' private DNS zone.
+
+
+## The firewall, VNet, and the public IP address all must be in the same resource group
+
+![alt text](image-584.png)
+
+## minimum number of connection monitors you deploy
+
+
+## Create a route-table 
+
+
+Route all traffic to the firewall
+When you create a virtual network, Azure automatically creates a default route table for each of its subnets and adds system default routes to the table. In this step, you create a user-defined route table that routes all traffic to the firewall, and then associate it with the App Service subnet in the integrated virtual network.
+Section3 in document.
+https://learn.microsoft.com/en-us/azure/app-service/network-secure-outbound-traffic-azure-firewall
+
+## Routing preference Microsoft point-of-presence (POP)
+
+![alt text](image-585.png)
+
+Routing preference in Azure Traffic Manager allows you to specify how to route traffic to your Azure service endpoints based on various criteria, such as the geographic location of the client or the endpoint, the performance of the endpoint, or the priority of the endpoint.
+
+By configuring routing preference, you can direct incoming user traffic to the Microsoft point-of-presence (POP) closest to the user's location, ensuring the best possible user experience. This can be achieved by selecting the "Performance" routing method in Azure Traffic Manager, which uses DNS-based traffic routing to direct users to the endpoint that offers the best performance from the user's location.
