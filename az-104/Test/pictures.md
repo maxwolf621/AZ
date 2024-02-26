@@ -1154,94 +1154,104 @@ Because file is modified on 5 Oct, after 2 days it moved to cool storage and on 
 Same as File 2 its still in cool storage, because its modified on 2nd oct it still has one day to move to archive tier.
 
 
-## Role 
+## :warning: Storage Blob Data Contributor & Reader 
 
 ![alt text](image-407.png)
 
-Assigning the Storage Account Contributor and Storage Blob Data Reader rolls to the group and having the user (which is a part of that group) sign in to the portal, the storage account isn't even listed under storage accounts.
-
-After removing the Storage Blob Data Reader and assigning the Reader roll to the group, the storage account is listed and the users of the group can creat blobs/fileshares etc.
-
 ANSWER: BC
 
-The Reader role is an Azure Resource Managerrole that permits users to view storage account resources, but not modify them. 
+Assigning the Storage Account Contributor and Storage Blob Data Reader rolls to the group and having **the user (which is a part of that group)** sign in to the portal, the storage account isn't even listed under storage accounts.  
 
-It does not provide read permissions to data in Azure Storage, but only to account management resources. 
+Remove the Storage Blob Data Reader and assigning the Reader roll to the group, **the storage account is listed and the users of the group can create blobs/file-shares etc.**
 
-The Reader role is necessary so that users can navigate to blob containers in the Azure portal. 
+:memo: Reader Role  
+The Reader role is an Azure Resource Manager role that permits users to view storage account resources, but not modify them.
+- **It does not provide read permissions to data in Azure Storage, but only to account management resources.**  
+So The Reader role is necessary so that users can navigate to blob containers in the Azure portal.   
 
-For example, if you assign the Storage Blob Data Contributor role to user Mary at the level of a container named sample-container, then Mary is granted read, write, and delete access to all of the blobs in that container. However, if Mary wants to view a blob in the Azure portal, then the Storage Blob Data Contributor role by itself will not provide sufficient permissions to navigate through the portal to the blob in order to view it. The additional permissions are required to navigate through the portal and view the other resources that are visible there." - https://docs.microsoft.com/en-us/azure/storage/blobs/assign-azure-role-data-access?tabs=portal
+:question: Why you need Reader instead of Storage Blob Data Reader ?
+For example, if you assign the Storage Blob Data Contributor role to user Mary at the level of a container named sample-container, then Mary is granted read, write, and delete access to all of the blobs in that container.  
+
+However, if Mary wants to view a blob in the Azure portal, then the Storage Blob Data Contributor role by itself will not provide sufficient permissions to navigate through the portal to the blob in order to view it. 
+
+> The additional permissions are required to navigate through the portal and view the other resources that are visible there." - https://docs.microsoft.com/en-us/azure/storage/blobs/assign-azure-role-data-access?tabs=portal
 
 
-## 
-
+## azcopy copy src dest --parameter
 
 ![alt text](image-408.png)
 
 Correct Answer: C
+- A: URL of the Storage Account.
+- B: The azcopy sync command replicates the source location to the destination location. 
+However, the file is skipped if the last modified time in the destination is more recent.
+- C: The azcopy copy command copies a directory (and all the files in that directory) to a blob container. 
+The result is a directory in the container by the same name.
+- D: The az storage blob copy start-batch command copies multiple blobs to a blob container.
 
-A: URL of the Storage Account.
-
-B: The azcopy sync command replicates the source location to the destination location. However, the file is skipped if the last modified time in the destination is more recent.
-
-C: The azcopy copy command copies a directory (and all the files in that directory) to a blob container. The result is a directory in the container by the same name.
-
-D: The az storage blob copy start-batch command copies multiple blobs to a blob container.
-
-## Change the Account type
+## Change the Account type via option `performance`
 
 ![alt text](image-409.png)
 
-Select Standard performance for general-purpose v2 storage accounts (default). This type of account is recommended by Microsoft for most scenarios. For more information, see Types of storage accounts.  
+Select Standard performance for GPv2 storage accounts (default). 
+- This type of account is recommended by Microsoft for most scenarios.   
 
-Select Premium for scenarios requiring low latency. After selecting Premium, select the type of premium storage account to create. The following types of premium storage accounts are available:  
+Select Premium for scenarios requiring low latency. 
+
+After selecting Premium, select the type of premium storage account to create. 
+
+The following types of premium storage accounts are available:  
 ```
 Block blobs
 File shares
 Page blobs
 ```
 
-## Copy Files
+## :warning: Blob Container authentication method with Access Key, AAD and SAS to file-share via AZ   
 
-
-![alt text](image-410.png)
 You plan to use `AzCopy` to copy a blob from `container1` directly to `share1`.  
 
 You need to identify which authentication method to use when you use AzCopy.
-What should you identify for each account? To answer, drag the appropriate authentication methods to the correct accounts. Each method may be used once, more than once, or not at all. You may need to drag the split bar between panes or scroll to view content.
+What should you identify for each account? 
 
+![alt text](image-410.png)
 
-To storage1, you could authenticate with Access Key, SAS and AAD, but Storage1 has disabled public access, so you can't access it with AzCopy even authenticated. 
+- Each method may be used once, more than once, or not at all. You may need to drag the split bar between panes or scroll to view content.
 
-However in SAS toiken you can specify authorized IP range from which you can use your access. Access Key and AAD don;t have that option, hence the only possible authorization method for storage1 is SAS.
+:a: SAS
 
-## Container with encrypted Scope
+To `storage1`, you could authenticate with **Access Key**, **SAS** and **AAD**, but Storage1 has disabled public access, so you can't access it with **AzCopy** even authenticated. 
+
+However in SAS token you can specify authorized IP range from which you can use your access.   
+Access Key and AAD do not have that option, hence the only possible authorization method for `storage1` is SAS.  
+
+## Blob Container with encrypted Scope
 
 ![alt text](image-411.png)
 
 D) Create an encryption scope
 
-Why?
+In Azure Storage, encryption of data at rest is done using Azure Storage Service Encryption (SSE). 
 
-In Azure Storage, encryption of data at rest is done using Azure Storage Service Encryption (SSE). Azure Storage SSE uses Microsoft-managed encryption keys to encrypt the data in the storage account.
+Azure Storage SSE uses Microsoft-managed encryption keys to encrypt the data in the storage account.
 
 In the scenario described, you need to use a different key to encrypt data at rest for one of the containers. To do this, you need to create an encryption scope, which is a named configuration that defines the default encryption settings for a container. By creating an encryption scope, you can use a customer-managed key, stored in Azure Key Vault, to encrypt the data in that specific container.
 
-Therefore, option D (Create an encryption scope) is the correct answer as it allows you to use a different key for data encryption for the specific container.
+Therefore, option D (Create an encryption scope) is the correct answer as **it allows you to use a different key for data encryption for the specific container.**
 
-## Rule policy to blobs 
+## Blobs Rule policy 
 
 ![alt text](image-412.png)
 
 N-N-N
 
-On June 6, File1 will be in archive because File1 is in container 1, and rule 1 applies 3 days after june 1.
+- On June 6, File1 will be in archive because File1 is in container 1, and rule 1 applies 3 days after june 1.
 
-On June 1, File2 will still be in Hot tier because File2 is in container2, Rule3 and Rule4 havent hit yet.
+- On June 1, File2 will still be in Hot tier because File2 is in container2, Rule3 and Rule4 haven't hit yet.
 
-On June 16, File2 will be deleted because Rule3 applies 10 days after June 1.
+- On June 16, File2 will be deleted because Rule3 applies 10 days after June 1.
 
-## ARM for Storage Account and Service
+## :star: Storage ARM for allowBlobPublicAccess & SKU & DeleteRetentionPolicy
 
 You plan to deploy a storage account named storage1 by using the following Azure Resource Manager (ARM) template.
 
@@ -1250,32 +1260,33 @@ You plan to deploy a storage account named storage1 by using the following Azure
 ![alt text](image-421.png)
 
 N-N-Y
-`deleteRetentionPolicy` is 7 days, so can not be restored after 7 days. Means, backup is deleted after 7 days.
 
-`allowBlobPublicAccess` is true, so anyone can access the blob, not just on Azure.
-
-`kind` is `Standard_LRS`, so 3 local copies are stored.
+- `deleteRetentionPolicy` is 7 days, so can not be restored after 7 days. Means, backup is deleted after 7 days.
+- `allowBlobPublicAccess` is `true`, so anyone can access the blob, not just on Azure.
+- `kind` is `Standard_LRS` and `location` is `East US`, so 3 local copies are stored.
 
 ## AZ Explorer
 
 ![alt text](image-417.png)  
 
-Azure Storage Explorer does not have the ability to create a new storage account directly. Instead, you can use Azure Storage Explorer to connect to and manage existing storage accounts in Azure.
+**Azure Storage Explorer does not have the ability to create a new storage account directly.**  
+- Instead, you can use Azure Storage Explorer to connect to and manage existing storage accounts in Azure.
 
-## RSV for VM availability
+## RSV for ZRS 
 
 ![alt text](image-416.png)
 
-## AZ copy
-
-![alt text](image-415.png)
+1. Create RSV 
+2. Set Replication ZRS
+3. Backup Policy Creation &Configuration
 
 ## ARM lifecycle management
 
-tierToArchive and prefixMatch
-- tierToArchive because it's the lowest cost tier, and doesnt say anyhting about needing to read data after 90 days.   
+`tierToArchive` and `prefixMatch`
+
+- `tierToArchive` because it's the lowest cost tier, and does not say anything about needing to read data after 90 days.   
 However, rehydration costs will occur if they did need to read it.  
-- prefixMatch because we only want the blob in the container1.  
+- `prefixMatch` because we only want the blob in the container1.  
 
 ## Storage Account Blades Configuration
 
@@ -1283,27 +1294,29 @@ However, rehydration costs will occur if they did need to read it.
 
 ![alt text](image-419.png)
 
-IT'S NOW `IAM` AND `REDUDANCY` ( `REPLICATION CHANGED` TO THIS NAME )
+IT'S NOW `IAM` AND `REDUDANCY` 
+(`REPLICATION` CHANGED TO THIS NAME)
 
-## Customer-managed key encryption for storage container
+## RSA Customer-managed key encryption for storage container
 
 ![alt text](image-420.png)
 
-## Access Policy for Storage Container
+## 2 blob storage policies & 5 access policies 
 
-![alt text](image-413.png)
-![alt text](image-414.png)
+![alt text](image-413.png)  
 
-Max stored access policies: `3`
-- because max total of stored access policy is `5` and we already have `2`, so additional 3 available.
+![alt text](image-414.png)  
 
-Max immutable blob storage: `1`
+Max stored access policies: `3`  
+- because max total of stored access policy is `5` and we already have `2`, so additional 3 available.  
+
+Max immutable blob storage: `1`  
 - because max total of immutable blob storage policy is 2
-- one Legal hold policy and one Time-based retention policy. 
-
+- one Legal hold policy and one Time-based retention policy.    
+ 
 We already have one, so additional 1 available.
 
-## Connection String key and SAS
+## :star: Connection String key and SAS Access
 
 ![alt text](image-423.png)
 
@@ -1314,101 +1327,111 @@ To which resources can User1 write by using SAS1 and key1?
 
 ![alt text](image-425.png)
 
-key1: folder1, container1, table1
+:a: 
 
-SAS1: table1
+`key1`: folder1, container1, table1    
+`SAS1`: table1   
 
-I think that `key1` is the key of storage account which is created when creating storage account.   
-Thus, it should be able to access all in storage account.  
+I think that `key1` is the key of storage account which is created when creating storage account.  
+Thus, **it should be able to access all in storage account**.  
 
 SAS1 allows table only which is shown in the exhibit.  
 
-## Lifecycle policy Action Order
+## :star: Lifecycle Management Policies Actions Order
 
 ![alt text](image-426.png)
 
-If you define more than one action on the same blob, **lifecycle management applies the least expensive action to the blob**. 
+If you define more than one action on the same blob
+- **lifecycle management applies the least expensive action to the blob**. 
 
-For example, action `delete` is cheaper than action `tierToArchive`. Action `tierToArchive` is cheaper than action `tierToCool`.
+For example, action `delete` is cheaper than action `tierToArchive`.
+Action `tierToArchive` is cheaper than action `tierToCool`.
+- `delete -> tierToArchive -> tierToCool`
 
-`delete -> tierToArchive -> tierToCool`
-
-##
+## :star: Lifecycle management with account kind & redundancy
 
 ![alt text](image-427.png)
-
-You need to identify which storage accounts support lifecycle management, and which storage accounts support moving data to the Archive access tier.
+- You need to identify which storage accounts support lifecycle management, and which storage accounts support moving data to the Archive access tier.
 
 Which storage accounts should you use? 
 
-1. storage1, storage2, storage3 (see Kind)
+:a: 
+
+1. storage1, storage2, storage3 (SEE Kind)
 Lifecycle management policies are supported for block blobs and append blobs **in general-purpose v2, premium block blob, and Blob Storage accounts.**
 
 2.  storage2 (SEE Redundancy)
 Only storage accounts that are configured for `LRS`, `GRS`, or `RA-GRS` support moving blobs to the archive tier.  
-The archive tier isn't supported for ZRS, GZRS, or RA-GZRS accounts.  
+    - The archive tier isn't supported for ZRS, GZRS, or RA-GZRS accounts.  
 
-> https://learn.microsoft.com/en-us/azure/storage/blobs/lifecycle-management-overview
-https://learn.microsoft.com/en-us/azure/storage/blobs/access-tiers-overview
+> https://learn.microsoft.com/en-us/azure/storage/blobs/lifecycle-management-overview  
+> https://learn.microsoft.com/en-us/azure/storage/blobs/access-tiers-overview  
 
-## ARM for Storage tierToCool and blobTypes
+## ARM for Storage `tierToCool` and `blobTypes`
 
-You create a blob lifecycle rule named rule1.
+You create a blob lifecycle rule named rule1.  
 
 You need to configure rule1 to automatically move blobs that were NOT updated for 45 days from contained to the Cool access tier.
 
-![alt text](image-428.png)
+![alt text](image-428.png)  
 
-Tiering is not yet supported in a premium block blob storage account. **For all other accounts, tiering is allowed only on block blobs and not for append and page blobs.**
+Tiering is not yet supported in a premium block blob storage account. 
 
-tierToCool
-- Supported for blockBlob
+**For all other accounts, tiering is allowed only on block blobs and not for append and page blobs.**
 
-
-## SMB Multichannel
+## SMB Multichannel (File Share, LRS/ZRS)
 
 You need to ensure that share1 can support SMB Multichannel. 
 
 The solution must minimize costs.
 
-- According to documentation only Premium file shares (FileStorage), LRS/ZRS are supported for SMB.
+:a: 
 
-##  use conditions when 指派 RBAC to storage account
+According to documentation only Premium file shares (FileStorage), **LRS/ZRS are supported for SMB**.
 
-![alt text](image-429.png)
+## use conditions while assigning RBAC to containers and queues
 
-## K8s & CNI -> VNet
+![alt text](image-429.png)  
+
+## :star: K8s & CNI -> VNet
 
 ![alt text](image-430.png)  
 ![alt text](image-431.png)  
 Agree with the answer NYY.
-1. subnet is not in the same location as cluster > **If you want to select an existing virtual network, make sure it's in the same location and Azure subscription as your Kubernetes cluster.**
-https://learn.microsoft.com/en-us/azure/aks/configure-azure-cni
-2. azure cni network in same location as cluster and within the total pod no. limit
-3. Bring your own subnet and route table with k8s. 
-With k8s, a route table must exist on your cluster subnet(s). 
-AKS supports bringing your own existing subnet and route table.
-https://learn.microsoft.com/en-us/azure/aks/configure-kubenet#prerequisites
 
-## Azure Custom Script Extension PostDeployment :x: ARM templates  
+1. subnet is not in the same location as cluster 
+**If you want to select an existing virtual network, make sure it's in the same location and Azure subscription as your Kubernetes cluster.**
+
+> https://learn.microsoft.com/en-us/azure/aks/configure-azure-cni
+
+2. azure CNI network configuration in same location as cluster and within the total pod no. limit
+
+3. Bring your own subnet and route table with k8s. 
+With k8s network configuration, a route table must exist on your cluster subnet(s). 
+AKS supports bringing your own existing subnet and route table.
+
+> https://learn.microsoft.com/en-us/azure/aks/configure-kubenet#prerequisites
+
+## Azure Custom Script Extension PostDeployment  
 
 ![alt text](image-432.png)  
 
-## Storage minimize network cost & managed key
+## default routing tier minimizes storage network cost & managed key can be modified after creating
 
 ![alt text](image-433.png)
 
 ![alt text](image-434.png)
 
 **to minimize network cost** default routing tier
-https://learn.microsoft.com/en-us/azure/storage/common/network-routing-preference
+
+> https://learn.microsoft.com/en-us/azure/storage/common/network-routing-preference
 
 **what can be changed after creation** customer-managed key
-"You can switch between customer-managed keys and Microsoft-managed keys at any time"
-https://learn.microsoft.com/en-us/azure/storage/common/customer-managed-keys-overview
+- You can switch between customer-managed keys and Microsoft-managed keys at any time
 
+> https://learn.microsoft.com/en-us/azure/storage/common/customer-managed-keys-overview
 
-## 
+## RSA customer-managed key 4096
 
 You need to configure encryption for the account. The solution must meet the following requirements:
 
@@ -1417,33 +1440,36 @@ You need to configure encryption for the account. The solution must meet the fol
 
 ![alt text](image-435.png)
 
-## SAS or RBAC
+## SAS or Role Assignment Condition
 
 ![alt text](image-436.png)  
 
-A :
-An Azure role assignment condition is an optional check that you can add to your role assignment to provide more fine-grained access control. For example, you can add a condition that requires an object to have a specific tag to read the object.
-https://learn.microsoft.com/en-us/azure/role-based-access-control/conditions-role-assignments-portal
+:a: : 
 
+An Azure role assignment condition is an optional check that you can add to your role assignment to provide more fine-grained access control.  
+
+For example, you can add a condition that requires an object to have a specific tag to read the object.  
+
+https://learn.microsoft.com/en-us/azure/role-based-access-control/conditions-role-assignments-portal  
 
 ## ARM for Network and Storage Account
 
-You plan to create a role definition to meet the following requirements:
+You plan to create a role definition to meet the following requirements :  
+- Users must be able to view the configuration data of a storage account.  
+- Users must be able to perform all actions on a virtual network.  
 
-• Users must be able to view the configuration data of a storage account.
-• Users must be able to perform all actions on a virtual network.
-• The solution must use the principle of least privilege.
+The solution must use the principle of least privilege.  
 
 ![alt text](image-437.png)
 
-## Host Caching & Storage Type
+## :star: Host Caching & Premium SSD
 
-To VM1, you plan to add a 1-TB data disk that meets the following requirements:
+To VM1, you plan to add a 1-TB data disk that meets the following requirements:  
+- Provides data resiliency in the event of a datacenter outage.
+- Provides the lowest latency and the highest performance.
+- Ensures that no data loss occurs if a host fails.
 
-• Provides data resiliency in the event of a datacenter outage.
-• Provides the lowest latency and the highest performance.
-• Ensures that no data loss occurs if a host fails.
-
+:a: 
 
 1. **Provides data resiliency in the event of a datacenter outage.**
 - Zone-redundant storage (ZRS) provides this capability by replicating data across multiple availability zones, ensuring that if one datacenter fails, the data is still available in other zones.
@@ -1463,65 +1489,66 @@ Host caching:
 To avoid data loss during a host failure, we should avoid using write caching.
 - Read-Only would be the appropriate choice to enhance performance without risking data loss due to host failure.
 
-## VM KEK with RSV
+## VM KEK & Disk Encryption for RSV
 
-![alt text](image-438.png)
+![alt text](image-438.png)  
 
 To prepare Vault1 for Azure Disk Encryption with a key encryption key (KEK):
 
-1. **You need to have a key in the Key Vault.** This will be the KEK. Azure Disk Encryption uses BitLocker for Windows VMs, which requires a key for encrypting the data disk. If you're using a KEK, the BEK (BitLocker Encryption Key) will be wrapped by this KEK.
+1. `Create a new key`   
+**You need to have a key in the Key Vault.** 
+This will be the KEK.    
+Azure Disk Encryption uses `BitLocker` for Windows VMs, which requires a key for encrypting the data disk.   
+**If you're using a KEK, the BEK (BitLocker Encryption Key) will be wrapped by this KEK.** 
 
-So, you should:
-B. Create a new key.
-
-2. **The key vault itself should be configured for Azure Disk Encryption.** 
+2. `Select Azure Disk Encryption for volume encryption.`
+**The key vault itself should be configured for Azure Disk Encryption.**   
 This ensures the vault is set up to work with Azure VMs and their disks.
-
-Therefore:
-E. Select Azure Disk Encryption for volume encryption.
 
 So, the correct actions are B and E.
 
-## usage of Azure Disk Encryption
+## Usage of Azure Disk Encryption
 
 ![alt text](image-439.png)
 
-"You can protect your managed disks by using Azure Disk Encryption for Linux VMs, which uses DM-Crypt, or Azure Disk Encryption for Windows VMs, which uses Windows BitLocker, to protect both operating system disks and data disks with full volume encryption.
+You can protect your managed disks by using Azure Disk Encryption for Linux VMs, which uses DM-Crypt, or Azure Disk Encryption for Windows VMs, which uses Windows BitLocker, to protect both operating system disks and data disks with full volume encryption.
 
 Encryption keys and secrets are safeguarded in your Azure Key Vault subscription. By using the Azure Backup service, you can back up and restore encrypted virtual machines (VMs) that use Key Encryption Key (KEK) configuration."
-https://learn.microsoft.com/en-us/azure/security/fundamentals/encryption-overview
+
+> https://learn.microsoft.com/en-us/azure/security/fundamentals/encryption-overview
 
 
-##
+## :star: SAS configuration
 
+You need to configure a shared access signature (SAS) to ensure that users can only **download blobs securely by name**.
 
-You need to configure a shared access signature (SAS) to ensure that users can only download blobs securely by name.
+:a:   
 
 ![alt text](image-440.png)
 
-Allowed services: Blob (since you want to access blobs).
+Allowed resource types:
+- Blob (since you want to access blobs).  
+- Service (if you want users to access all blobs within a container)
+- **Object (if you want users to access a specific blob by name)**
 
-Allowed resource types: Service (if you want users to access all blobs within a container) or **Object (if you want users to access a specific blob by name)**.
-
-Allowed permissions: Set to "Read" to allow downloading.
+Allowed permissions: 
+- Set to `Read` to allow downloading.
 
 Specify the start and expiry date for the token.
-If you're using a shared access policy, you can select it here. Otherwise, configure the SAS token directly.
+- If you're using a shared access policy, you can select it here. Otherwise, configure the SAS token directly.
 
 ## SAS Accessing
 
 ![alt text](image-441.png)
 
-##
-
+## :star: Hierarchical namespace for Azure Data Lake Storage
 
 You need to create an Azure Storage account named storage1
 
 It requires
-
-• Support Azure Data Lake Storage.
-• Minimize costs for infrequently accessed data.
-• Automatically replicate data to a secondary Azure region.
+- Support `Azure Data Lake Storage`.
+- Minimize costs for infrequently accessed data.
+- Automatically replicate data to a secondary Azure region.
 
 Which three options should you configure for `storage1`
 
@@ -1534,37 +1561,41 @@ C. Geo-redundant storage (GRS):
 E. Hierarchical namespace: 
 - T**he hierarchical namespace is required for Azure Data Lake Storage,** as it enables the storage account to support the data lake's file system structure.
 
-So, the correct options are B, C, and E.
-
-## Lifecycle Policy
+## :star: ARM Lifecycle Management Policy
 
 You have an Azure Storage account named storage1 that contains two containers named container1 and container2
 
 You periodically take blob snapshots of critical blobs.
 
 ![alt text](image-442.png)
-
 ![alt text](image-443.png)
-Correct, YNN.
 
-Y - See section tierToCool
+Y 
+- See section tierToCool
 
-N - rule1 only applies to container1, not container2, see section prefixMatch
+N 
+- `rule1` only applies to `container1`, not `container2`, see section prefixMatch
 
-N - This one is a bit complicated. Rehydrated files (that were in the archive tier first and then returned to hot or cool) wouldn't necessarily be archived after 30 days - as there's a condition that the last tier change must be at least 7 days ago. (I'll leave it open how these files became archived in the first place, before 30 days after creation...)
+N 
+- This one is a bit complicated.   
+Rehydrated files (that were in the archive tier first and then returned to hot or cool) wouldn't necessarily be archived after 30 days    
+as there's a condition that the last tier change must be at least 7 days ago.     
+(I'll leave it open how these files became archived in the first place, before 30 days after creation...)   
 
 
-## ARM storage rule
+## ARM blockbob for blobs whose prefixMatch is `finance` 
 
-You have an Azure Storage account named storage1 that contains a container named container1. 
+You have an Azure Storage account named `storage1` that contains a container named `container1`. 
 
-The container1 container stores thousands of image files.
+The `container1` container stores thousands of image files.
 
-You plan to use an Azure Resource Manager (ARM) template to create a blob inventory rule named rule1.
+You plan to use an Azure Resource Manager (ARM) template to create a blob inventory rule named `rule1`.  
 
-**You need to ensure that only blobs whose names start with the word `finance` are stored daily as a CSV file in container1.**
+**You need to ensure that only blobs whose names start with the word `finance` are stored daily as a CSV file in `container1`.**
 
-How should you complete `rule1`  
+How should you complete `rule1`?
+
+:a: 
 
 ![alt text](image-444.png)  
 
@@ -1573,8 +1604,7 @@ How should you complete `rule1`
 • Ensure that the SAS can only be used to enumerate and download blobs stored in container1.
 • Use the principle of least privilege.
 
-
-## Roles and Storage Account Permission
+## :star: Roles and Storage Account Permission
 
 ![alt text](image-447.png)
 ![alt text](image-446.png)
@@ -1594,17 +1624,18 @@ ANSWERS = N-N-N
 
 You can use the access key to authorize requests to Azure Storage using Shared Key authorization or SAS tokens
 
-## aks deployment
+## AKS deployment
 
-You deploy an Azure Kubernetes Service (AKS) cluster named AKS1.
+You deploy an Azure Kubernetes Service (AKS) cluster named AKS1. 
 
 :x: Solution: From Azure CLI, you run az aks.
 :o: Solution: From Azure CLI, you run the kubectl client.
-:x: From Azure CLI, you run azcopy.
+:x: From Azure CLI, you run `azcopy`.
 
-## Azure Log Analytics workspace & Monitoring Agent on VM & Alert in AZ Monitor 
+## create an Alert via Azure Log Analytic & AZ Monitor 
 
 You have an Azure virtual machine named VM1 that runs Windows Server 2016.
+
 You need to create an alert in Azure when more than two error events are logged to the System event log on VM1 within an hour.
 
 :x: **You create an Azure storage account and configure shared access signatures (SASs)**.   
@@ -1626,15 +1657,18 @@ You Install the Microsoft Monitoring Agent VM agent to VM1 > This is Correct
 1. Log analytics agent
 Install in VM.
 1. Log analytics workspace 
-collect the log files from Log Analytics Agent.
+Collect the log files from Log Analytics Agent.
 1. Azure Monitor
 Create alert based on logs read from Log Analytics Workspace.
 
-## Move app from vnet to another
+## Move APP from VNET to another
 
 ![alt text](image-451.png)
 ![alt text](image-452.png)
-We cannot just move a virtual machine between networks. 
+
+:a: 
+
+We cannot just move a virtual machine between networks.   
 
 What we need to do is identify the disk used by the VM, delete the VM itself while retaining the disk, and recreate the VM in the target virtual network and then attach the original disk to it.
 
@@ -1643,21 +1677,26 @@ What we need to do is identify the disk used by the VM, delete the VM itself whi
 ![alt text](image-453.png)
 ![alt text](image-454.png)
 
-## web app plan
+## create how many web app plan
 
 ![alt text](image-450.png)
 
 Box 1: ASP1 and ASP3 only
-ASP.NET Core apps can be hosted both on Windows or Linux.
-The region in which your app runs is the region of the App Service Plan is in.
-ASP2 is in Central US, not the same as WebApp1. Different locations.
+`ASP.NET Core` apps can be hosted both on Windows or Linux.  
+
+The region in which your app runs is the region of the App Service Plan is in.  
+
+ASP2 is in Central US, not the same as WebApp1. 
+
+Different locations.
 
 Box 2: ASP1 only
 ASP.NET apps can be hosted on Windows only. Only ASP1 is in the same Location as the WebApp2 (West US).
 
 ## post deployment
 
-![alt text](image-449.png)
+
+![alt text](image-448.png)
 
 Correct Answer: A and D
 
@@ -1670,12 +1709,10 @@ Scripts can be downloaded from Azure storage or GitHub, or provided to the Azure
 The Custom Script extension integrates with Azure Resource Manager templates, and can also be used with the Azure CLI, Azure PowerShell, Azure portal, or the REST API
 The following Custom Script Extension definition downloads a sample script from GitHub, installs the required packages, then writes the VM instance hostname to a basic HTML page.
 
-Reference:
-https://docs.microsoft.com/en-us/azure/virtual-machine-scale-sets/tutorial-install-apps-template
+> https://docs.microsoft.com/en-us/azure/virtual-machine-scale-sets/tutorial-install-apps-template
 
-![alt text](image-448.png)
 
-## Scale in/out web service plan
+## Scale up/out web service plan
 
 ![alt text](image-455.png)
 
@@ -1688,7 +1725,7 @@ At this point, you have the option to select `Upgrade` and go to the Scale tab o
 
 - Scale up: Get more CPU, memory, disk space, and extra features like dedicated virtual machines (VMs), custom domains and certificates, staging slots, autoscaling, and more.
 - Scale out: Increase the number of VM instances that run your app. 
-ou can scale out to as many as 30 instances
+you can scale out to as many as 30 instances
 
 ## Modify variable in resources section
 
@@ -1711,30 +1748,26 @@ No more than 20% of the Scale Set upgrading at any time, then 2 machines out of 
 For the regions that support zonal deployment of virtual machine scale sets and this option is selected, the default value of the fault domain count is `1` for each of the zones.   
 - `FD=1` in this case implies that the VM instances belonging to the scale set will be spread across many racks on a best effort basis.  
 
-
 Reference:  
 - https://docs.microsoft.com/en-us/azure/virtual-machines/manage-availability
 - https://docs.microsoft.com/en-us/learn/modules/build-app-with-scale-sets/2-features-benefits-virtual-machine-scale-sets
 - https://docs.microsoft.com/en-us/azure/virtual-machine-scale-sets/virtual-machine-scale-sets-automatic-upgrade
 
-## Create Log Analytics for error events on VM
+## Error Event : Log Analytics & Agent & Monitor
 
 You have an Azure virtual machine named VM1 that runs Windows Server 2016.
 
 You need to create an alert in Azure when more than two error events are logged to the System event log on VM1 within an hour.
 
-Solution: You create an event subscription on VM1. You create an alert in Azure Monitor and specify VM1 as the source
-Does this meet the goal?
+:x: You create an event subscription on VM1. You create an alert in Azure Monitor and specify VM1 as the source
 
-:x: 
-You need to specify Log Analytics as the source for this alert, and not the VM as source for the alert.
+:o: You need to specify Log Analytics as the source for this alert, and not the VM as source for the alert.
 
 1. You create an Azure Log Analytics workspace and configure the data settings.
 2. You install the Microsoft Monitoring Agent on VM1.
 3. You create an alert in Azure Monitor and specify the Log Analytics workspace as the source.
 
-
-## Redeployment
+## Redeployment (MOVE VM to Different Host)
 
 You have an Azure virtual machine named VM1.  
 
@@ -1748,12 +1781,11 @@ You need to move VM1 to a different host immediately.
 :x: From the Overview blade, you move the virtual machine to a different subscription.
 :x: From the Update management blade, you click Enable.
 
-## Custom DNS record
+## Custom DNS record for Custom Domain
 
 ![alt text](image-458.png)
 
-
-## :star::star: delete VM when change it to different RG and add Network
+## :star::star: delete VM when change it to different RG and connects a VM
 
 ![alt text](image-459.png)
 
@@ -1762,10 +1794,11 @@ You need to move VM1 to a different host immediately.
 Instead, you should delete `VM1`. Then recreate VM1 and add the network interface for VM1.
 
 > To migrate a VM from a VNET to another VNET.   
-> The only option is to delete the VM and redeploy it using a new NIC and NIC connected to VNET2.  
+> **The only option is to delete the VM and redeploy it using a new NIC and NIC connected to VNET2.**  
 
 - When you create an Azure Virtual Machine (VM), you must create a Virtual Network (VNet) or use an existing VNet. 
-- You can change the subnet a VM is connected to after it's created, but you cannot change the VNet. You can also change the size of a VM.
+- You can change the subnet a VM is connected to after it's created, but you cannot change the VNet. 
+You can also change the size of a VM.
 - Changing VNET is not an easy task once VM is deployed and running.  
 
 ## VCpu
@@ -1849,26 +1882,29 @@ The "restartPolicy" is set as "OnFailure".
 ![alt text](image-461.png)
 While resizing, the VM must be in a stopped state, therefore there will be a downtime.
 
-## swapping slots
+## test staging and swap it with production
 
 ![alt text](image-460.png)  
-1. Deploy the App to “webapp1-test” which is staging environment and test it there.
+1. Deploy the App to `webapp1-test` which is staging environment and test it there.
 2. Once the test is success swap the slots, so the new changes will be available under production.  
 
-## Using Network Watcher to Check flow log
+## Using Network Watcher x AZ storage account x Microsoft.Insights  
 
-You have an Azure subscription named `Subscription1` that has the following providers registered:
-- Authorization
-- Automation
-- Resources
-- Compute
-- KeyVault
-- Network
-- Storage
-- Billing
-- Web
+You have an Azure subscription named `Subscription1` that has the following providers registered :
+```
+Authorization
+Automation
+Resources
+Compute
+KeyVault
+Network
+Storage
+Billing
+Web
+```
 
 Subscription1 contains an Azure virtual machine named VM1 that has the following configurations:
+
 ```
 Private IP address: 10.0.0.4 (dynamic)
 Network security group (NSG): NSG1
@@ -1882,6 +1918,7 @@ Location: East US
 You need to record all the successful and failed connection attempts to VM1. 
 
 Which three actions should you perform? Each correct answer presents part of the solution.  
+
 A. Enable Azure Network Watcher in the East US Azure region.  
 B. Add an Azure Network Watcher connection monitor.  
 C. Register the MicrosoftLogAnalytics provider.  
@@ -1890,12 +1927,13 @@ E. :o: `Register the Microsoft.Insights resource provider. `
 F. :o: `Enable Azure Network Watcher flow logs.`  
 
 
-https://docs.microsoft.com/en-us/azure/network-watcher/network-watcher-monitoring-overview
+> https://docs.microsoft.com/en-us/azure/network-watcher/network-watcher-monitoring-overview  
 
-https://docs.microsoft.com/en-us/azure/network-watcher/network-watcher-nsg-flow-logging-portal
+> https://docs.microsoft.com/en-us/azure/network-watcher/network-watcher-nsg-flow-logging-portal  
 
 
 :a: 
+
 **When you create or update a virtual network in your subscription, Network Watcher will be enabled automatically in your Virtual Network's region.** 
 - There is no impact to your resources or associated charge for automatically enabling Network Watcher. 
 
@@ -1912,18 +1950,18 @@ https://docs.microsoft.com/en-us/azure/network-watcher/network-watcher-nsg-flow-
 6. Download logged data
 7. View logged data
 
-## Fast Way to Deploy VM Scale Set
+## Fast Way to Deploy VM Scale Set by ScaleSetVM orchestration mode
 
-![alt text](image-469.png)
+![alt text](image-469.png)  
 
-Answer is correct (D).
 the main idea is to create 5 VMs ASAP. 
-
-To do this you should let Azure do it for you with the least steps. either by using ARM template which is not mentioned here or VM scale set. 
+- To do this you should let Azure do it for you with the least steps.   
+- either by using ARM template which is not mentioned here or VM scale set. 
 
 That leaves us with 2 options C or D. 
 - C : `VM (virtual machines) orchestration mode` is like `unmanaged Scale set` where you add the VMs manually to the scale set as a unmanaged group. 
-- while D : `ScaleSetVM orchestration mode` is managed scale set by Azure where it is based on configuration set during the setup of the VM Scale set
+
+- D : `ScaleSetVM orchestration mode` is managed scale set by Azure where it is based on configuration set during the setup of the VM Scale set
 
 ## How many web app service plans you need 
 
@@ -1932,13 +1970,12 @@ That leaves us with 2 options C or D.
 **Since web server app plane can only have one OS** 
 
 The correct answer is still B, but probably this question will soon require some update.
-- current LTS versioon of .NET Core is called .NET 6 (goes both in windows and Linux)
+- current LTS version of `.NET` Core is called .NET 6 (goes both in windows and Linux)
 - .NET 4.7 is not available (.NET 4.8 is) - this goes in windows only
-- PHP is available in versions 8.0, 8.1, 8.2 --> this goes in liinux only
+- PHP is available in versions 8.0, 8.1, 8.2 (this goes in linux only)
 - Ruby support has ended in April 2023.
 
-
-## Budget
+## :star: Budget
 
 You have a pay-as-you-go Azure subscription that contains the virtual machines shown in the following table.
 
@@ -1946,46 +1983,49 @@ You have a pay-as-you-go Azure subscription that contains the virtual machines s
 
 ![alt text](image-472.png)
 
-The AG1 action group contains a user named admin@contoso.com only.
+The `AG1` action group contains a user named `admin@contoso.com` only.
 
-Correct Answer:
+Correct Answer:  
 
-Box 1: VM1 and VM2 continue to run
-The Budget’s scope is RG1, so only VM1 will be handled.
-When the budget thresholds you've created are exceeded, only notifications are triggered.
-To stop resources, you need to setup additional things, none of which are mentioned in the question.
+Box 1: `VM1` and `VM2` continue to run
 
+- The Budget’s scope is `RG1`, so only `VM1` will be handled.
+
+When the budget thresholds you've created are exceeded, only notifications are triggered.    
+- To stop resources, you need to setup additional things, none of which are mentioned in the question.  
 
 Box 2: one email notification will be sent each month.
 
-Budget alerts have scope in Resource Group RG1, which includes VM1, but not VM2.
-VM1 consumes 20 Euro/day, so 20 euros * 30 days = 600 euros.
-The 50%, 500 Euro limit, will be reached in 25 days (25*20 = 500), so an email will be sent.
+Budget alerts have scope in`RG1`, which includes VM1, but not VM2.
+- VM1 consumes `20 Euro/day`, so 20 euros * 30 days = 600 euros.  
+
+The `50%`, `500` Euro limit, will be reached in 25 days (`25*20 = 500`), so an email will be sent.  
 The 70% and 100% alert conditions will not be reached within a month, and they don't trigger email actions anyway, because AG1 action group contains a user.
 
-Credit alerts: Credit alerts are generated automatically at 90% and at 100% of your Azure credit balance. Whenever an alert is generated, it's reflected in cost alerts and in the email sent to the account owners. 90% and 100% will not be reached though.
+Credit alerts: Credit alerts are generated automatically at 90% and at 100% of your Azure credit balance.
+
+Whenever an alert is generated, it's reflected in cost alerts and in the email sent to the account owners. `90%` and `100%` will not be reached though.
 
 
-## Tag for RG
+## :star: RG is not considered as resource
 
-You have an Azure subscription named Subscription1 that contains the following resource group:  
+You have an Azure subscription named `Subscription1` that contains the following resource group:  
 ``` 
 Name: RG1
 Region: West US
-Tag: `tag1`: `value1`
+Tag: tag1: value1
 ```
 
-You assign an Azure policy named `Policy1` to Subscription1 by using the following configurations:  
+You assign an Azure policy named `Policy1` to `Subscription1` by using the following configurations:  
 ```
 Exclusions: None
 Policy definition: Append a tag and its value to resources
 Assignment name: Policy1
 Parameters:
-Tag name: tag2
-Tag value: value2
+Tags: tag2 : value2
 ```
 
-After Policy1 is assigned, you create a storage account that has the following configuration:
+After `Policy1` is assigned, you create a storage account that has the following configuration :  
 ```
 Name: storage1
 Location: West US
@@ -1994,48 +2034,53 @@ Tags: tag3 : value3
 ```
 
 You need to identify which tags are assigned to each resource.
+
 What should you identify?
+
 ![alt text](image-477.png)
 
-Assigning a policy goes through all the items that might be affected. 
+Assigning a policy goes through all the items that might be affected.   
+- Meaning this new policy would go through resources and check if they fit the filters to take action on.   
 
-meaning this new policy would go through resources and check if they fit the filters to take action on. 
+In this case, RG1 doesn't get anything assigned to it because **resource groups are not considered resources**. 
+- If the first part was not a resource group.
+lets say a VM, then the policy would have added (appended) another tag to already existing one and it would have tag 1 and tag 2. 
 
-in this case, RG1 doesn't get anything assigned to it because resource groups are not considered resources. 
+In case of the storage account, that is considered a resource so it keeps its own tag 3 and the policy adds tag 2 alongside it  (no tag 1 coz it created after tag 1)
 
-if the first part was not a resource group but lets say a VM, then the policy would have added (appended) another tag to already existing one and it would have 1 and 2. 
-
-in case of the storage account, that is considered a resource so it keeps its own tag 3 and the policy adds tag 2 alongside it  
-
-## AKS & Kubectrl Creation
-
+## :star: `az aks` AKS configuration & Azure Portal for AKS Autoscaler 
 
 ![alt text](image-478.png)
 
-:a: :
-We need to configure autoscaler for the AKS cluster. We do not want to scale Kubernetes pods, so kubectl command is not needed.
+:a: 
 
-A: kubectl command is used for configuring Kubernetes and not AKS cluster.
-B: The az aks command is used for the AKS cluster configuration.
-C: Set-AzVm cmdlet is used for VMs.
-D: Azure portal, under node pools, press scale, then choose auto scale.
-E: Set-AzAks, creates or updates an AKS cluster, the correct cmdlet is Set-AzAksCluster.
+We need to configure autoscaler for the AKS cluster. 
+- We do not want to scale Kubernetes pods, so kubectl command is not needed.
+
+A: `kubectl` command is used for configuring Kubernetes and not AKS cluster.
+B: The `az aks` command is used for the AKS cluster configuration.
+C: `Set-AzVm` cmdlet is used for VMs.
+D: `Azure portal`, under node pools, press scale, then choose auto scale.
+E: `Set-AzAks`, creates or updates an AKS cluster, the correct cmdlet is Set-AzAksCluster.
 
 AKS clusters can scale in one of two ways:
-- The cluster autoscaler watches for pods that can't be scheduled on nodes because of resource constraints. The cluster then automatically increases the number of nodes.
-- The horizontal pod autoscaler uses the Metrics Server in a Kubernetes cluster to monitor the resource demand of pods. If an application needs more resources, the number of pods is automatically increased to meet the demand.
+1. The cluster autoscaler watches for pods that can't be scheduled on nodes because of resource constraints. The cluster then automatically increases the number of nodes.
 
-## Roles for Local Administrator :star::star:  
+2. The horizontal pod autoscaler uses the Metrics Server in a Kubernetes cluster to monitor the resource demand of pods. If an application needs more resources, the number of pods is automatically increased to meet the demand.
+
+## :star::star: Roles for Local Administrator 
 
 ![alt text](image-473.png)  
-First the only user who can join Azure AD devices is `User 1`. 
-- Since User1 is admin on machine. So, the machine can be added.
+First the only user who can join Azure AD devices is `User 1`.  
+- Since `User1` is admin on machine.  
+So, the machine can be added.  
 
 Local Administrators Group on Microsoft Azure-joined Devices
 By default, the ones are local admins :  
 1. global administrator
 2. device owners (device administrators). 
-3. are managed under :arrow_down:
+
+admins are managed under :arrow_down:
 ![alt text](image-474.png)
 Since this is not mentioned, so we can assume default.
 
@@ -2045,13 +2090,13 @@ Local Administrators Group on Microsoft Azure-joined Devices:
 
 - To manage a Windows device, you need to be a member of the local administrators group on that device.
 
-:one: Microsoft Azure Global Administrator role: 
+:one: Microsoft Azure `Global Administrator` Role
 - This role has broad administrative privileges across the entire Azure environment.
 
-:two: Microsoft Azure Joined Device Local Administrator role: 
+:two: Microsoft Azure `Joined Device Local Administrator` Role: 
 - This role is specific to the joined device and provides local administrative rights.
 
-:three: The user 
+:three: The user (device OWNER)
 - performing the Azure join is also added to the local administrators group.
 
 :arrow_up:
@@ -2061,7 +2106,7 @@ By adding these roles, you can update the users who can manage a device anytime 
 The Joined Device Local Administrator role 
 - follows the principle of least privilege (PoLP) by granting only necessary rights to manage the device.
 
-## Action Group Configuration for Alert Rule
+## :star: Alert Rate limit thresholds
 
 You have an Azure subscription named Subscription1.
 In Subscription1, you create an alert rule named Alert1.
@@ -2087,38 +2132,41 @@ Note: Rate limiting is a suspension of notifications that occurs when too many a
 Rate limiting ensures that alerts are manageable and actionable.
 
 The rate limit thresholds are:
-- SMS: No more than a SMS every 5 minutes.
-- Voice: No more than a Voice call every 5 minutes.
-- Email: No more than 100 emails in an hour.
+- `SMS`: No more than a SMS every 5 minutes.
+- `Voice`: No more than a Voice call every 5 minutes.
+- `Email`: No more than 100 emails in an hour.
 - Other actions are not rate limited.
 
 Reference:
 https://docs.microsoft.com/en-us/azure/azure-monitor/platform/alerts-rate-limiting
 
-## az acr build command
+## az acr build deploy image to aks
 
 ![alt text](image-479.png)
 
-## Web Server & DNS server
+## Web Server 80 & DNS server 53
 
-![alt text](image-480.png)
-![alt text](image-481.png)
-Box 1:
-- Rule2 blocks ports 50-60, which includes port `53`, the DNS port. 
-- Internet users can reach to the Web server, since it uses port 80.
+![alt text](image-480.png)  
+![alt text](image-481.png)  
 
-Box 2:
-- If Rule2 is removed internet users can reach the DNS server as well.
+Box 1 :  
+- `Rule2` blocks ports` 50-60`, which includes port `53`, the DNS port.  
+- Internet users can reach to the Web server, since it uses port 80.  
 
-Note: Rules are processed in priority order, with lower numbers processed before higher numbers, because lower numbers have higher priority.   
-Once traffic matches a rule, processing stops. As a result, any rules that exist with lower priorities (higher numbers) that have the same attributes as rules with higher priorities are not processed.
+Box 2 :  
+- If `Rule2` is removed internet users can reach the DNS server as well.  
 
-## Configure VM from an ARM
+Note: Rules are processed in priority order, with lower numbers processed before higher numbers, because lower numbers have higher priority.  
+Once traffic matches a rule, processing stops. 
 
-![alt text](image-482.png)
+As a result, any rules that exist with lower priorities (higher numbers) that have the same attributes as rules with higher priorities are not processed.  
 
-## 
+## Configure NEW VM from an ARM exported from a VM
 
+What can you configure ? From a ARM exported from a VM ?  
+![alt text](image-482.png)  
+
+## :star: Runbook can scale up/down size of VM
 ![alt text](image-483.png)  
 
 Correct Answer: B
@@ -2127,10 +2175,12 @@ Here we need to modify the size of the VM to increase the number of vCPU's assig
 - This can be included as a task in the runbook. 
 - The VM size property can be modified by a runbook that is triggered by metrics, but you can schedule it monthly.
 
-C: Scheduled vertical scaling could be a solution, **but then you don't need a scheduled runbook** and it states that it does not support multiple active instances. Scale Set is not a n option.
+`C`: Scheduled vertical scaling could be a solution, **but then you don't need a scheduled runbook** and it states that it does not support multiple active instances. Scale Set is not a n option.
 
-E: DSC is only useful to `keep` the resources on a VM (OS, File shares, etc.) in a consistent state, not to change VM properties.
-For example : You need to ensure that NGINX is available on all the virtual machines after they are deployed.
+`E`: DSC is only useful to `keep` the resources on a VM (OS, File shares, etc.) in a consistent state, not to change VM properties.
+
+For example :   
+You need to ensure that NGINX is available on all the virtual machines after they are deployed.
 
 
 ## DSC & Azure Custom Script Extension
@@ -2139,13 +2189,13 @@ For example : You need to ensure that NGINX is available on all the virtual mach
 
 There are several versions of this question in the exam. The question has two correct answers:
 1. a Desired State Configuration (DSC) extension
-2. Azure Custom Script Extension
+2. a Azure Custom Script (ACS) Extension
 
 The question can have other incorrect answer options, including the following:
 ✑ the Publish-AzVMDscConfiguration cmdlet
 ✑ Azure Application Insights
 
-## Auto-Scale of App Service Plan 
+## :star: Auto-Scale of App Service Plan 
 
 You have the App Service plan shown in the following exhibit.
 
@@ -2169,14 +2219,16 @@ Box 2: 4
 So, from the default of 1 it will it scale in to the max 5 (60/5 = 12, which means 6 times scale out, because we have 5 minutes period of cool down).   
 Then when it drops to 25% for 9 minutes and it will scale in once after 5 mins (since the average of the last 5 minutes is under 30% ), so it will decrease by 1, so 4 in total. Then it will have a cooldown of 5 minutes before scaling in again, but since only 4 minutes left from 9 minutes (9-5 = 4), it won't scale in again. So, 4 in total.
 
-## 
+## Integration Services
 
 You have an Azure subscription.
-You have an on-premises virtual machine named VM1. The settings for VM1 are shown in the exhibit  
+You have an on-premises virtual machine named VM1. 
 
+The settings for VM1 are shown in the exhibit  
 ![alt text](image-488.png)
 
 You need to ensure that you can use the disks attached to VM1 as a template for Azure virtual machines.
+
 What should you modify on VM1?
 A. the memory
 B. the network adapters
@@ -2184,28 +2236,23 @@ C. the hard drive
 D. the processor
 E. Integration Services
 
-##  
-
-![alt text](image-489.png)
-
 ## Scale Set while VM resizing OR O.S Updating
 
 You have an Azure subscription that contains a virtual machine 
 scale set.
 
-The scale set contains four instances that have the following configurations  
+The scale set contains **four instances** that have the following configurations  
 ```bash 
 Operating system: Windows Server 2016
 Size: Standard_D1_v2
 ```
-
 ![alt text](image-490.png)    
 ![alt text](image-491.png)  
-Box 1: 4
+Box 1: `4`
 **If you resize the Scale Set all the VMs get resized at once**, thus 4 is the correct answer.
 
-Box 2: 1
-**Automatic OS updates update 20% of the VMs at once, with a minimum of 1 VM instance at a time. Also 20% of 4 = 0.8.**
+Box 2: `1`
+**Automatic OS updates update `20%` of the VMs at once, with a minimum of 1 VM instance at a time. Also 20% of 4 = 0.8.**
 
 ## ransomware
 
@@ -2240,7 +2287,7 @@ Reference:
 - https://docs.microsoft.com/en-us/azure/backup/backup-azure-restore-files-from-vm
 - https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/backup/backup-azure-
 
-## Backup Pre-Check 
+## Backup Pre-Check Warning Status : WaAppAgent
 
 ![alt text](image-492.png)
 
