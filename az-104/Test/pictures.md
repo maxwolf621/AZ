@@ -2246,13 +2246,14 @@ The scale set contains **four instances** that have the following configurations
 Operating system: Windows Server 2016
 Size: Standard_D1_v2
 ```
+
 ![alt text](image-490.png)    
 ![alt text](image-491.png)  
 Box 1: `4`
 **If you resize the Scale Set all the VMs get resized at once**, thus 4 is the correct answer.
 
 Box 2: `1`
-**Automatic OS updates update `20%` of the VMs at once, with a minimum of 1 VM instance at a time. Also 20% of 4 = 0.8.**
+Automatic OS updates update `20%` of the VMs at once, with a minimum of 1 VM instance at a time. Also `4 * 0.2 = 0.8`.
 
 ## ransomware
 
@@ -2267,96 +2268,101 @@ You need to restore the latest backup of VM1.
 
 To which location can you restore the backup?
 
+Box 1: Any Windows computer that has Internet connectivity  
 
-Box 1:   
-Any Windows computer that has Internet connectivity  
 For files recovery, you download and run a windows executable to map a network drive.
+- It can only run when the OS meets the requirements.   
 
-It can only run when the OS meets the requirements.   
+Any computer running `Windows Server 2016` or `Windows 10` is suitable. 
 
-Any computer running Windows Server 2016 or Windows 10 is suitable. 
+**File recovery can be done from any machine on the Internet.**  
 
-File recovery can be done from any machine on the Internet.  
+- Note:  
+There might be compatibility issues with any Windows computer, so consider VM1 and VM2 only as an answer.
 
-Note: There might be compatibility issues with any Windows computer, so consider VM1 and VM2 only as an answer.
-
-Box 2:
-VM1 or a new Azure virtual machine only For restoring a VM, you can choose 'Create new' or 'Replace existing'.
+Box 2: VM1 or a new Azure virtual machine only For restoring a VM, you can choose `Create new` or `Replace existing`.
 
 Reference:
 - https://docs.microsoft.com/en-us/azure/backup/backup-azure-restore-files-from-vm
 - https://github.com/MicrosoftDocs/azure-docs/blob/master/articles/backup/backup-azure-
 
-## Backup Pre-Check Warning Status : WaAppAgent
+## Backup Pre-Check Warning Status : AZ VM AGENT WaAppAgent
 
 ![alt text](image-492.png)
 
 ## 
 
-You have an Azure virtual machine named VM1. VM1 was deployed by using a custom Azure Resource Manager template named ARM1.json.
-You receive a notification that VM1 will be affected by maintenance.
-You need to move VM1 to a different host immediately.
+You have an Azure virtual machine named VM1. 
+
+VM1 was deployed by using a custom Azure Resource Manager template named `ARM1.json`.  
+
+You receive a notification that VM1 will be affected by maintenance.  
+
+You need to move VM1 to a different host immediately.  
 
 Solution: From the Overview blade, you move the virtual machine to a different resource group.
 
-## ARM configuration update/fault domain
+## ARM update/(2 or 3)fault domain configuration
 
-You have an Azure subscription.
+You have an Azure subscription.  
 
-You plan to use Azure Resource Manager templates to deploy `50` Azure virtual machines that will be part of the same availability set.
+You plan to use Azure Resource Manager templates to deploy `50` Azure virtual machines that will be part of the same availability set.  
 
-You need to ensure that as many virtual machines as possible are available if the fabric fails or during servicing.
+You need to ensure that as many virtual machines as possible are available if the **fabric fails** or **during servicing**.  
 
-How should you configure the template? To answer, select the appropriate options in the answer area.
-![alt text](image-493.png)
+How should you configure the template? 
+![alt text](image-493.png)  
 
 :a: 
 
-box 1  
+box 1  `2 or 3`
 Use two fault domains.
-2 or 3 is max, depending on which region you are in.
+2 or 3 is max, depending on which region you are in.  
 
-box 2  
+box 2 `20`
 Use 20 for platformUpdateDomainCount
-Increasing the update domain (platformUpdateDomainCount) helps with capacity and availability planning when the platform reboots nodes. A higher number for the pool (20 is max) means that fewer of their nodes in any given availability set would be rebooted at once.
-
+Increasing the update domain helps with capacity and availability planning when the platform reboots nodes.  
+- A higher number for the pool (20 is max) means that fewer of their nodes in any given availability set would be rebooted at once.    
 
 ## Error Event Logged
 
-You have an Azure virtual machine named VM1 that runs Windows Server 2016.
-You need to create an alert in Azure when more than two error events are logged to the System event log on VM1 within an hour.
+You have an Azure virtual machine named VM1 that runs Windows Server 2016.  
+
+You need to create an alert in Azure when more than two error events are logged to the System event log on VM1 within an hour.  
 
 Solution: You create an Azure Log Analytics workspace and configure the Agent configuration settings. You install the Microsoft Monitoring Agent on VM1. You create an alert in Azure Monitor and specify the Log Analytics workspace as the source.
 
 ## Scale Set Scale-in/out
 
-
 You deploy a virtual machine scale set that is configured  
 ![alt text](image-494.png)  
 
-![alt text](image-495.png)
+![alt text](image-495.png)  
 
-box-1: 3
-box-2: 1
+box-1: `3`
+box-2: `1`
 
-## SKU of App Service Plan (Region Limits)
+## SKU of App Service Plan Limit by Region
 
 ![alt text](image-496.png)
 
-What an absolutely useless question. 
+- You can have 
+`10` Free  
+and `100` Standard  
+`100` Premium ASP per Region.
 
-Anyways, you can have `10` Free, and `100` Standard or `100` Premium ASP per Region.
-
-## ARM VM creation commands 
+## ARM VM creation `New-Az` command
 
 ![alt text](image-497.png)  
 Box 1: `New-AzResourceGroupDeployment`. 
 
-This cmdlet allows you to use a custom ARM template file to deploy resources to a resource group. For example:
+This cmdlet allows you to use a custom ARM template file to deploy resources to a resource group.   
+For example :  
 ```bash 
 New-AzResourceGroup `
 -Name $resourceGroupName `
--Location "$location"
+-Location $location
+
 New-AzResourceGroupDeployment `
 -ResourceGroupName $resourceGroupName `
 -TemplateUri "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/quickstarts/microsoft.compute/vm-simple-windows/azuredeploy.json" `
@@ -2367,22 +2373,24 @@ New-AzResourceGroupDeployment `
 
 Box 2: `-ResourceGroupName RG1`. 
 
-It’s one of parameters of New-AzResourceGroupDeployment to specify to which resource group you want to deploy resources.
+It's one of parameters of New-`AzResourceGroupDeployment` to specify to which resource group you want to deploy resources.
 
-You could use New-AzVm to create a VM, but it doesn’t use a template. You would need to provide all parameters in the command line.
+You could use `New-AzVm` to create a VM, but it doesn't use a template. 
+- You would need to provide all parameters in the command line.
 
 
-## deploy a YAML file to AKS1
+## deploy a YAML file to AKS `kubectl apply -f`
 
 You deploy an Azure Kubernetes Service (AKS) cluster named AKS1.
 You need to deploy a YAML file to AKS1.
+
 Solution: From Azure Cloud Shell, you run az aks.
 
 ```bash 
 kubectl apply -f <file_name>.yaml
 ```
 
-## Daily Backup for web app
+## :star: Daily Backup for App SERVICE into storage acc.
 
 You have an Azure App Service app named `WebApp1` that contains two folders named Folder1 and Folder2.
 
@@ -2405,66 +2413,68 @@ The question asks about an App Service, this one backs up to a storage account.
 
 You develop the following Azure Resource Manager (ARM) template to create a resource group and deploy an Azure Storage account to the resource group.
 
-
 D is correct here.
 
-We are creating RG and storage acc. in this RG.
-By using New-AzResourceGroupDeployment command -> "Adds an Azure deployment to a resource group."
+We are creating RG and storage account in this RG.
 
-## 
+By using `New-AzResourceGroupDeployment` command means 
+> Adds an Azure deployment to a resource group.
 
-![alt text](image-499.png)
+## Microsoft Azure Recovery Services Agent 
 
+![alt text](image-499.png)  
 
-Microsoft Azure Recovery Services Agent also known as MARS or Azure Backup Agent can be used to restore data for entire volume or just individual folders and files.
+:a: 
+`Microsoft Azure Recovery Services Agent` also known as `MARS` or `Azure Backup Agent` can be used to restore data for entire volume or just individual folders and files.  
 
-## create a virtual machine that will have multiple data disks
+## :star: Create a virtual machine that will have multiple data disks by ARM
 
 You need to use an Azure Resource Manager (ARM) template to create a virtual machine that will have multiple data disks.
-How should you complete the template? To answer, select the appropriate options in the answer area.
+
+How should you complete the template? 
 
 ![alt text](image-500.png)
 
+## Multiple NICs in VM
 
-## NIC in VNET
+![alt text](image-501.png)  
 
-![alt text](image-501.png)
 
-Multiple NICs allow a VM to connect to different subnets.
-
-VM must have at least one NIC. 
+:memo: A VM must have at least one NIC.  
 - **A virtual machine can have more than one NIC**, depending on the size of the VM you create.
 
-**Each NIC attached to a VM must exist in the same location and subscription as the VM**.
+:memo: Multiple NICs allow a VM to connect to different subnets.
 
-Each NIC must be connected to a VNet that exists in the same Azure location and subscription as the NIC.
+:memo: **Each NIC attached to a VM must exist in the same location and subscription as the VM**.
 
-## In which services can you run the images for win or linux
+:memo: Each NIC must be connected to a VNet that exists in the same Azure location and subscription as the NIC.
 
+## Services allow you run the images for Win or Linux
 
 ![alt text](image-502.png)
 ![alt text](image-503.png)
 
-Container Apps not supports to win
+> Container Apps not supports to WIN Server
 
-## Assign a managed identity to the App.
+## :question: Assign a managed identity to the App.
 
 ![alt text](image-504.png)
 
 I'm also in for answer B, since answer A needs a service principal. The only way to get one for a service is a managed identity (system or user generated).
 
-## ARM DependsON
+## ARM DependsON NIC for VM
 
 ![alt text](image-505.png)
-Therefore, the most direct and crucial dependency for VM1 among the listed resources is NIC1 (Option B). The NIC acts as the bridge between the VM and the other network resources like the virtual network, public IP, and network security group. Hence, it's essential to ensure that NIC1 is deployed before VM1.
 
+
+The most direct and crucial dependency for VM1 among the listed resources is NIC1 (Option B). 
+- The NIC acts as the bridge between the VM and the other network resources like the VNet, public IP, and NSG. Hence, it's essential to ensure that `NIC1` is deployed before VM1.
 
 ## deploy ARM New-AzSubscriptionDeployment 
 
 ![alt text](image-506.png)
 
-A is correct because RG is already mentioned in the template.
-
+A is correct because RG is already mentioned in the template.  
 How could be C ?
 You need to deploy a resource group to the subscription scope. The New-AzReesourceGroupDeployment deploy a resource inside the resource groupe scope.
 
@@ -2472,32 +2482,32 @@ You need to deploy a resource group to the subscription scope. The New-AzReesour
 
 ![alt text](image-507.png)
 
-## Which pricing plan should you choose, and which type of record should you use to verify the domain
+## Pricing plan Standard to auto-scaling, and domain TXT record type
 
 You need to configure a new Azure App Service app named WebApp1. The solution must meet the following requirements:
+- WebApp1 must be able to verify a custom domain name of `app.contoso.com`.
+- WebApp1 must be able to automatically scale up to eight instances.
+- Costs and administrative effort must be minimized.
 
-• WebApp1 must be able to verify a custom domain name of app.contoso.com.
-• WebApp1 must be able to automatically scale up to eight instances.
-• Costs and administrative effort must be minimized.
-
-Which pricing plan should you choose, and which type of record should you use to verify the domain? 
-
+Which pricing plan should you choose, and which type of record should you use to verify the domain?     
 ![alt text](image-508.png)
 
-WebApp1 must be able to verify a custom domain name of app.contoso.com. All paid tiers (Basic, Standard, Premium, Isolated) allow for custom domains.
-WebApp1 must be able to automatically scale up to eight instances. Auto-scaling is a feature that is available in the Standard, Premium, and Isolated tiers. It is not available in the Basic tier, which allows you to manually scale up to 3 instances.
+WebApp1 must be able to verify a custom domain name of app.contoso.com. 
+- All paid tiers (Basic, Standard, Premium, Isolated) allow for custom domains.
+
+WebApp1 must be able to automatically scale up to eight instances. 
+- Auto-scaling is a feature that is available in the `Standard`, `Premium`, and `Isolated` tiers.  
+It is not available in the `Basic` tier, which allows you to manually scale up to `3` instances.
+
 Costs and administrative effort must be minimized.
-Pricing Plan: Given these requirements, the best option is the "Standard" tier. It offers both auto-scaling and custom domains, while being less expensive than the Premium or Isolated tiers. The Basic tier does not support auto-scaling, and the Free and Shared tiers do not support custom domains or auto-scaling.
+- Pricing Plan: Given these requirements, the best option is the `Standard` tier.   It offers both auto-scaling and custom domains, while being less expensive than the `Premium` or `Isolated` tiers.  
+The Basic tier does not support auto-scaling   
+The Free and Shared tiers do not support custom domains or auto-scaling.  
 
-For verifying a custom domain, Azure uses a MX or TXT record. 
-The A record cannot be used for domain verification
-
-Pricing Plan: Standard
-Record Type: TXT
-
+For VERIFYING a custom domain, Azure uses a `MX` or `TXT` record. 
+- The `A` record cannot be used for domain verification
 
 ## num of web service plan depends on OS
-
 
 Can run only on Windows: .NET, ASP.NET
 Can run only on Linux: Python
@@ -2514,7 +2524,7 @@ Python (on Linux)
 HTML
 Custom container (Windows or Linux)
 
-## web app autoscale rule
+## :star: web app auto-scale rule with cooling down minute
 
 You have an Azure App Service app named App1 that contains two running instances.
 
@@ -2528,9 +2538,9 @@ What is the maximum number of instances for App1 during the 30-minute period?
 
 :a: 
 Start at 2 instances, after 15 min, > 70%, then +1 instance
-Cooling 5 mins, still >70%, then +1 instance (30-5)  
-Cooling 5 mins, still > 70%, then +1 instance (25-5)  
-Cooling 5 mins, still >70% (20-5), since max 5 instances, keep 5 instances only
+Cooling 5 mins, still >70%, then +1 instance  
+Cooling 5 mins, still >70%, then +1 instance 
+Cooling 5 mins, still >70%, since max 5 instances, keep 5 instances only
 
 ## OS disk of VM can be used as a source for a version of image
 
@@ -2544,7 +2554,7 @@ In ComputeGallery1, you create a virtual machine image definition named Image1
 
 Neither the region, vCPU count, nor the VM generation had any impact on my ability to select a particular VM OS disk as a source for an image version.
 
-## 
+## ARM New-AzSubscriptionDeployment
 
 ![alt text](image-512.png)
 
@@ -2555,20 +2565,23 @@ Neither the region, vCPU count, nor the VM generation had any impact on my abili
 For subscription level deployments, you must provide a location for the deployment.    
 The location of the deployment is separate from the location of the resources you deploy.  
 **The deployment location specifies where to store deployment data**.
-2. No. Only `RG0` and `RG3` will be created, `RG1` and `RG2` already exist and can't be created.
-3. No. `RG3` will be created in east region.
+2. No. 
+Only `RG0` and `RG3` will be created, `RG1` and `RG2` already exist and can't be created.
+3. No. 
+`RG3` will be created in `eastus` region.
 
-## ARM Join Devices `type` & `ProtectedSettings`
+## ARM Join Devices `type` & `ProtectedSettings` with password
 
 ![alt text](image-516.png)  
-
-https://docs.microsoft.com/en-us/azure/active-directory-domain-services/join-windows-vm-template  
 
 uses the `Microsoft.Compute/virtualMachines/extensions` resource type to install the Active Directory domain join extension.  
 
 Parameters are used that you specify at deployment time.   
 
 When the extension is deployed, the VM is joined to the specified managed domain.  
+
+> https://docs.microsoft.com/en-us/azure/active-directory-domain-services/join-windows-vm-template  
+
 
 ## K8s Modify the Network configuration setting & AKS-Managed Azure Active Directory
 
@@ -2579,14 +2592,14 @@ When the extension is deployed, the VM is joined to the specified managed domain
 1) Modify the Network configuration setting
 "To run an AKS cluster that supports node pools for Windows Server containers,**your cluster needs to use a network policy that uses Azure CNI (advanced) network plugin.**"
 
-If the Network configuration is Kubenet, you will not be able to add a windows node pool, you have to change it from Kubenet to Azure CNI first.  
+2. If the Network configuration is Kubenet, you will not be able to add a windows node pool, you have to change it from Kubenet to Azure CNI first.  
 Next step, you need to add a new node pool  
-All AKS clusters are created with a default first node pool, which is Linux-based. This node pool contains system services that are needed for the cluster to function. ...The first Linux-based node pool can't be deleted unless the AKS cluster itself is deleted.  
+All AKS clusters are created with a default first node pool, which is Linux-based. This node pool contains system services that are needed for the cluster to function.
+- The first Linux-based node pool can't be deleted unless the AKS cluster itself is deleted.  
 
 
 > Ref: https://learn.microsoft.com/en-us/azure/aks/learn/quick-windows-container-deploy-cli
 
-1) AKS-Managed Azure Active Directory
 > Ref: https://learn.microsoft.com/en-us/azure/aks/cluster-container-registry-integration?tabs=azure-cli
 
 ## Edit existing Node
@@ -2600,12 +2613,11 @@ We want to edit an existing node pool, so we cannot use "add":
 "Add a node pool to the managed Kubernetes cluster."
 
 We want to update the properties of the node pool, so we need to use:
-az aks nodepool update
-"Update a node pool properties."
+`az aks nodepool update` to Update a node pool properties.
 
 We want to set it up to use more nodes during an update, so this one is right:
---max-surge
-"Extra nodes used to speed upgrade. When specified, it represents the number or percent used, eg. 5 or 33%."
+`--max-surge` to extra nodes used to speed upgrade. 
+- **When specified, it represents the number or percent used, eg. 5 or 33%**.  
 
 
 ## New-AzResourceGroup & New-AzResourceGroupDeployment
@@ -2623,8 +2635,9 @@ Y: The 4 resources created are the RG1 resource group + the 3 storage accounts
 
 N: the location of the storage accounts is defined by the parameter "location" in the "resources" item that has the value of the Resource Group (stated by the "resourceGroup().location" function that returns the location of the resource group RG1 which is in Central US)
 
-Y: the names of the storages account have the prefix given by the copyIndex() function in `"name": "[concat(copyIndex(),'storage',uniqueString(resourceGroup().id))]"`, which starts at the position 0
-
+Y: the names of the storages account have the prefix given by the copyIndex() function in 
+`"name": "[concat(copyIndex(),'storage',uniqueString(resourceGroup().id))]"`, 
+which starts at the position 0
 
 ## New-AzResourceGroupDeployment 
 
@@ -2638,21 +2651,17 @@ Y: the names of the storages account have the prefix given by the copyIndex() fu
 ![alt text](image-524.png)  
 
 Answer is D.  
-https://learn.microsoft.com/en-us/azure/container-instances/container-instances-container-groups
-
 Multi-container groups currently support only Linux containers. For Windows containers, Azure Container Instances only supports deployment of a single container instance.  
 
 While we are working to bring all features to Windows containers, you can find current platform differences in the service
 
-## Deploy an instance of AZ firewall Premium with IP address
+> https://learn.microsoft.com/en-us/azure/container-instances/container-instances-container-groups
+
+## Deploy an instance of AZ firewall Premium with STATIC IPv4 IP address
 
 ![alt text](image-525.png)
 
-B should be the correct answer instead.
-
-https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/public-ip-addresses#at-a-glance
-
-https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/configure-public-ip-firewall
+`B` should be the correct answer instead.
 
 Azure Firewall
 - Dynamic IPv4: No
@@ -2660,32 +2669,36 @@ Azure Firewall
 - Dynamic IPv6: No
 - Static IPv6: No
 
-Azure Firewall is a cloud-based network security service that protects your Azure Virtual Network resources. Azure Firewall requires at least one public static IP address to be configured. 
+Azure Firewall is a cloud-based network security service that protects your Azure Virtual Network resources. 
 
-This IP or set of IPs are used as the external connection point to the firewall. 
+Azure Firewall requires at least one public static IP address to be configured. 
+- This IP or set of IPs are used as the external connection point to the firewall. 
 
-Azure Firewall supports standard SKU public IP addresses. 
+Azure Firewall supports `standard` SKU public IP addresses. 
+- `Basic` SKU public IP address and public IP prefixes aren't supported.  
 
-Basic SKU public IP address and public IP prefixes aren't supported.  
+https://learn.microsoft.com/en-us/azure/virtual-network/ip-services/public-ip-addresses#at-a-glance
 
-## 
+https://learn.microsoft.com/en-us/azure/ virtual-network/ip-services/configure-public-ip-firewall
+
+## :question:
 
 ![alt text](image-526.png)
 
-## use scope to target the resource group for storage account.
+## Use scope to target the resource group for storage account.
 
 ![alt text](image-527.png)  
-- The answer is scope. We would use scope to target the resource group for storage account.  
+
+The answer is scope. 
+- We would use scope to target the resource group for storage account.  
 
 
 https://ochzhen.com/blog/create-resource-group-azure-bicep
 
 ## New-AzDeployment -Location westus -TemplateFile "deploy.json"
 
-![alt text](image-526.png)
-
-
-![alt text](image-528.png)  
+![alt text](image-526.png)  
+![alt text](image-528.png)    
 
 YNY
 - The deployment creates 3 RGs called `RG0`, `RG1`, `RG2` as the index is `0`-based.
@@ -2699,13 +2712,16 @@ YNY
 
 ![alt text](image-530.png)
 YNN
-Point 1: Yes: Using virtual network integration enables your app to access:
+- Yes: 
+Using virtual network integration enables your app to access:
 Resources in the virtual network you're integrated with.
 Resources in virtual networks peered to the virtual network your app is integrated with including global peering connections.
-Point 2: NO: Virtual network integration is used only to make outbound calls from your app into your virtual network
-Point 3: NO: There are some limitations with using virtual network integration: The feature isn't available for Isolated plan apps in an App Service Environment
+- NO 
+Virtual network integration is used only to make outbound calls from your app into your virtual network
+- NO 
+There are some limitations with using virtual network integration : The feature isn't available for `Isolated` plan apps in an App Service Environment
 
-Reference: https://learn.microsoft.com/en-us/azure/app-service/overview-vnet-integration
+> https://learn.microsoft.com/en-us/azure/app-service/overview-vnet-integration
 
 ## connect to two different machines on the same port
 
@@ -2877,7 +2893,6 @@ You have a virtual network named VNet1 that has the configuration
 ## An inbound NAT rule Most with RDB
 
 ![alt text](image-545.png)
-
 
 ## Basic Load Balancer ans Subnet
 
