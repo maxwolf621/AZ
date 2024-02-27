@@ -2731,16 +2731,17 @@ Key is port 3389 from the internet for both VMs. If we want to connect to two di
 
 ## Minium num of NIC & minimum num of NSGs
 
-You plan to deploy five virtual machines to a virtual network subnet.
-Each virtual machine will have a public IP address and a private IP address.
-Each virtual machine requires the same inbound and outbound security rules.
+You plan to deploy **five virtual machines** to a virtual network subnet.
+
+1. Each virtual machine will have a public IP address and a private IP address.
+2. Each virtual machine requires the same inbound and outbound security rules.
 
 ![alt text](image-532.png)  
 
-Box 1: 5 -
-A public and a private IP address can be assigned to a single network interface.
+Box 1: 5
+- A public and a private IP address can be assigned to a single network interface.
 
-Box 2: 1 -
+Box 2: 1
 You can associate `zero`, or `one`, network security group to each virtual network subnet and network interface in a virtual machine. 
 
 The same network security group can be associated to as many subnets and network interfaces as you choose.
@@ -2751,11 +2752,11 @@ The same network security group can be associated to as many subnets and network
 
 ## A Record and Private IP Addr
 
-The virtual machines are registered (added) to the private zone as A records pointing to their private IP addresses.
+The virtual machines are registered (added) to the private zone as `A` records pointing to their private IP addresses.
 
-Since both VM1 & VM2 are in same Vnet1 and the Vnet1 is liked under adatum.com domain (Private DNS Zone->Setting->virtual network links).
+Since both VM1 & VM2 are in same VNet1 and the VNet1 is liked under `adatum.com` domain (Private DNS Zone->Setting->virtual network links).
 
-##
+## Log Analytics workspace collect data of NSG flow
 
 ![alt text](image-534.png)
 
@@ -2785,16 +2786,17 @@ F - You need 2 backend pools for the 2 different services
 ## Auto registration
 
 ![alt text](image-536.png)
-- You create a public Azure DNS zone named adatum.com and a private Azure DNS zone named contoso.com.
+You create a public Azure DNS zone named `adatum.com` and a private Azure DNS zone named `contoso.com`.
 
+:a: 
 
 All three VMs are in VNET2. 
-
-Auto registration is enabled for private Azure DNS zone named `contoso.com`, which is linked to VNET2. 
+- Auto registration is enabled for private Azure DNS zone named `contoso.com`, which is linked to VNET2. 
 
 So, VM1, VM2 and VM3 will auto-register their host records to contoso.com.
 
-None of the VM will auto-register to the public Azure DNS zone named adatum.com. You cannot register private IPs on the internet (adatum.com)
+- None of the VM will auto-register to the public Azure DNS zone named adatum.com. 
+- You cannot register private IPs on the internet (adatum.com)
 
 Box 1: Yes
 Auto registration is enabled for private Azure DNS zone named contoso.com.
@@ -2803,27 +2805,27 @@ Box 2: Yes
 Auto registration is enabled for private Azure DNS zone named contoso.com.
 
 Box 3: No
-None of the VM will auto-register to the public Azure DNS zone named adatum.com
+None of the VM will auto-register to the public Azure DNS zone named `adatum.com`
 
-## Add new space to peering VNet
+## Actions of Adding new space to peering VNet
 
-![alt text](image-537.png)
+![alt text](image-537.png)  
+ 
+![alt text](image-538.png)  
 
-![alt text](image-538.png)
+## :star: All Resources moves to the new RGs
 
-## 
+![alt text](image-539.png)  
+
+> All resources moved to the new resource groups, but the region did not change
+
+1. YES. I was able to move the storage from RG1 to RG2, however it stayed in the West US region.  
+2. YES. I was able to move NIC1 from RG1 to RG2 which was associated with VM1 and VNET1 subnet1, however it stayed in the West US region.  
+3. NO. The location of IP2 did not change.   
+However I was able to move LP2 from RG2 to RG1 as it isn't associated with any other resource, however it stayed in the East US region.
 
 
-![alt text](image-539.png)
-1. YES. I was able to move the storage from RG1 to RG2, however it stayed in the West US region.
-
-2. YES. I was able to move NIC1 from RG1 to RG2 which was associated with VM1 and VNET1 subnet1, however it stayed in the West US region.
-
-3. NO. The location of IP2 did not change. However I was able to move LP2 from RG2 to RG1 as it isn't associated with any other resource, however it stayed in the East US region.
-
-All resources moved to the new resource groups, but the region did not change
-
-##
+## Web App access VM via Application Gateway 
 
 ![alt text](image-540.png)
 
@@ -2875,37 +2877,39 @@ NSG-Subnet1 is associated to Subnet1.
 
 You need to be able to establish Remote Desktop connections from the internet to VM1.
 
-Solution: 
-1. :x: You add an inbound security rule to NSG-Subnet1 that allows connections from the internet source to the VirtualNetwork destination for port range 3389 and uses the UDP protocol.  
-- The default port for RDP is TCP port 3389.  
-2. You add an inbound security rule to NSG-Subnet1 and NSG-VM1 that allows connections from the internet source to the VirtualNetwork destination for port range 3389 and uses the TCP protocol.  
+Solutions:  
+1. :x: You add an inbound security rule to `NSG-Subnet1` that allows connections from the internet source to the VirtualNetwork destination for port range 3389 and uses the UDP protocol.   
+:memo:The default port for RDP is TCP port `3389`.   
 
-##  
+2. :o: You add an inbound security rule to `NSG-Subnet1` and `NSG-VM1` that allows connections **from the internet source to the VirtualNetwork destination for port range `3389` and uses the TCP protocol**.  
+
+## :question: 
 
 You have a virtual network named VNet1 that has the configuration  
-![alt text](image-542.png)   
+![alt text](image-542.png)  
+
 ![alt text](image-543.png)  
 
-## AZ-CLI move the `adatum.com` zone to an Azure DNS zone in Subscription1  
+## apply AZ CLI to move the DNS zone name to an Azure DNS zone in Subscription  
 
 ![alt text](image-544.png)
 
-## An inbound NAT rule Most with RDB
+## An inbound NAT rule to direct RDP to a VM
 
 ![alt text](image-545.png)
 
-## Basic Load Balancer ans Subnet
+## Basic SKU LB : single availability-Set & Scale Set
 
 ![alt text](image-546.png)  
 
 ![alt text](image-547.png)  
 
-- Basic SKU LB : Balance Virtual machines in a single availability set or virtual machine scale set  
  
 Basic Load Balancer:  
-- Backend pool endpoints for Virtual machines in a single availability set or virtual machine scale set.  
+- Backend pool endpoints for VMs in a **SINGLE availability set** or **virtual machine scale set**.  
 
-- Subnet12 Association will be used to assign an IP for the internal load balancer, not to load balance the VMs in the Subnet.    
+Load Balancer `LB1` Configuration instructs that  
+Subnet `Subnet12` Association will be used to assign an IP for the internal load balancer, not to load balance the VMs in the Subnet.    
 
 Box 1: Yes  
 - VM1 and VM are in the Availability Set.  
@@ -2916,10 +2920,10 @@ Box 2: No
 Box 3: No  
 - Both VMs are not part of any Availability Set or Scale Set.  
 
-## You can only link VNETs to private DNS zones only
+## You can only LINK VNets to private DNS zones only
 
 ![alt text](image-548.png)  
-
+    
 Box 1: Private
 Box 2: Private
 
@@ -2930,7 +2934,7 @@ You can only link VNETs to private DNS zones only and accordingly auto register 
 To resolve the records of a private DNS zone from your VNet, you must link the virtual network with the zone. 
 - Linked virtual networks have full access and can resolve all DNS records published in the private zone.
 
-## Actions of Site to Site VPN
+## Actions of Site to Site VPN  
 
 You have an on-premises network that you plan to connect to Azure by using a site-so-site VPN.
 
@@ -2950,60 +2954,76 @@ Now for the on-premise side.
 
 :one: Create a local gateway. You need the local gateway in order to complete the tunnel, then you can create a VPN connection
 
-## VM configuration managed disks & Availability options
+## Managed Disks & Availability Options in VM configuration
 
 You need to ensure that VM1 can be created in an Availability Zone.
 
 Which two settings should you modify
 
 :a: 
+
 Correct Answer: A and C
 
-In Basic
+In `Basic`
 A: Your VMs should use managed disks if you want to move them to an Availability Zone by using Site Recovery.
 
-In Disks 
+In `Disks` 
 C: When you create a VM for an Availability Zone, Under Settings > High availability, select one of the numbered zones from the Availability zone dropdown.
 
 Reference:
 https://docs.microsoft.com/en-us/azure/site-recovery/move-azure-vms-avset-azone
+
 https://docs.microsoft.com/en-us/azure/virtual-machines/windows/create-portal-availability-zone
+
 https://docs.microsoft.com/en-us/azure/virtual-machines/manage-availability
+
 https://docs.microsoft.com/en-us/azure/availability-zones/az-overview#availability-zones
 
 ## Add VM to VS scale set
 
 ![alt text](image-549.png)
 
-## 
+## Apply P2S VPN instead of installing the certificate
+
+You have a computer named `Computer1` that has a point-to-site VPN connection to an Azure virtual network named `VNet1`. 
+
+The point-to-site connection uses a self-signed certificate.
+
+From Azure, you download and install the VPN client configuration package on a computer named `Computer2`.
+
+You need to ensure that you can establish a point-to-site VPN connection to `VNet1` from `Computer2`.
+
+Solutions  
+:x: You modify the Azure Active Directory (Azure AD) authentication policies.
+:x: You join Computer2 to Azure Active Directory (Azure AD).
 
 
-You have a computer named Computer1 that has a point-to-site VPN connection to an Azure virtual network named VNet1. The point-to-site connection uses a self-signed certificate.
-From Azure, you download and install the VPN client configuration package on a computer named Computer2.
-You need to ensure that you can establish a point-to-site VPN connection to VNet1 from Computer2.
-
-
-Solution: You modify the Azure Active Directory (Azure AD) authentication policies.
-
-Solution: You join Computer2 to Azure Active Directory (Azure AD).
-
+Apply P2S VPN : 
 
 Instead export the client certificate from Computer1 and install the certificate on Computer2.
 
-A Point-to-Site (P2S) VPN gateway connection lets you create a secure connection to your virtual network from an individual client computer. A P2S connection is established by starting it from the client computer. This solution is useful for telecommuters who want to connect to Azure VNets from a remote location, such as from home or a conference. P2S VPN is also a useful solution to use instead of S2S VPN when you have only a few clients that need to connect to a VNet. This article applies to the Resource Manager deployment model.
+A Point-to-Site VPN gateway connection lets you create a secure connection to your virtual network from an individual client computer. 
+- A P2S connection is established by starting it from the client computer. 
+
+This solution is useful for telecommuters who want to connect to Azure VNets from a remote location, such as from home or a conference. 
+
+P2S VPN is also a useful solution to use instead of S2S VPN when you have only a few clients that need to connect to a VNet. 
+- This article applies to the Resource Manager deployment model.
 
 
-##
+## Policy to block TCP port 8080 btw VNets 
 
-You have an Azure subscription that contains 10 virtual networks. The virtual networks are hosted in separate resource groups.
+You have an Azure subscription that contains `10` virtual networks. 
+
+The virtual networks are hosted in separate resource groups.
+
 Another administrator plans to create several network security groups (NSGs) in the subscription.
 
-You need to ensure that when an NSG is created, it automatically blocks TCP port 8080 between the virtual networks.
+You need to ensure that when an NSG is created, it automatically blocks TCP port `8080` between the virtual networks.
 
 Solution: 
 :x: You create a resource lock, and then you assign the lock to the subscription.
 :x: You assign a built-in policy definition to the subscription.
-
 
 ## All VM can resolve DNS using DNS service on a VM
 
@@ -3375,38 +3395,40 @@ CNAME records get used to redirect a DNS name or subdomain name to another DNS n
 reference: https://support.dnsimple.com/articles/cname-record/   
 
 ## SKU of LB and public IP addresses must be the same 
-![alt text](image-578.png)
+![alt text](image-578.png)  
 
-## restrict network traffic between the pods with Calico Net Policy
+## Restrict network traffic between the pods with Calico Network Policy 
 
 ![alt text](image-579.png)
 
-## 
+## Route All Inbound Traffic from VPN Gateway to VNET through a VM
 
 ![alt text](image-580.png)
 
-
-Box 1: 10.0.0.0/16
+Box 1: `10.0.0.0/16`
 Address prefix
-destination-> Vnet 1 (Address space of Vnet1)
+destination : VNet 1 (Address space of VNet1)
 
-Box 2: Virtual appliance
-Next hop type
-VM1 ->Virtual Appliance. You can specify IP address of VM 1 when configuring next hop as Virtual appliance.
+Box 2: **Virtual appliance**
+Next hop type   
+VM1 -> Virtual Appliance.  
+- You can specify IP address of VM 1 when configuring next hop as Virtual appliance.  
 
-Box 3: Gateway Subnet
+Box 3: **Gateway Subnet**
 Assigned to
-This route is to be followed by Gateway Subnet for the incoming traffic. You can associate routing table to the Subnet from Rout Table -> subnet ->Associate.
+This route is to be followed by Gateway Subnet for the incoming traffic. 
 
+You can associate routing table to the Subnet from RouteTable -> subnet -> Associate.
 
-## Load balancing rule that will load balance HTTPS traffic between VM1 and VM2
-
+## Load balancing rule that will load balance HTTPS traffic between VM1 and VM2  
 
 You have an Azure subscription that contains two virtual machines named VM1 and VM2.
-You create an Azure load balancer.
-You plan to create a load balancing rule that will load balance HTTPS traffic between VM1 and VM2.
-Which two additional load balancer resources should you create before you can create the load balancing rule?
 
+You create an Azure load balancer.
+
+You plan to create a load balancing rule that will load balance HTTPS traffic between VM1 and VM2.
+
+Which two additional load balancer resources should you create before you can create the load balancing rule?
 
 A. a frontend IP address  
 B. an inbound NAT rule   
@@ -3415,23 +3437,27 @@ D. a backend pool
 E. a health probe  
 
 D and E.  
-You can't create a LB without FrontEnd IP, so if we have a LB we also have a FrontEnd IP already. You can however create a LB without a backend pool and without any rules.   
-- If you want to add a rule to your LB later you have to create a backend pool and health probe first. 
 
-Those are mandatory properties for a rule. I also tested it in my lab to be sure.
+You can't create a LB without FrontEnd IP, so if we have a LB we also have a FrontEnd IP already.  
 
-## 
+You can however create a LB **without a backend pool** and **without any rules**.  
+- **If you want to add a rule to your LB later you have to create a backend pool and health probe first.**  
 
-You have an on-premises network that contains a database server named dbserver1.
-You have an Azure subscription.
+Those are mandatory properties for a rule.    
 
-You plan to deploy three Azure virtual machines. 
+## VM connects DB with standard SKU of a static public address assignment
+
+You have an on-premises network that contains a database server named `dbserver1`.  
+
+You have an Azure subscription.  
+
+You plan to deploy 3 Azure virtual machines. 
 
 Each virtual machine will be deployed to a separate availability zone.
 
-You need to configure an Azure VPN gateway for a site-to-site VPN. 
+You need to configure an Azure VPN gateway for a site-to-site VPN.   
 
-The solution must ensure that the virtual machines can connect to dbserver1.  
+The solution must ensure that the virtual machines can connect to `dbserver1`.  
 
 Which type of public IP address SKU and assignment should you use for the gateway?
  
@@ -3439,41 +3465,53 @@ A. a basic SKU and a static IP address assignment
 B. a standard SKU and a static IP address assignment 
 C. a basic SKU and a dynamic IP address assignment  
 
-##
+## :star: VNet Link to Private DNS
 
 ![alt text](image-581.png)
 
 
-YES -For VM1,server1.contoso.com resolves to 131.107.3.3
+YES
+- For VM1 , `server1.contoso.com` resolves to `131.107.3.3`
 
-VM1 is connected to VNET1 which has Default(Azure-Provided) DNS Server and linked to Azure Private DNS Server contoso.com (131.107.3.3 and 131.107.3.4 DNS Servers). That means VM1 has these 2 DNS servers for resloving.
+VM1 is connected to VNET1 which has Default(Azure-Provided) DNS Server and linked to Azure Private DNS Server `contoso.com` (131.107.3.3 and 131.107.3.4 DNS Servers). 
+
+That means VM1 has these 2 DNS servers for resolving.
 DNS Servers for VNET1
-server1.contoso.com = 131.107.3.3
-server2.contoso.com = 131.107.3.4
+- server1.contoso.com = 131.107.3.3
+- server2.contoso.com = 131.107.3.4
 
-NO-For VM2,server1.contoso.com resolves to 131.107.3.3
+NO
+- For VM2, `server1.contoso.com` resolves to `131.107.3.3`
 
-VM2 belongs to VNET2 has Custom DNS:192.168.0.5 IP of VM4 ( not takes from dedault Azure: the server1.contoso.com = 131.107.3.4 and server2.contoso.com = 131.107.3.4) -NO
-VM2 will resolve from VM4 (DNS Server1.contoso.com=131.107.2.3 and Server2.contoso.com=131.107.2.4)
+VM2 belongs to VNET2 has Custom DNS: `192.168.0.5` IP of VM4 ( not takes from default Azure: the `server1.contoso.com = 131.107.3.3` and `server2.contoso.com = 131.107.3.4`) 
 
-YES- For VM3,server2.contoso.com resolves to 131.107.2.4
+VM2 will resolve from VM4 
+(DNS Server1.contoso.com=131.107.2.3 and Server2.contoso.com=131.107.2.4)
 
-VM3 belongs to VNET3 has Custom DNS:192.168.0.5 IP of VM4 ( not takes from default Azure: the server1.contoso.com = 131.107.3.4 and server2.contoso.com = 131.107.3.4)
+YES
+- For VM3,server2.contoso.com resolves to 131.107.2.4
+
+VM3 belongs to VNET3 has Custom DNS: `192.168.0.5` IP of VM4 ( not takes from default Azure: the `server1.contoso.com = 131.107.3.4` and` server2.contoso.com = 131.107.3.4`)  
+
 VM3 will resolve from VM4 (DNS Server1.contoso.com=131.107.2.3 and Server2.contoso.com=131.107.2.4)
 
-## 
+## :star: Azure DHCP service ignores any DNS suffix when it registers the private DNS zone.
 
-![alt text](image-582.png)
-- `fabrikam.com`, you add a virtual network link to vnet1 and enable auto registration.
-- For `contoso.com`, you assign vm1 and vm2 the Owner role.
+![alt text](image-582.png)  
+- `fabrikam.com`, you add a virtual network link to `VNet1` and enable auto registration.  
+- For `contoso.com`, you assign `vm1` and `vm2` the Owner role.  
 
-![alt text](image-583.png)
+![alt text](image-583.png)  
 
 N Y Y
 
-Only private AZ DNS Zones can use auto registration. The set DNS search suffix in the client changes nothing about that https://docs.microsoft.com/en-us/azure/dns/private-dns-autoregistration
+Only private AZ DNS Zones can use auto registration. 
+> The set DNS search suffix in the client changes nothing about that https://docs.microsoft.com/en-us/azure/dns/private-dns-autoregistration
 
-A virtual machine with a DNS suffix configured in Windows will register its DNS record to the private DNS zone. However, the Azure DHCP service ignores any DNS suffix when it registers the private DNS zone. For example, if your virtual machine is configured for 'contoso.com' as the primary DNS suffix, but the virtual network is linked to the 'fabrikam.com' private DNS zone, the virtual machine's registration appears in the 'fabrikam.com' private DNS zone.
+
+**A virtual machine with a DNS suffix configured in Windows will register its DNS record to the private DNS zone.** 
+However, the Azure DHCP service ignores any DNS suffix when it registers the private DNS zone. 
+- For example, if your VM is configured for `contoso.com` as the primary DNS suffix, but the VNet is linked to the `fabrikam.com` private DNS zone, the VM's registration appears in the `fabrikam.com` private DNS zone.
 
 
 ## The firewall, VNet, and the public IP address all must be in the same resource group
@@ -3484,7 +3522,6 @@ A virtual machine with a DNS suffix configured in Windows will register its DNS 
 
 
 ## Create a route-table 
-
 
 Route all traffic to the firewall
 When you create a virtual network, Azure automatically creates a default route table for each of its subnets and adds system default routes to the table. In this step, you create a user-defined route table that routes all traffic to the firewall, and then associate it with the App Service subnet in the integrated virtual network.
