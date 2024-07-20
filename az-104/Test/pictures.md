@@ -20,6 +20,8 @@ Delta, will kick off a delta sync and bring only the last change, so it will be 
 ![alt text](image-285.png)  
 :o: Solution: You access the Resource Group blade.
 :x: Solution: You access the Container blade.
+
+
 ---
 
 ![alt text](image-286.png)
@@ -399,8 +401,6 @@ Answer is correct, both Tags and Locks are available to Subscriptions, Resource 
 
 N, N, N
 
-
-
 ## Role to enable Traffic Analytics
 
 ![alt text](image-336.png)  
@@ -441,7 +441,6 @@ N, N, N
 - Lets you manage networks, but not access to them. (so you can add VNET, subnet, etc)
 
 ---
-
 
 ![alt text](image-341.png)
 
@@ -2785,18 +2784,24 @@ F - You need 2 backend pools for the 2 different services
 
 ## Auto registration
 
-![alt text](image-536.png)
+You have an Azure subscription. The subscription contains virtual machines that run Windows Server 2016 and are configured as shown in the following table.
+![alt text](image-449.png)
+
 You create a public Azure DNS zone named `adatum.com` and a private Azure DNS zone named `contoso.com`.
+
+You create a virtual network link for `contoso.com` as shown in the following exhibit.
+![alt text](image-489.png)
+
+![alt text](image-415.png)
 
 :a: 
 
 All three VMs are in VNET2. 
 - Auto registration is enabled for private Azure DNS zone named `contoso.com`, which is linked to VNET2. 
 
-So, VM1, VM2 and VM3 will auto-register their host records to contoso.com.
+So, VM1, VM2 and VM3 will auto-register their host records to `contoso.com`.
 
-- None of the VM will auto-register to the public Azure DNS zone named adatum.com. 
-- You cannot register private IPs on the internet (adatum.com)
+- None of the VM will auto-register to the public Azure DNS zone named `adatum.com`. You cannot register private IPs on the internet (`adatum.com`)
 
 Box 1: Yes
 Auto registration is enabled for private Azure DNS zone named contoso.com.
@@ -2813,14 +2818,14 @@ None of the VM will auto-register to the public Azure DNS zone named `adatum.com
  
 ![alt text](image-538.png)  
 
-## :star: All Resources moves to the new RGs
+## :star: All resources moved to the new resource groups, but the region did not change
 
 ![alt text](image-539.png)  
 
 > All resources moved to the new resource groups, but the region did not change
 
 1. YES. I was able to move the storage from RG1 to RG2, however it stayed in the West US region.  
-2. YES. I was able to move NIC1 from RG1 to RG2 which was associated with VM1 and VNET1 subnet1, however it stayed in the West US region.  
+2. YES. **I was able to move NIC1 from RG1 to RG2 which was associated with VM1 and VNET1 subnet1, however it stayed in the West US region**.  
 3. NO. The location of IP2 did not change.   
 However I was able to move LP2 from RG2 to RG1 as it isn't associated with any other resource, however it stayed in the East US region.
 
@@ -2829,28 +2834,29 @@ However I was able to move LP2 from RG2 to RG1 as it isn't associated with any o
 
 ![alt text](image-540.png)
 
-## enable Desired State Configuration for VM
+## Enable Desired State Configuration Extension for VM
+
 You create an Azure VM named VM1 that runs Windows Server 2019.
-VM1 is configured as shown
+VM1 is configured as shown  
 ![alt text](image-541.png)  
 
-You need to enable Desired State Configuration for VM1.  
-A. Connect to VM1.   
-B. Start VM1.  
-C. Capture a snapshot of VM1.  
-D. Configure a DNS name for VM1.  
+You need to enable Desired State Configuration for VM1.    
+A. Connect to VM1.    
+B. Start VM1.   
+C. Capture a snapshot of VM1.   
+D. Configure a DNS name for VM1.   
 
 :a: 
+
 Correct Answer: B
 
 > Status is Stopped (Deallocated). 
 
 The DSC extension for Windows requires that the target Virtual Machine is able to communicate with Azure. 
 
-First you start the VM, 
-- because you need VM online to deploy DSC Extension.
+First you start the VM, because you need VM online to deploy DSC Extension.
 
-## Connect to RDB from TCP
+## Connect to RDB from TCP 3389 
 
 You have an Azure subscription that contains the following resources:
 - A virtual network that has a subnet named `Subnet1`
@@ -2889,6 +2895,13 @@ You have a virtual network named VNet1 that has the configuration
 ![alt text](image-542.png)  
 
 ![alt text](image-543.png)  
+
+Box 1: Add  an address space 
+- One can add additional address space (`192.168.0.0/16`) to the VNet1, without having to delete existing (`10.2.0.0/16`).
+
+Box 2: Add subnet 
+- Defined 'default' subnet from example (`10.2.0.0/24`) contains 254 IP addresses, with last IP being `10.2.0.254`. 
+In order to assign `10.2.1.0/24` IP address to VM we need to create add new subnet.
 
 ## apply AZ CLI to move the DNS zone name to an Azure DNS zone in Subscription  
 
@@ -3033,13 +3046,15 @@ Solution:
 
 ![alt text](image-551.png)
 
-Solutions 
+Solutions   
 
-You create a Basic SKU public IP address, associate the address to the network interface of VM1, and then start VM1.
+:x: You create a Basic SKU public IP address, associate the address to the network interface of VM1, and then start VM1.
 
-You create a Standard SKU public IP address, associate the address to the network interface of VM1, and then stop VM2.
+:x: You create a Standard SKU public IP address, associate the address to the network interface of VM1, and then stop VM2.
 
 :o: You create two Standard SKU public IP addresses and associate a Standard SKU public IP address to the network interface of each virtual machine.
+
+:a: :  
 
 You can only attach virtual machines that are in the same location and on the same virtual network as the LB. Virtual machines must have a standard SKU public IP or no public IP.
 
@@ -3049,12 +3064,14 @@ Also, when adding them to a backend pool, it doesn’t matter in which status ar
 
 Note: Load balancer and the public IP address SKU must match when you use them with public IP addresses.
 
-## 
+## Priority of NSG rule
 
 ![alt text](image-552.png)
 
 You deploy a web server on VM1, and then create a secure website that is accessible by using the HTTPS protocol. VM1 is used as a web server only.
+
 You need to ensure that users can connect to the website from the Internet.
+
 What should you do?
 A. Modify the protocol of Rule4
 B. Delete Rule1
@@ -3080,93 +3097,123 @@ You have Azure virtual machines that run Windows Server 2019
 
 ![alt text](image-553.png)
 
-## Configure Public name server Domain Registrar
+## configuring the name servers for `adatum.com` at the domain register
 
 ![alt text](image-556.png)
 
-You create a public Azure DNS zone named adatum.com and a private Azure DNS zone named contoso.com.
+You create a public Azure DNS zone named `adatum.com` and a private Azure DNS zone named `contoso.com`.
 
-For `controso.com`, you create a virtual network link named link1.
+For `controso.com`, you create a virtual network link named `link1`.  
+
 ![alt text](image-555.png)
 
-You discover that VM1 can resolve names in `contoso.com` but cannot resolve names in adatum.com. 
+You discover that VM1 can resolve names in `contoso.com` but cannot resolve names in `adatum.com`. 
 
 VM1 can resolve other hosts on the Internet.
 
 You need to ensure that VM1 can resolve host names in `adatum.com`.
 
+A. Update the DNS suffix on VM1 to be `adatum.com`.    
+B. Configure the name servers for `adatum.com` at the domain registrar.  
+C. Create an SRV record in the `contoso.com` zone.  
+D. Modify the Access control (IAM) settings for link1.  
+
+:a: 
+
 Correct Answer: B
 
 `Adatum.com` is a public DNS zone. 
+- The Internet top level domain DNS servers need to know which DNS servers to direct DNS queries for `adatum.com` to. 
+- You configure this by configuring the name servers for `adatum.com` at the domain register.
 
-The Internet top level domain DNS servers need to know which DNS servers to direct DNS queries for `adatum.com` to. 
-- You configure this by configuring the name servers for `adatum.com` at the domain registrar.
+Domain Registrar :  
+- A domain registrar is a company or service that allows you to register and manage domain names (such as `example.com` or `mywebsite.net`).
+- When you want to acquire a domain name, you typically go through a domain registrar to purchase it.
+- The registrar maintains records of domain ownership, handles domain renewals, and provides tools for managing DNS settings associated with the domain.
 
+## IP flow verify for NSG rule and Connection troubleshoot for endpoint to endpoint
 
-## 
+You plan to use Azure Network Watcher to perform the following tasks:  
 
-You plan to use Azure Network Watcher to perform the following tasks:
 - Task1: Identify a security rule that prevents a network packet from reaching an Azure virtual machine.
 - Task2: Validate outbound connectivity from an Azure virtual machine to an external host.
 
+:a: 
 
 Box 1: IP flow verify
-At some point, a VM may become unable to communicate with other resources, because of a security rule. The IP flow verify capability enables you to specify a source and destination IPv4 address, port, protocol (TCP or UDP), and traffic direction (inbound or outbound). IP flow verify then tests the communication and informs you if the connection succeeds or fails. If the connection fails, IP flow verify tells you which.
+At some point, a VM may become unable to communicate with other resources, because of a security rule. 
+
+The IP flow verify capability enables you to specify a source and destination IPv4 address, port, protocol (TCP or UDP), and traffic direction (inbound or outbound). 
+
+IP flow verify then tests the communication and informs you if the connection succeeds or fails. 
+- If the connection fails, IP flow verify tells you which.
 
 Box 2: Connection troubleshoot
+
 Diagnose outbound connections from a VM: 
-- The connection troubleshoot capability enables you to test a connection between a VM and another VM, an FQDN, a URI, or an IPv4 address.
+
+The connection troubleshoot capability enables you to test a connection between a VM and another VM, an FQDN, a URI, or an IPv4 address.
 
 The test returns similar information returned when using the connection monitor capability, but tests the connection at a point in time, rather than monitoring it over time, as connection monitor does. 
 
-## NIC configured DNS servers takes precedence over VNET configured DNS servers.
+## :star: NIC configured DNS servers takes precedence over VNET configured DNS servers.
 
+You have an Azure subscription that contains the Azure virtual machines shown in the following table.  
 ![alt text](image-558.png)
-![alt text](image-559.png)
 
-The virtual machines can successfully connect to the DNS server that has an IP address of `192.168.10.15` and the DNS server that has an IP address of
-`193.77.134.10`.
+You configure the network interfaces of the virtual machines to use the settings shown in the following table.  
+![alt text](image-559.png)  
+
+From the settings of VNET1 you configure the DNS servers shown in the following exhibit.  
+![alt text](image-536.png)  
+
+The virtual machines can successfully connect to the DNS server that has an IP address of `192.168.10.15` and the DNS server that has an IP address of `193.77.134.10`.
 
 ![alt text](image-557.png)
 
-NIC configured DNS servers takes precedence over VNET configured DNS servers.
+> NIC configured DNS servers takes precedence over VNET configured DNS servers.
 
 Box 1: Yes
-VM1 uses the VNET configured DNS 193.77.134.10.
+- AS per link the DNS is set on the VNET level
+- VM1 uses the VNET configured DNS `193.77.134.10`.
 You can specify DNS server IP addresses in the VNet settings. The setting is applied as the default DNS server(s) for all VMs in the VNet.
-The DNS is set on the VNET level.
 
 Box 2: No
-VM2 uses the NIC configured DNS 192.168.10.15.
-You can set DNS servers per VM or cloud service to override the default network settings.
-This VM has 192.168.10.5 set as DNS server, so it overrides the default DNS set on VNET1.
+- VM2 uses the NIC configured DNS `192.168.10.15`.
+You can set DNS servers per VM or cloud service to override the default network settings.  
+- This VM has `192.168.10.5` set as DNS server, so it overrides the default DNS set on VNET1.  
 
 Box 3: Yes
-VM3 uses the NIC configured DNS 192.168.10.15
-You can set DNS servers per VM or cloud service to override the default network settings.
-This VM has 192.168.10.5 set as DNS server, so it overrides the default DNS set on VNET1.
+- VM3 uses the NIC configured DNS `192.168.10.15`  
+You can set DNS servers per VM or cloud service to override the default network settings.   
+- This VM has `192.168.10.5` set as DNS server, so it overrides the default DNS set on `VNET1`.  
 
+## RO or Delete locks does not have any impact for Move operation
 
-## Move Resource with Lock 
+![alt text](image-561.png)  
 
-![alt text](image-561.png)
+:a: 
 
-![alt text](image-560.png)
+Box 1: IP1, VNET2, and storage1
+Box 2: IP2, VNET2, and storage2
 
-RO or Delete locks does not have any impact for Move operation and it doesn`t matter if it comes from RG level or are directly attached to the resource.
+**RO or Delete locks does not have any impact for Move operation** and it doesn`t matter if it comes from RG level or are directly attached to the resource.
 
+## P2S export the client certificate from local-device and install it in other local-device
 
-## 
+You have a computer named `Computer1` that has a point-to-site VPN connection to an Azure virtual network named `VNet1`. 
 
-You add a network interface named vm1173 to VM1
+The point-to-site connection uses a self-signed certificate.
 
-From Computer1, you attempt to connect to VM1 by using Remote Desktop, but the connection fails.
+From Azure, you download and install the VPN client configuration package on a computer named `Computer2`.
 
-You need to establish a Remote Desktop connection to VM1.
+You need to ensure that you can establish a point-to-site VPN connection to `VNet1` from `Computer2`.
 
-Start VM1
+Solution: 
 
-## 
+:o: You export the client certificate from Computer1 and install the certificate on Computer2.
+
+## custom policy definition to block tcp 8080
 
 You have an Azure subscription that contains 10 virtual networks. The virtual networks are hosted in separate resource groups.
 Another administrator plans to create several network security groups (NSGs) in the subscription.
@@ -3185,15 +3232,22 @@ You need to use a custom policy definition, because there is not a built-in poli
 
 Resource policy definition used by Azure Policy enables you to establish conventions for resources in your organization by describing when the policy is enforced and what effect to take. By defining conventions, you can control costs and more easily manage your resources.
 
-##
+## Add VMs to LB
+
+![alt text](image-593.png)
+
+## Peering VNETs
+
+![alt text](image-592.png)
+
+![alt text](image-562.png)
+
 
 ```
 VNET1: 10.10.10.0 - 10.10.10.255
 VNET2: 172.16.0.0 - 172.16.255.255
 VNETA: 10.10.128.0 - 10.10.255.255
 ```
-
-![alt text](image-562.png)
 
 Box 1: No
 To create a VNet to VNet VPN you need to have a special Gateway Subnet. Here, the VNet has no sufficient address space to create a Gateway Subnet and thus to establish a VNet to VNet VPN connection.
@@ -3204,26 +3258,28 @@ For VNet peering the only consideration is that the VNets do not overlap. VNET1 
 Box 3: Yes
 For VNet peering the only consideration is that the VNets do not overlap. VNET1 and VNETA do not overlap.
 
-##
+## Ensure that connections to `App1` can be established successfully from `131.107.100.50` over TCP port `443`
 
-You have an app named App1 that is installed on two Azure virtual machines named VM1 and VM2. Connections to App1 are managed by using an Azure Load
-Balancer.
+You have an app named `App1` that is installed on two Azure virtual machines named `VM1` and `VM2`. 
 
-NSG for VM2
+Connections to `App1` are managed by using an Azure Load Balancer.  
+
+NSG for VM2  
 ![alt text](image-563.png)
 
-You discover that connections to App1 from 131.107.100.50 over TCP port 443 fail.
+You discover that connections to `App1` from `131.107.100.50` over TCP port `443` fail.
+
 You verify that the Load Balancer rules are configured correctly.
-You need to ensure that connections to App1 can be established successfully from 131.107.100.50 over TCP port 443.
+
+You need to ensure that connections to `App1` can be established successfully from `131.107.100.50` over TCP port `443`.
+
+:x: You delete the `BlockAllOther443` inbound security rule.  
+:x: You modify the priority of the `Allow_131.107.100.50` inbound security rule.  
+:o: You create an inbound security rule that allows any traffic from the `AzureLoadBalancer` source and has a priority  of `150`.
 
 
-:x: You delete the BlockAllOther443 inbound security rule.  
-:x: You modify the priority of the Allow_131.107.100.50 inbound security rule.  
-:o: You create an inbound security rule that allows any traffic from the AzureLoadBalancer source and has a cost of 150.
-
-
-> "Attach network interface" Button is enabeld! That means, VM is Stopped and deallocated!
-
+> "Attach network interface" Button is enable! 
+> That means, VM is `Stopped` and `deallocated`!
 
 ## RTT & Connection Monitor 
 
@@ -3235,10 +3291,10 @@ You need to view the average round-trip time (RTT) of the packets from VM1 to VM
 Which Azure Network Watcher feature should you use?
 A. IP flow verify
 B. Connection troubleshoot
-C. Connection monitor Most Voted
+**C. Connection monitor Most Voted**
 D. NSG flow logs
 
-##
+## SKU for LB
 
 ![alt text](image-564.png)
 ![alt text](image-565.png)
@@ -3281,10 +3337,14 @@ How should you complete the template?
 ![alt text](image-567.png)
 . All Azure Bastion resources deployed in subnets of size /27 prior to this date are unaffected by this change and will continue to work, but we highly recommend increasing the size of any existing AzureBastionSubnet to /26 in case you choose to take advantage of host scaling in the future.
 
-##
+## packet capture for period of time
 
+You manage a virtual network named VNet1 that is hosted in the West US Azure region.
+VNet1 hosts two virtual machines named VM1 and VM2 that run Windows Server.
 You need to inspect all the network traffic from VM1 to VM2 for a period of three hours.
-Solution: From Azure Network Watcher, you create a packet capture.
+
+
+:o: From Azure Network Watcher, you create a packet capture.
 
 ## Route-base S2P
 
@@ -3292,9 +3352,7 @@ Solution: From Azure Network Watcher, you create a packet capture.
 P2S client doesn't have fixed IPs.  
 Policy based on combinations of prefixes from both networks to define how traffic is encrypted/decrypted through IPsec tunnels.    
 
-
-
-##
+## Auto-registration 
 
 ![alt text](image-570.png)
 
@@ -3374,25 +3432,23 @@ Custom DNS Scenarios: In scenarios where you have custom DNS servers, you might 
 Azure-Provided DNS: If you are using Azure-provided DNS, the resolution of names for resources in Azure (like VMs) works across peered VNets without additional configuration
 
 
-## DNS Record Type
+## Ping VM with A Records
 
 ![alt text](image-577.png)
 
-Correct Answer C: comp2.contoso.com only
+Correct Answer C: `comp2.contoso.com only`
 
-A record: Is used to map a DNS/domain name to an IP  
-Ref:https://www.cloudflare.com/learning/dns/dns-records/dns-a-record/  
+A record (resolvable) : Is used to map a DNS/domain name to an IP  
+> https://www.cloudflare.com/learning/dns/dns-records/dns-a-record/  
 
 TXT records in a lot of cases get used to prove ownership of a domain, it has other purposes too.  
-Reference:  
-https://support.google.com/a/answer/2716800?hl=en#:~:text=TXT%20records%20are%20a%20type,and%20to%20ensure%20email%20security.  
+> https://support.google.com/a/answer/2716800?hl=en#:~:text=TXT%20records%20are%20a%20type,and%20to%20ensure%20email%20security.  
 
 PTR: A Reverse DNS lookup is used by remote hosts to determine who 'owns' an IP address.  
-Reference:    
-https://www.mailenable.com/kb/content/article.asp?ID=ME020206   
+> https://www.mailenable.com/kb/content/article.asp?ID=ME020206   
 
 CNAME records get used to redirect a DNS name or subdomain name to another DNS name or domain name or subdomain name.  
-reference: https://support.dnsimple.com/articles/cname-record/   
+> https://support.dnsimple.com/articles/cname-record/   
 
 ## SKU of LB and public IP addresses must be the same 
 ![alt text](image-578.png)  
@@ -3462,7 +3518,7 @@ The solution must ensure that the virtual machines can connect to `dbserver1`.
 Which type of public IP address SKU and assignment should you use for the gateway?
  
 A. a basic SKU and a static IP address assignment  
-B. a standard SKU and a static IP address assignment 
+**B. a standard SKU and a static IP address assignment** 
 C. a basic SKU and a dynamic IP address assignment  
 
 ## :star: VNet Link to Private DNS
@@ -3535,3 +3591,188 @@ https://learn.microsoft.com/en-us/azure/app-service/network-secure-outbound-traf
 Routing preference in Azure Traffic Manager allows you to specify how to route traffic to your Azure service endpoints based on various criteria, such as the geographic location of the client or the endpoint, the performance of the endpoint, or the priority of the endpoint.
 
 By configuring routing preference, you can direct incoming user traffic to the Microsoft point-of-presence (POP) closest to the user's location, ensuring the best possible user experience. This can be achieved by selecting the "Performance" routing method in Azure Traffic Manager, which uses DNS-based traffic routing to direct users to the endpoint that offers the best performance from the user's location.
+
+
+## Delete Peering and re-create to change the status
+
+![alt text](image-586.png)
+
+![alt text](image-560.png)
+
+Box 1: vNET6 only
+Peering status to both VNet1 and Vnet2 are disconnected. So, only communication inside vNET6.
+
+Box 2: delete peering1
+Peering to vNET1 is enabled but disconnected. We need to delete the peering from both virtual networks, and then re-create them.
+
+## Basic LB for VMs
+
+You have an Azure subscription that contains the resources in the following table.
+![alt text](image-587.png)
+
+You install the Web Server server role (IIS) on VM1 and VM2, and then add VM1 and VM2 to LB1.
+![alt text](image-588.png)
+
+![alt text](image-589.png)
+
+![alt text](image-590.png)
+
+Box 1: Yes
+A Basic Load Balancer supports virtual machines in a single availability set or virtual machine scale set.
+
+Box 2: Yes
+When using load-balancing rules with Azure Load Balancer, you need to specify health probes to allow Load Balancer to detect the backend endpoint status. The configuration of the health probe and probe responses determine which backend pool instances will receive new flows. 
+
+You can use health probes to detect the failure of an application on a backend endpoint. You can also generate a custom response to a health probe and use the health probe for flow control to manage load or planned downtime. When a health probe fails, Load Balancer will stop sending new flows to the respective unhealthy instance. Outbound connectivity is not impacted, only inbound connectivity is impacted.
+
+Box 3: No
+There will be no loadbalancing between the VMs.
+
+##
+
+You have an Azure virtual machine named VM1 that connects to a virtual network named VNet1. VM1 has the following configurations:
+- Subnet: 10.0.0.0/24
+- Availability set: AVSet
+- Network security group (NSG): None
+- Private IP address: 10.0.0.4 (dynamic)
+- Public IP address: 40.90.219.6 (dynamic)
+You deploy a standard, Internet-facing load balancer named slb1.
+You need to configure slb1 to allow connectivity to VM1.
+
+![alt text](image-591.png)
+
+Box 1: Remove the public IP address from VM1
+Note: A public load balancer can provide outbound connections for virtual machines (VMs) inside your virtual network. These connections are accomplished by translating their private IP addresses to public IP addresses. Public Load Balancers are used to load balance internet traffic to your VMs. Load balancer and the public IP address SKU must match when you use them with public IP addresses. Only Basic SKU IPs work with the Basic SKU load balancer and only Standard SKU IPs work with Standard SKU load balancers.
+
+Box 2: Create and configure an NSG
+NSGs are used to explicitly permit allowed traffic. If you do not have an NSG on a subnet or NIC of your virtual machine resource, traffic is not allowed to reach this resource.
+
+## 2-2-2
+
+
+![alt text](image-594.png)
+
+## Delete GW and Create Route-base VNet GW
+
+![alt text](image-595.png)
+
+
+## Actions of adding VM to backend pool with LB
+
+![alt text](image-596.png)
+
+## Action of S2S
+
+![alt text](image-597.png)
+
+1. Create Azure Virtual WAN
+2. Create Virtual Hub
+3. Create VPN sites
+4. Connect VPN sites to virtual hub
+
+## configure an Azure web app named contoso.azurewebsites.net to host www.contoso.com.
+
+![alt text](image-598.png)
+
+## When adding service endpoints on the VNET1 side you only get to choose the service
+
+![alt text](image-599.png)  
+
+First service endpoint: One service endpoint for Microsoft.Storage added to VNET1.
+
+The question asks how many to add to VNET1. 
+
+When adding service endpoints on the VNET1 side you only get to choose the service ( Microsoft.Storage ) not the actual storage accounts. 
+
+Once you add this service endpoint it can be then linked to on the storage side for both accounts.
+
+Second Service Endpoint: Microsoft.AzureActiveDirectory.
+
+## 
+
+![alt text](image-600.png)
+
+No: 
+- Server2 uses Server1 for DNS. Server1 has no host2.contoso.com record for 131.107.50.50. It would work if VNET1 hat a virtual network link to the private zone contoso.com.
+
+Yes: 
+- Server2 uses Server1 for DNS. Server1 has a host1.contoso.com record for 131.107.10.15
+
+No: 
+- Server3 uses 10.10.0.4 as DNS (inherited from VNET2). 10.10.0.4 (Server1) has no record for host2.contoso.com. The virtual network link for the private zone contoso.com on VNET2 won't be used since the DNS from VNET1 is set on VNET2. VNET1 DNS is not aware of the private zone contoso.com. It would work if VNET1 had a virtual network link to the private zone contoso.com.
+
+## public/private LB Network Contributor role
+
+LB1 and LB2 are resources that we want the Network Contributor role to manage,
+
+
+## Access Review for GUEST
+
+![alt text](image-602.png)
+
+User3 can perform an access review of User1 = No
+User1 is a Member and not a Guest Account, Access Review specified Guests only.
+
+User3 can perform an access review of UserA = No
+User1 is a Member and not a Guest Account, Access Review specified Guests only.
+
+User3 can perform an access review of UserB = No
+Created Group 1 and Group 2, added Group 2 as a member in Group 1,
+Added guest Accounts to Group 1 and Group 2,
+In the Access Review results only the Guest Accounts in Group 1 appeared for review and "Not" the Guest accounts in Group 2.
+
+## subscription should be moved by can't be added to 2 groups 
+
+![alt text](image-601.png)  
+
+Answer is Wrong : It should Be NO NO NO
+- subscription should be moved by can't be added to 2 groups.
+
+## Device Management
+
+![alt text](image-603.png)
+
+User1 can add Device2 to Group1: No
+User2 can add Device1 to Group1: Yes
+User2 can add Device2 to Group2: No
+
+Groups can contain both registered and joined devices as members.
+- As a global administrator or cloud device administrator, you can manage the registered or joined devices. 
+
+Intune Service administrators can update and delete devices. 
+
+User administrator can manage users but not devices.
+
+User1 is a cloud device administrator. 
+
+Users in this role can enable, disable, and delete devices in Azure AD and read Windows 10 BitLocker keys (if present) in the Azure portal. 
+- The role does not grant permissions to manage 
+any other properties on the device.
+
+User2 is the owner of Group1. 
+- He can add Device1 to Group1.
+
+Group2 is configured for dynamic membership. 
+- The properties on which the membership of a device in a group of the type dynamic device are defined cannot be changed by either an end user or an user administrator. 
+
+User2 cannot add any device to Group2.
+
+> Reference: https://docs.microsoft.com/en-us/azure/active-directory/devices/device-management-azure-portal
+
+## 
+
+You have an Azure subscription named Subscription1 that contains a virtual network named VNet1. VNet1 is in a resource group named RG1.
+Subscription1 has a user named User1. User1 has the following roles:
+- Reader
+- Security Admin
+- Security Reader
+You need to ensure that User1 can assign the Reader role for VNet1 to other users.
+What should you do?
+A. Remove User1 from the Security Reader and Reader roles for Subscription1.  
+`B. Assign User1 the User Access Administrator role for VNet1. Most Voted`
+C. Assign User1 the Network Contributor role for VNet1.  
+D. Assign User1 the Network Contributor role for RG1.  
+
+There are several versions of this question in the exam. The question has two possible correct answers:
+- Assign User1 the User Access Administrator role for VNet1.
+- Assign User1 the Owner role for VNet1.
